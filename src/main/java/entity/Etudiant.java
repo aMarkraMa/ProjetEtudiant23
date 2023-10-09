@@ -4,28 +4,28 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class Etudiant {
-    private int numEtudiant;
+    private int idEtudiant;
     private String nomEtudiant;
     private String prenomEtudiant;
     private Formation formation;
     private ArrayList<Projet> projetsRealises;
 
-    public Etudiant(int numEtudiant, String nomEtudiant, String prenomEtudiant, Formation formation,
+    public Etudiant(int idEtudiant, String nomEtudiant, String prenomEtudiant, Formation formation,
                     ArrayList<Projet> projetsRealises) {
         super();
-        this.numEtudiant = numEtudiant;
+        this.idEtudiant = idEtudiant;
         this.nomEtudiant = nomEtudiant;
         this.prenomEtudiant = prenomEtudiant;
         this.formation = formation;
         this.projetsRealises = projetsRealises;
     }
 
-    public int getNumEtudiant() {
-        return this.numEtudiant;
+    public int getidEtudiant() {
+        return this.idEtudiant;
     }
 
-    public void setNumEtudiant(int numEtudiant) {
-        this.numEtudiant = numEtudiant;
+    public void setidEtudiant(int idEtudiant) {
+        this.idEtudiant = idEtudiant;
     }
 
     public String getNomEtudiant() {
@@ -62,13 +62,13 @@ public class Etudiant {
 
     @Override
     public String toString() {
-        return "Etudiant [numEtudiant=" + numEtudiant + ", nomEtudiant=" + nomEtudiant + ", prenomEtudiant="
+        return "Etudiant [idEtudiant=" + idEtudiant + ", nomEtudiant=" + nomEtudiant + ", prenomEtudiant="
                 + prenomEtudiant + ", formation=" + formation + ", projetsRealises=" + projetsRealises + "]";
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(numEtudiant);
+        return Objects.hash(idEtudiant);
     }
 
     @Override
@@ -80,7 +80,7 @@ public class Etudiant {
         if (getClass() != obj.getClass())
             return false;
         Etudiant other = (Etudiant) obj;
-        return numEtudiant == other.numEtudiant;
+        return idEtudiant == other.idEtudiant;
     }
 
 

@@ -7,16 +7,16 @@ import java.util.Map;
 import java.util.Objects;
 
 public class Binome {
-    private int numBinome;
+    private int idBinome;
     private Projet projet;
     private ArrayList<Etudiant> etudiants;
     private double noteRapport;
     private Map<Etudiant, Double> notesSoutenance;
     private LocalDate dateReelleRemise;
 
-    public Binome(int numBinome, Projet projet, Etudiant etudiant1, Etudiant etudiant2, LocalDate dateReelleRemise) {
+    public Binome(int idBinome, Projet projet, Etudiant etudiant1, Etudiant etudiant2, LocalDate dateReelleRemise) {
         super();
-        this.numBinome = numBinome;
+        this.idBinome = idBinome;
         this.projet = projet;
         this.etudiants = new ArrayList<>();
         etudiants.add(etudiant1);
@@ -28,12 +28,12 @@ public class Binome {
         this.dateReelleRemise = null;
     }
 
-    public int getNumBinome() {
-        return numBinome;
+    public int getidBinome() {
+        return idBinome;
     }
 
-    public void setNumBinome(int numBinome) {
-        this.numBinome = numBinome;
+    public void setidBinome(int idBinome) {
+        this.idBinome = idBinome;
     }
 
     public Projet getProjet() {
@@ -78,13 +78,13 @@ public class Binome {
 
     @Override
     public String toString() {
-        return "Binome [numBinome=" + numBinome + ", projet=" + projet + ", etudiants=" + etudiants + ", noteRapport="
+        return "Binome [idBinome=" + idBinome + ", projet=" + projet + ", etudiants=" + etudiants + ", noteRapport="
                 + noteRapport + ", notesSoutenance=" + notesSoutenance + ", dateReelleRemise=" + dateReelleRemise + "]";
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(numBinome);
+        return Objects.hash(idBinome);
     }
 
     @Override
@@ -96,6 +96,6 @@ public class Binome {
         if (getClass() != obj.getClass())
             return false;
         Binome other = (Binome) obj;
-        return numBinome == other.numBinome;
+        return idBinome == other.idBinome;
     }
 }

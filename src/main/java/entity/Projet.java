@@ -4,25 +4,25 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public class Projet {
-    private int numProjet;
+    private int idProjet;
     private String nomMatiere;
     private String sujet;
     private LocalDate datePrevueRemise;
 
-    public Projet(int numProjet, String nomMatiere, String sujet, LocalDate datePrevueRemise) {
+    public Projet(int idProjet, String nomMatiere, String sujet, LocalDate datePrevueRemise) {
         super();
-        this.numProjet = numProjet;
+        this.idProjet = idProjet;
         this.nomMatiere = nomMatiere;
         this.sujet = sujet;
         this.datePrevueRemise = datePrevueRemise;
     }
 
-    public int getNumProjet() {
-        return numProjet;
+    public int getidProjet() {
+        return idProjet;
     }
 
-    public void setNumProjet(int numProjet) {
-        this.numProjet = numProjet;
+    public void setidProjet(int idProjet) {
+        this.idProjet = idProjet;
     }
 
     public String getNomMatiere() {
@@ -51,13 +51,13 @@ public class Projet {
 
     @Override
     public String toString() {
-        return "Projet [numProjet=" + numProjet + ", nomMatiere=" + nomMatiere + ", sujet=" + sujet
+        return "Projet [idProjet=" + idProjet + ", nomMatiere=" + nomMatiere + ", sujet=" + sujet
                 + ", datePrevueRemise=" + datePrevueRemise + "]";
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(numProjet);
+        return Objects.hash(idProjet);
     }
 
     @Override
@@ -69,6 +69,6 @@ public class Projet {
         if (getClass() != obj.getClass())
             return false;
         Projet other = (Projet) obj;
-        return numProjet == other.numProjet;
+        return idProjet == other.idProjet;
     }
 }

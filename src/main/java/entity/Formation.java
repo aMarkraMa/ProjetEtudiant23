@@ -4,23 +4,23 @@ package entity;
 import java.util.Objects;
 
 public class Formation {
-    private int numFormation;
+    private int idFormation;
     private String nomFormation;
     private String promotion;
 
-    public Formation(int numFormation, String nomFormation, String promotion) {
+    public Formation(int idFormation, String nomFormation, String promotion) {
         super();
-        this.numFormation = numFormation;
+        this.idFormation = idFormation;
         this.nomFormation = nomFormation;
         this.promotion = promotion;
     }
 
-    public int getNumFormation() {
-        return this.numFormation;
+    public int getidFormation() {
+        return this.idFormation;
     }
 
-    public void setNumFormation(int numFormation) {
-        this.numFormation = numFormation;
+    public void setidFormation(int idFormation) {
+        this.idFormation = idFormation;
     }
 
     public String getNomFormation() {
@@ -41,13 +41,13 @@ public class Formation {
 
     @Override
     public String toString() {
-        return "Formation [numFormation=" + numFormation + ", nomFormation=" + nomFormation + ", promotion=" + promotion
+        return "Formation [idFormation=" + idFormation + ", nomFormation=" + nomFormation + ", promotion=" + promotion
                 + "]";
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(numFormation);
+        return Objects.hash(idFormation);
     }
 
     @Override
@@ -59,6 +59,6 @@ public class Formation {
         if (getClass() != obj.getClass())
             return false;
         Formation other = (Formation) obj;
-        return numFormation == other.numFormation;
+        return idFormation == other.idFormation;
     }
 }
