@@ -2,8 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="etudiant.selectAll">
-    <select id="selectAll" resultType="entity.Etudiant">
-        select * from tb_etudiant;
+<mapper namespace="com.projet.mapper.EtudiantMapper">
+    <select id="selectAll" resultType="com.projet.entity.Etudiant">
+        select *
+        from etudiants;
     </select>
 </mapper>
