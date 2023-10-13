@@ -4,11 +4,14 @@ package com.projet.entity;
 import java.util.Objects;
 
 public class Formation {
-    private int idFormation;
+    private Integer idFormation;
     private String nomFormation;
     private String promotion;
 
-    public Formation(int idFormation, String nomFormation, String promotion) {
+    public Formation() {
+    }
+
+    public Formation(Integer idFormation, String nomFormation, String promotion) {
         super();
         this.idFormation = idFormation;
         this.nomFormation = nomFormation;
@@ -19,7 +22,7 @@ public class Formation {
         return this.idFormation;
     }
 
-    public void setidFormation(int idFormation) {
+    public void setidFormation(Integer idFormation) {
         this.idFormation = idFormation;
     }
 

@@ -3,30 +3,29 @@ package com.projet.entity;
 import java.util.Objects;
 
 public class Note {
-    private int idNote;
-    private Binome binome;
+    private Integer idBinome;
     private double noteRapport;
-    private Etudiant etudiant;
+    private Integer idEtudiant;
     private double noteSoutenance;
+    private Integer idProjet;
 
-    public Note(int idNote, Binome binome, double noteRapport, Etudiant etudiant, double noteSoutenance) {
-        this.idNote = idNote;
-        this.binome = binome;
+    public Note() {
+    }
+
+    public Note(Binome binome, double noteRapport, Etudiant etudiant, double noteSoutenance, Projet projet) {
+        this.idBinome = binome.getIdBinome();
         this.noteRapport = noteRapport;
-        this.etudiant = etudiant;
+        this.idEtudiant = etudiant.getIdEtudiant();
         this.noteSoutenance = noteSoutenance;
+        this.idProjet = projet.getIdProjet();
     }
 
-    public void setIdNote(int idNote) {
-        this.idNote = idNote;
+    public Integer getIdBinome() {
+        return idBinome;
     }
 
-    public Binome getBinome() {
-        return binome;
-    }
-
-    public void setBinome(Binome binome) {
-        this.binome = binome;
+    public void setIdBinome(Integer idBinome) {
+        this.idBinome = idBinome;
     }
 
     public double getNoteRapport() {
@@ -37,12 +36,12 @@ public class Note {
         this.noteRapport = noteRapport;
     }
 
-    public Etudiant getEtudiant() {
-        return etudiant;
+    public Integer getIdEtudiant() {
+        return idEtudiant;
     }
 
-    public void setEtudiant(Etudiant etudiant) {
-        this.etudiant = etudiant;
+    public void setIdEtudiant(Integer idEtudiant) {
+        this.idEtudiant = idEtudiant;
     }
 
     public double getNoteSoutenance() {
@@ -53,31 +52,23 @@ public class Note {
         this.noteSoutenance = noteSoutenance;
     }
 
-    public int getIdNote() {
-        return idNote;
+    public Integer getIdProjet() {
+        return idProjet;
     }
 
-    @Override
-    public String toString() {
-        return "Note{" +
-                "idNote=" + idNote +
-                ", binome=" + binome +
-                ", noteRapport=" + noteRapport +
-                ", etudiant=" + etudiant +
-                ", noteSoutenance=" + noteSoutenance +
-                '}';
+    public void setIdProjet(Integer idProjet) {
+        this.idProjet = idProjet;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Note note = (Note) o;
-        return idNote == note.idNote;
+        if (!(o instanceof Note note)) return false;
+        return Objects.equals(getIdBinome(), note.getIdBinome()) && Objects.equals(getIdEtudiant(), note.getIdEtudiant()) && Objects.equals(getIdProjet(), note.getIdProjet());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idNote);
+        return Objects.hash(getIdBinome(), getIdEtudiant(), getIdProjet());
     }
 }

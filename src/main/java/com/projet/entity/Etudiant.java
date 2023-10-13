@@ -10,6 +10,9 @@ public class Etudiant {
     private Integer idFormation;
     private ArrayList<Projet> projetsRealises;
 
+    public Etudiant() {
+    }
+
     public Etudiant(Integer idEtudiant, String nomEtudiant, String prenomEtudiant, Formation formation,
                     ArrayList<Projet> projetsRealises) {
         super();

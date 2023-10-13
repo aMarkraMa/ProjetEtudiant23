@@ -1,27 +1,30 @@
 package com.projet.entity;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Objects;
 
 public class Projet {
-    private int idProjet;
+    private Integer idProjet;
     private String nomMatiere;
     private String sujet;
-    private LocalDate datePrevueRemise;
+    private Date datePrevueRemise;
 
-    public Projet(int idProjet, String nomMatiere, String sujet, LocalDate datePrevueRemise) {
-        super();
-        this.idProjet = idProjet;
+    public Projet() {
+    }
+
+    public Projet(Projet projet, String nomMatiere, String sujet, Date datePrevueRemise) {
+        this.idProjet = projet.getIdProjet();
         this.nomMatiere = nomMatiere;
         this.sujet = sujet;
         this.datePrevueRemise = datePrevueRemise;
     }
 
-    public int getidProjet() {
+    public int getIdProjet() {
         return idProjet;
     }
 
-    public void setidProjet(int idProjet) {
+    public void setIdProjet(Integer idProjet) {
         this.idProjet = idProjet;
     }
 
@@ -41,23 +44,12 @@ public class Projet {
         this.sujet = sujet;
     }
 
-    public LocalDate getDatePrevueRemise() {
+    public Date getDatePrevueRemise() {
         return datePrevueRemise;
     }
 
-    public void setDatePrevueRemise(LocalDate datePrevueRemise) {
+    public void setDatePrevueRemise(Date datePrevueRemise) {
         this.datePrevueRemise = datePrevueRemise;
-    }
-
-    @Override
-    public String toString() {
-        return "Projet [idProjet=" + idProjet + ", nomMatiere=" + nomMatiere + ", sujet=" + sujet
-                + ", datePrevueRemise=" + datePrevueRemise + "]";
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(idProjet);
     }
 
     @Override

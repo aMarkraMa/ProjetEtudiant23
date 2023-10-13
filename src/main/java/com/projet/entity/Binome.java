@@ -1,39 +1,40 @@
 package com.projet.entity;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class Binome {
-    private int idBinome;
-    private Projet projet;
+    private Integer idBinome;
+    private Integer idProjet;
     private ArrayList<Etudiant> etudiants;
-    private LocalDate dateReelleRemise;
+    private Date dateReelleRemise;
 
-    public Binome(int idBinome, Projet projet, Etudiant etudiant1, Etudiant etudiant2) {
-        super();
-        this.idBinome = idBinome;
-        this.projet = projet;
-        this.etudiants = new ArrayList<>();
-        etudiants.add(etudiant1);
-        etudiants.add(etudiant2);
-        this.dateReelleRemise = null;
+    public Binome() {
     }
 
-    public int getidBinome() {
+    public Binome(Integer idBinome, Projet projet, ArrayList<Etudiant> etudiants, Date dateReelleRemise) {
+        this.idBinome = idBinome;
+        this.idProjet = projet.getIdProjet();
+        this.etudiants = etudiants;
+        this.dateReelleRemise = dateReelleRemise;
+    }
+
+    public Integer getIdBinome() {
         return idBinome;
     }
 
-    public void setidBinome(int idBinome) {
+    public void setIdBinome(Integer idBinome) {
         this.idBinome = idBinome;
     }
 
-    public Projet getProjet() {
-        return projet;
+    public Integer getIdProjet() {
+        return idProjet;
     }
 
-    public void setProjet(Projet projet) {
-        this.projet = projet;
+    public void setIdProjet(Integer idProjet) {
+        this.idProjet = idProjet;
     }
 
     public ArrayList<Etudiant> getEtudiants() {
@@ -44,33 +45,23 @@ public class Binome {
         this.etudiants = etudiants;
     }
 
-    public LocalDate getDateReelleRemise() {
+    public Date getDateReelleRemise() {
         return dateReelleRemise;
     }
 
-    public void setDateReelleRemise(LocalDate dateReelleRemise) {
+    public void setDateReelleRemise(Date dateReelleRemise) {
         this.dateReelleRemise = dateReelleRemise;
     }
 
     @Override
-    public String toString() {
-        return "Binome [idBinome=" + idBinome + ", projet=" + projet + ", etudiants=" + etudiants + ", dateReelleRemise=" + dateReelleRemise + "]";
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Binome binome)) return false;
+        return Objects.equals(getIdBinome(), binome.getIdBinome()) && Objects.equals(getIdProjet(), binome.getIdProjet());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idBinome);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Binome other = (Binome) obj;
-        return idBinome == other.idBinome;
+        return Objects.hash(getIdBinome(), getIdProjet());
     }
 }
