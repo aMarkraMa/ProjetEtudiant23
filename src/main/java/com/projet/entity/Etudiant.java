@@ -8,19 +8,15 @@ public class Etudiant {
     private String nomEtudiant;
     private String prenomEtudiant;
     private Integer idFormation;
-    private ArrayList<Projet> projetsRealises;
 
     public Etudiant() {
     }
 
-    public Etudiant(Integer idEtudiant, String nomEtudiant, String prenomEtudiant, Formation formation,
-                    ArrayList<Projet> projetsRealises) {
-        super();
+    public Etudiant(Integer idEtudiant, String nomEtudiant, String prenomEtudiant, Integer idFormation) {
         this.idEtudiant = idEtudiant;
         this.nomEtudiant = nomEtudiant;
         this.prenomEtudiant = prenomEtudiant;
-        this.idFormation = formation.getidFormation();
-        this.projetsRealises = projetsRealises;
+        this.idFormation = idFormation;
     }
 
     public Integer getIdEtudiant() {
@@ -55,13 +51,6 @@ public class Etudiant {
         this.idFormation = idFormation;
     }
 
-    public ArrayList<Projet> getProjetsRealises() {
-        return projetsRealises;
-    }
-
-    public void setProjetsRealises(ArrayList<Projet> projetsRealises) {
-        this.projetsRealises = projetsRealises;
-    }
 
     @Override
     public String toString() {
@@ -70,7 +59,6 @@ public class Etudiant {
                 ", nomEtudiant='" + nomEtudiant + '\'' +
                 ", prenomEtudiant='" + prenomEtudiant + '\'' +
                 ", idFormation=" + idFormation +
-                ", projetsRealises=" + projetsRealises +
                 '}';
     }
 

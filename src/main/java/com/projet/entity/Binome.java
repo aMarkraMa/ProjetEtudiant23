@@ -1,7 +1,6 @@
 package com.projet.entity;
 
 import java.sql.Date;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -56,12 +55,13 @@ public class Binome {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Binome binome)) return false;
-        return Objects.equals(getIdBinome(), binome.getIdBinome()) && Objects.equals(getIdProjet(), binome.getIdProjet());
+        if (o == null || getClass() != o.getClass()) return false;
+        Binome binome = (Binome) o;
+        return Objects.equals(idBinome, binome.idBinome) && Objects.equals(idProjet, binome.idProjet) && Objects.equals(etudiants, binome.etudiants) && Objects.equals(dateReelleRemise, binome.dateReelleRemise);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getIdBinome(), getIdProjet());
+        return Objects.hash(idBinome, idProjet, etudiants, dateReelleRemise);
     }
 }

@@ -63,12 +63,13 @@ public class Note {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Note note)) return false;
-        return Objects.equals(getIdBinome(), note.getIdBinome()) && Objects.equals(getIdEtudiant(), note.getIdEtudiant()) && Objects.equals(getIdProjet(), note.getIdProjet());
+        if (o == null || getClass() != o.getClass()) return false;
+        Note note = (Note) o;
+        return Double.compare(noteRapport, note.noteRapport) == 0 && Double.compare(noteSoutenance, note.noteSoutenance) == 0 && Objects.equals(idBinome, note.idBinome) && Objects.equals(idEtudiant, note.idEtudiant) && Objects.equals(idProjet, note.idProjet);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getIdBinome(), getIdEtudiant(), getIdProjet());
+        return Objects.hash(idBinome, noteRapport, idEtudiant, noteSoutenance, idProjet);
     }
 }

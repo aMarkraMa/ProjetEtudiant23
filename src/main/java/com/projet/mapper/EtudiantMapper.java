@@ -5,5 +5,6 @@ import com.projet.entity.Etudiant;
 import java.util.List;
 
 public interface EtudiantMapper {
-    List<Etudiant> selectAll();
+    public List<Etudiant> selectAll();
+    public Etudiant selectById();
 }
