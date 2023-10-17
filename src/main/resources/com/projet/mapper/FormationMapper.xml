@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.projet.mapper.FormationMapper">
+
+    <insert id="insertFormation">
+        INSERT INTO formations(nom_formation, promotion) VALUES (#{nomFormation}, #{promotion})
+    </insert>
+
+    <delete id="deleteFormation">
+        DELETE FROM formations WHERE id_formation = #{idFormation}
+    </delete>
+
+    <update id="updateFormation">
+        UPDATE formations
+        <set>
+            <if test="nomFormation != null and nomFormation != ''">nom_formation = #{nomFormation},</if>
+            <if test="promotion != null and promotion != ''">promotion = #{promotion}</if>
+        </set>
+        WHERE id_formation = #{idFormation}
+    </update>
+
+    <select id="selectFormation" resultType="formation">
+        SELECT f.nom_formation, f.promotion
+        FROM formations f
+        <where>
+            <if test="nomFormation != null and nomFormation != ''">
+                f.nom_formation = #{nomFormation}
+            </if>
+            <if test="promotion != null and promotion != ''">
+                AND f.promotion = #{promotion}
+            </if>
+        </where>
+    </select>
+
+</mapper>

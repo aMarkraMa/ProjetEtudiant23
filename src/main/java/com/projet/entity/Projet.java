@@ -13,8 +13,8 @@ public class Projet {
     public Projet() {
     }
 
-    public Projet(Projet projet, String nomMatiere, String sujet, Date datePrevueRemise) {
-        this.idProjet = projet.getIdProjet();
+    public Projet(Integer idProjet, String nomMatiere, String sujet, Date datePrevueRemise) {
+        this.idProjet = idProjet;
         this.nomMatiere = nomMatiere;
         this.sujet = sujet;
         this.datePrevueRemise = datePrevueRemise;

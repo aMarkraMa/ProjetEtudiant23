@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.projet.mapper.ProjetMapper">
+
+    <insert id="insertProjet">
+        INSERT INTO projets(nom_matiere, sujet, date_prevue_remise) VALUES (#{nomMatiere}, #{sujet}, #{datePrevueRemise})
+    </insert>
+
+    <delete id="deleteProjet">
+        DELETE FROM projets WHERE nom_matiere=#{nomMatiere} AND sujet = #{sujet} AND date_prevue_remise = #{datePrevueRemise}
+    </delete>
+
+    <update id="updateProjet">
+        UPDATE projets
+        <set>
+            <if test="nomMatiere != null and nomMatiere != ''">nom_matiere = #{nomMatiere},</if>
+            <if test="sujet != null and sujet !=''">sujet = #{sujet},</if>
+            <if test="datePrevueRemise != null"> date_prevue_remis = #{datePrevueRemise}</if>
+        </set>
+        WHERE id_projet = #{idProjet}
+    </update>
+
+    <select id="selectProjet" resultType="projet">
+        SELECT p.nom_matiere, p.sujet, p.date_prevue_remise
+        FROM projets p
+        <where>
+            <if test="nomMatiere != null and nomMatiere != ''">
+                p.nom_matiere = #{nomMatiere}
+            </if>
+
+            <if test="sujet != null and sujet != ''">
+                AND p.sujet = #{sujet}
+            </if>
+
+            <if test="datePrevueRemise !=null">
+                AND p.date_prevue_remise = #{datePrevueRemise}
+            </if>
+        </where>
+    </select>
+
+</mapper>
