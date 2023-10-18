@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.projet.mapper.FormationMapper">
+
+    <resultMap id="formationResultMap" type="Formation">
+        <!--
+            id : clé primaire
+            result : normal
+                column : nom de table bdd
+                property : nom d'attribut de java
+        -->
+        <id column="id_formation" property="idFormation"/>
+        <result column="nom_formation" property="nomFormation"/>
+    </resultMap>
+
+    <select id="selectById" resultMap="formationResultMap">
+        select *
+        from formations
+        where id_formation = #{idFormation};
+    </select>
+
+    <!--Requêtes conditionnelles dynamiques-->
+    <select id="selectByCondition" resultMap="formationResultMap">
+        select *
+        from formations
+        <where>
+            <if test="idFormation != null">
+                id_formation = #{idFormation}
+            </if>
+            <if test="nomFormation != null and nomFormation != '' ">
+                and nom_formation like #{nomFormation}
+            </if>
+            <if test="promotion != null and promotion != '' ">
+                and promotion like #{promotion}
+            </if>
+        </where>
+    </select>
+
+    <insert id="addFormation" useGeneratedKeys="true" keyProperty="idFormation">
+        insert into formations (nom_formation, promotion)
+        values (#{nomFormation}, #{promotion});
+    </insert>
+
+    <update id="updateFormation">
+        update formations
+        <set>
+            <if test="nomFormation != null and nomFormation != ''">
+                nom_formation = #{nomFormation},
+            </if>
+            <if test="promotion != null and promotion != ''">
+                promotion = #{promotion},
+            </if>
+        </set>
+        where id_formation = #{idFormation};
+    </update>
+
+    <delete id="deleteById">
+        delete from formations
+        where id_formation = #{idFormation};
+    </delete>
+
+
+</mapper>

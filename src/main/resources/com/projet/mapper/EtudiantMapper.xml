@@ -51,7 +51,7 @@
             <if test="idEtudiant != null">
                 id_etudiant = #{idEtudiant}
             </if>
-            <if test="nomEtudiant != null">
+            <if test="nomEtudiant != null and nomEtudiant != ''">
                 and nom_etudiant like #{nomEtudiant}
             </if>
             <if test="prenomEtudiant != null and prenomEtudiant != '' ">
@@ -62,6 +62,29 @@
             </if>
         </where>
     </select>
+    <insert id="addEtudiant" useGeneratedKeys="true" keyProperty="idEtudiant">
+        insert into etudiants (nom_etudiant, prenom_etudiant, id_formation)
+        values (#{nomEtudiant}, #{prenomEtudiant}, #{idFormation});
+    </insert>
+    <update id="updateEtudiant">
+        update etudiants
+        <set>
+            <if test="nomEtudiant != null and nomEtudiant != ''">
+                nom_etudiant = #{nomEtudiant},
+            </if>
+            <if test="prenomEtudiant != null and prenomEtudiant != ''">
+                prenom_etudiant = #{prenomEtudiant},
+            </if>
+            <if test="idFormation != null">
+                id_formation = #{idFormation}
+            </if>
+        </set>
+        where id_etudiant = #{idEtudiant};
+    </update>
+    <delete id="deleteById">
+        delete from etudiants
+        where id_etudiant = #{idEtudiant};
+    </delete>
 
 
 </mapper>

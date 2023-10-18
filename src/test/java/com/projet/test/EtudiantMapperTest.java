@@ -11,6 +11,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class EtudiantMapperTest {
     private SqlSession sqlSession;
@@ -28,7 +29,7 @@ public class EtudiantMapperTest {
         // Obtenir une instance de l'interface UserMapper
         EtudiantMapper etudiantMapper = sqlSession.getMapper(EtudiantMapper.class);
 
-        //Appeler la méthode getUserById.
+        //Appeler la méthode selectByCondition
         Etudiant etudiant = new Etudiant();
         etudiant.setIdEtudiant(1);
         etudiant.setNomEtudiant("LI");
@@ -41,5 +42,86 @@ public class EtudiantMapperTest {
         assertEquals("LI", etudiants.get(0).getNomEtudiant());
         assertEquals("Yingxuan", etudiants.get(0).getPrenomEtudiant());
         assertEquals(1, (int)etudiants.get(0).getIdFormation());
+
+        //Appeler la méthode selectByCondition
+        etudiant = new Etudiant();
+        etudiant.setNomEtudiant("LI");
+        etudiant.setPrenomEtudiant("Yingxuan");
+        etudiant.setIdFormation(1);
+        etudiants = etudiantMapper.selectByCondition(etudiant);
+
+        // Résultats des assertions
+        assertEquals(1, (int)etudiants.get(0).getIdEtudiant());
+        assertEquals("LI", etudiants.get(0).getNomEtudiant());
+        assertEquals("Yingxuan", etudiants.get(0).getPrenomEtudiant());
+        assertEquals(1, (int)etudiants.get(0).getIdFormation());
     }
+    @Test
+    public void testAddEtudiant(){
+        // Obtenir une instance de l'interface UserMapper
+        EtudiantMapper etudiantMapper = sqlSession.getMapper(EtudiantMapper.class);
+
+        Etudiant etudiant = new Etudiant();
+
+        etudiant.setNomEtudiant("Bernard");
+        etudiant.setPrenomEtudiant("Henri");
+        etudiant.setIdFormation(1);
+
+        etudiantMapper.addEtudiant(etudiant);
+
+
+        //System.out.println(etudiant.getIdEtudiant());
+
+        sqlSession.commit();
+
+        List<Etudiant> etudiants = etudiantMapper.selectByCondition(etudiant);
+
+        // Résultats des assertions
+        assertEquals("Bernard", etudiants.get(0).getNomEtudiant());
+        assertEquals("Henri", etudiants.get(0).getPrenomEtudiant());
+        assertEquals(1, (int)etudiants.get(0).getIdFormation());
+    }
+
+    @Test
+    public void testUpdateEtudiant(){
+        // Obtenir une instance de l'interface UserMapper
+        EtudiantMapper etudiantMapper = sqlSession.getMapper(EtudiantMapper.class);
+
+        Etudiant etudiant = new Etudiant();
+
+        etudiant.setNomEtudiant("Petit");
+        etudiant.setIdEtudiant(4);
+
+        int colomn = etudiantMapper.updateEtudiant(etudiant);
+
+
+        //System.out.println(etudiant.getIdEtudiant());
+
+        sqlSession.commit();
+        System.out.println(colomn);
+
+        List<Etudiant> etudiants = etudiantMapper.selectByCondition(etudiant);
+
+        // Résultats des assertions
+        assertEquals("Petit", etudiants.get(0).getNomEtudiant());
+        assertEquals(1, (int)etudiants.get(0).getIdFormation());
+    }
+    @Test
+    public void testDeleteById(){
+        // Obtenir une instance de l'interface UserMapper
+        EtudiantMapper etudiantMapper = sqlSession.getMapper(EtudiantMapper.class);
+
+        int id = 5;
+
+
+        etudiantMapper.deleteById(id);
+        sqlSession.commit();
+
+        Etudiant etudiant = etudiantMapper.selectById(id);
+
+        // Résultats des assertions
+        assertNull(etudiant);
+    }
+
+
 }

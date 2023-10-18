@@ -9,4 +9,7 @@ public interface EtudiantMapper {
     List<Etudiant> selectAll();
     Etudiant selectById(int idEtudiant);
     List<Etudiant> selectByCondition(Etudiant etudiant);
+    void addEtudiant(Etudiant etudiant);
+    int updateEtudiant(Etudiant etudiant);
+    void deleteById(int idEtudiant);
 }
