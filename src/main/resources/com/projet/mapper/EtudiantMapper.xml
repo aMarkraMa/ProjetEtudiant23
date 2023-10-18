@@ -19,11 +19,49 @@
 
     <select id="selectAll" resultMap="etudiantResultMap">
         select *
-        from etudiants;
+        from etudiants
+        <where>
+            <if test="nomEtudiant != null and nomEtudiant != ''">
+                nom_etudiant = #{nomEtudiant}
+            </if>
+
+            <if test="prenomEtudiant != null and prenomEtudiant != ''">
+                AND prenom_etudiant = #{prenomEtudiant}
+            </if>
+
+            <if test="idFormation != null">
+                AND id_formation = #{idFormation}
+            </if>
+        </where>
     </select>
     <select id="selectById" resultMap="etudiantResultMap">
+    <!--
+        #{}
+        ${} Injection Sql -> n'utilise pas
+    -->
         select *
         from etudiants
-        where id = ${id};
+        where id_etudiant = #{idEtudiant};
     </select>
+    <!--Requêtes conditionnelles dynamiques-->
+    <select id="selectByCondition" resultMap="etudiantResultMap">
+        select *
+        from etudiants
+        <where>
+            <if test="idEtudiant != null">
+                id_etudiant = #{idEtudiant}
+            </if>
+            <if test="nomEtudiant != null">
+                and nom_etudiant like #{nomEtudiant}
+            </if>
+            <if test="prenomEtudiant != null and prenomEtudiant != '' ">
+                and prenom_etudiant like #{prenomEtudiant}
+            </if>
+            <if test="idFormation != null">
+                and id_formation = #{idFormation}
+            </if>
+        </where>
+    </select>
+
+
 </mapper>

@@ -5,6 +5,13 @@
 <configuration>
 
     <!--com.projet.entity.xxx -> xxx -->
+    <properties resource="jdbc.properties"/>
+
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <setting name="lazyLoadingEnabled" value="true"/>
+    </settings>
+
     <typeAliases>
         <package name="com.projet.entity"/>
     </typeAliases>
@@ -13,10 +20,8 @@
         <environment id="development">
             <transactionManager type="JDBC"/>
             <dataSource type="POOLED">
-                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
-                <property name="url" value="jdbc:mysql://localhost:3306/projet_etudiant_23?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false&amp;serverTimezone = UTC"/>
-                <property name="username" value="root"/>
-                <property name="password" value="rainmsq0815"/>
+                <property name="driver" value="${jdbc.driver}"/>
+                <property name="url" value="${jdbc.url}"/>
             </dataSource>
         </environment>
     </environments>
