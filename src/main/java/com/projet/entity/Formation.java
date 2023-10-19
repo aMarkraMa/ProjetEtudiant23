@@ -1,8 +1,5 @@
 package com.projet.entity;
 
-
-import java.util.Objects;
-
 public class Formation {
     private Integer idFormation;
     private String nomFormation;
@@ -12,22 +9,21 @@ public class Formation {
     }
 
     public Formation(Integer idFormation, String nomFormation, String promotion) {
-        super();
         this.idFormation = idFormation;
         this.nomFormation = nomFormation;
         this.promotion = promotion;
     }
 
-    public int getidFormation() {
-        return this.idFormation;
+    public Integer getIdFormation() {
+        return idFormation;
     }
 
-    public void setidFormation(Integer idFormation) {
+    public void setIdFormation(Integer idFormation) {
         this.idFormation = idFormation;
     }
 
     public String getNomFormation() {
-        return this.nomFormation;
+        return nomFormation;
     }
 
     public void setNomFormation(String nomFormation) {
@@ -35,33 +31,10 @@ public class Formation {
     }
 
     public String getPromotion() {
-        return this.promotion;
+        return promotion;
     }
 
     public void setPromotion(String promotion) {
         this.promotion = promotion;
-    }
-
-    @Override
-    public String toString() {
-        return "Formation [idFormation=" + idFormation + ", nomFormation=" + nomFormation + ", promotion=" + promotion
-                + "]";
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(idFormation);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Formation other = (Formation) obj;
-        return idFormation == other.idFormation;
     }
 }

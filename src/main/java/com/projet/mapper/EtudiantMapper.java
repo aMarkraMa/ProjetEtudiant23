@@ -2,13 +2,14 @@ package com.projet.mapper;
 
 import com.projet.entity.Etudiant;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface EtudiantMapper {
-
-    int insertEtudiant(Etudiant etudiant);
-    int deleteEtudiant(Etudiant etudiant);
+    /*cherche tous les attributs*/
+    List<Etudiant> selectAll();
+    Etudiant selectById(int idEtudiant);
+    List<Etudiant> selectByCondition(Etudiant etudiant);
+    void addEtudiant(Etudiant etudiant);
     int updateEtudiant(Etudiant etudiant);
-    ArrayList<Etudiant> selectEtudiant(Etudiant etudiant);
-
+    void deleteById(int idEtudiant);
 }

@@ -1,7 +1,6 @@
 package com.projet.entity;
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class Binome {
@@ -14,18 +13,11 @@ public class Binome {
     public Binome() {
     }
 
-    public Binome(Integer idBinome, Projet projet, Etudiant etudiant1, Etudiant etudiant2, Date dateReelleRemise) {
+    public Binome(Integer idBinome, Integer idProjet, Etudiant etudiant1, Etudiant etudiant2, Date dateReelleRemise) {
         this.idBinome = idBinome;
-        this.idProjet = projet.getIdProjet();
+        this.idProjet = idProjet;
         this.etudiant1 = etudiant1;
         this.etudiant2 = etudiant2;
-        this.dateReelleRemise = dateReelleRemise;
-    }
-
-    public Binome(Integer idBinome, Projet projet, Etudiant etudiant, Date dateReelleRemise) {
-        this.idBinome = idBinome;
-        this.idProjet = projet.getIdProjet();
-        this.etudiant1 = etudiant;
         this.dateReelleRemise = dateReelleRemise;
     }
 
@@ -70,15 +62,26 @@ public class Binome {
     }
 
     @Override
+    public String toString() {
+        return "Binome{" +
+                "idBinome=" + idBinome +
+                ", idProjet=" + idProjet +
+                ", etudiant1=" + etudiant1 +
+                ", etudiant2=" + etudiant2 +
+                ", dateReelleRemise=" + dateReelleRemise +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Binome binome = (Binome) o;
-        return Objects.equals(idBinome, binome.idBinome) && Objects.equals(idProjet, binome.idProjet) && Objects.equals(etudiants, binome.etudiants) && Objects.equals(dateReelleRemise, binome.dateReelleRemise);
+        return Objects.equals(idBinome, binome.idBinome) && Objects.equals(idProjet, binome.idProjet) && Objects.equals(etudiant1, binome.etudiant1) && Objects.equals(etudiant2, binome.etudiant2) && Objects.equals(dateReelleRemise, binome.dateReelleRemise);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idBinome, idProjet, etudiants, dateReelleRemise);
+        return Objects.hash(idBinome, idProjet, etudiant1, etudiant2, dateReelleRemise);
     }
 }
