@@ -16,24 +16,24 @@
     </resultMap>
 
     <select id="selectById" resultMap="formationResultMap">
-        select *
+        select id_formation, nom_formation, promotion
         from formations
         where id_formation = #{idFormation};
     </select>
 
     <!--Requêtes conditionnelles dynamiques-->
     <select id="selectByCondition" resultMap="formationResultMap">
-        select *
+        select id_formation, nom_formation, promotion
         from formations
         <where>
             <if test="idFormation != null">
                 id_formation = #{idFormation}
             </if>
             <if test="nomFormation != null and nomFormation != '' ">
-                and nom_formation like #{nomFormation}
+                AND nom_formation like concat('%', #{nomFormation}, '%')
             </if>
             <if test="promotion != null and promotion != '' ">
-                and promotion like #{promotion}
+                AND promotion like concat('%', #{promotion}, '%')
             </if>
         </where>
     </select>
@@ -60,6 +60,5 @@
         delete from formations
         where id_formation = #{idFormation};
     </delete>
-
 
 </mapper>

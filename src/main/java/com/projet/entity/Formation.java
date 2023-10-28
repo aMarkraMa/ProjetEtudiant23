@@ -1,5 +1,7 @@
 package com.projet.entity;
 
+import java.util.Objects;
+
 public class Formation {
     private Integer idFormation;
     private String nomFormation;
@@ -36,5 +38,27 @@ public class Formation {
 
     public void setPromotion(String promotion) {
         this.promotion = promotion;
+    }
+
+    @Override
+    public String toString() {
+        return "Formation{" +
+                "idFormation=" + idFormation +
+                ", nomFormation='" + nomFormation + '\'' +
+                ", promotion='" + promotion + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Formation)) return false;
+        Formation formation = (Formation) o;
+        return Objects.equals(getIdFormation(), formation.getIdFormation());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getIdFormation());
     }
 }

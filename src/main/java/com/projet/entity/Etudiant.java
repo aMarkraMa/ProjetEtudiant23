@@ -7,16 +7,16 @@ public class Etudiant {
     private Integer idEtudiant;
     private String nomEtudiant;
     private String prenomEtudiant;
-    private Integer idFormation;
+    private Formation formation;
 
     public Etudiant() {
     }
 
-    public Etudiant(Integer idEtudiant, String nomEtudiant, String prenomEtudiant, Integer idFormation) {
+    public Etudiant(Integer idEtudiant, String nomEtudiant, String prenomEtudiant, Formation formation) {
         this.idEtudiant = idEtudiant;
         this.nomEtudiant = nomEtudiant;
         this.prenomEtudiant = prenomEtudiant;
-        this.idFormation = idFormation;
+        this.formation = formation;
     }
 
     public Integer getIdEtudiant() {
@@ -43,14 +43,13 @@ public class Etudiant {
         this.prenomEtudiant = prenomEtudiant;
     }
 
-    public Integer getIdFormation() {
-        return idFormation;
+    public Formation getFormation() {
+        return formation;
     }
 
-    public void setIdFormation(Integer idFormation) {
-        this.idFormation = idFormation;
+    public void setFormation(Formation formation) {
+        this.formation = formation;
     }
-
 
     @Override
     public String toString() {
@@ -58,7 +57,7 @@ public class Etudiant {
                 "idEtudiant=" + idEtudiant +
                 ", nomEtudiant='" + nomEtudiant + '\'' +
                 ", prenomEtudiant='" + prenomEtudiant + '\'' +
-                ", idFormation=" + idFormation +
+                ", formation=" + formation +
                 '}';
     }
 

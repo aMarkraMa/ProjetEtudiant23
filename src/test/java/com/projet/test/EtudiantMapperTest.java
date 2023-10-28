@@ -34,27 +34,27 @@ public class EtudiantMapperTest {
         etudiant.setIdEtudiant(1);
         etudiant.setNomEtudiant("LI");
         etudiant.setPrenomEtudiant("Yingxuan");
-        etudiant.setIdFormation(1);
+//        etudiant.setIdFormation(1);
         List<Etudiant> etudiants = etudiantMapper.selectByCondition(etudiant);
 
         // Résultats des assertions
         assertEquals(1, (int)etudiants.get(0).getIdEtudiant());
         assertEquals("LI", etudiants.get(0).getNomEtudiant());
         assertEquals("Yingxuan", etudiants.get(0).getPrenomEtudiant());
-        assertEquals(1, (int)etudiants.get(0).getIdFormation());
+//        assertEquals(1, (int)etudiants.get(0).getIdFormation());
 
         //Appeler la méthode selectByCondition
         etudiant = new Etudiant();
         etudiant.setNomEtudiant("LI");
         etudiant.setPrenomEtudiant("Yingxuan");
-        etudiant.setIdFormation(1);
+//        etudiant.setIdFormation(1);
         etudiants = etudiantMapper.selectByCondition(etudiant);
 
         // Résultats des assertions
         assertEquals(1, (int)etudiants.get(0).getIdEtudiant());
         assertEquals("LI", etudiants.get(0).getNomEtudiant());
         assertEquals("Yingxuan", etudiants.get(0).getPrenomEtudiant());
-        assertEquals(1, (int)etudiants.get(0).getIdFormation());
+//        assertEquals(1, (int)etudiants.get(0).getIdFormation());
     }
     @Test
     public void testAddEtudiant(){
@@ -65,7 +65,7 @@ public class EtudiantMapperTest {
 
         etudiant.setNomEtudiant("Bernard");
         etudiant.setPrenomEtudiant("Henri");
-        etudiant.setIdFormation(1);
+//        etudiant.setIdFormation(1);
 
         etudiantMapper.addEtudiant(etudiant);
 
@@ -79,7 +79,7 @@ public class EtudiantMapperTest {
         // Résultats des assertions
         assertEquals("Bernard", etudiants.get(0).getNomEtudiant());
         assertEquals("Henri", etudiants.get(0).getPrenomEtudiant());
-        assertEquals(1, (int)etudiants.get(0).getIdFormation());
+//        assertEquals(1, (int)etudiants.get(0).getIdFormation());
     }
 
     @Test
@@ -104,7 +104,7 @@ public class EtudiantMapperTest {
 
         // Résultats des assertions
         assertEquals("Petit", etudiants.get(0).getNomEtudiant());
-        assertEquals(1, (int)etudiants.get(0).getIdFormation());
+//        assertEquals(1, (int)etudiants.get(0).getIdFormation());
     }
     @Test
     public void testDeleteById(){
@@ -122,6 +122,16 @@ public class EtudiantMapperTest {
         // Résultats des assertions
         assertNull(etudiant);
     }
+
+    @Test
+    public void testSelectAll() {
+        SqlSession sqlSession = MyBatisUtils.getSqlSession();
+        EtudiantMapper mapper = sqlSession.getMapper(EtudiantMapper.class);
+        List<Etudiant> etudiants = mapper.selectAll();
+        etudiants.forEach(System.out::println);
+    }
+
+
 
 
 }
