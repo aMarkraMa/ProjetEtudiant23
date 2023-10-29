@@ -1,26 +1,24 @@
 package com.projet.entity;
 
-import java.sql.Date;
 import java.time.LocalDate;
-import java.util.Objects;
 
 public class Projet {
     private Integer idProjet;
     private String nomMatiere;
     private String sujet;
-    private Date datePrevueRemise;
+    private LocalDate datePrevueRemise;
 
     public Projet() {
     }
 
-    public Projet(Projet projet, String nomMatiere, String sujet, Date datePrevueRemise) {
-        this.idProjet = projet.getIdProjet();
+    public Projet(Integer idProjet, String nomMatiere, String sujet, LocalDate datePrevueRemise) {
+        this.idProjet = idProjet;
         this.nomMatiere = nomMatiere;
         this.sujet = sujet;
         this.datePrevueRemise = datePrevueRemise;
     }
 
-    public int getIdProjet() {
+    public Integer getIdProjet() {
         return idProjet;
     }
 
@@ -44,12 +42,22 @@ public class Projet {
         this.sujet = sujet;
     }
 
-    public Date getDatePrevueRemise() {
+    public LocalDate getDatePrevueRemise() {
         return datePrevueRemise;
     }
 
-    public void setDatePrevueRemise(Date datePrevueRemise) {
+    public void setDatePrevueRemise(LocalDate datePrevueRemise) {
         this.datePrevueRemise = datePrevueRemise;
+    }
+
+    @Override
+    public String toString() {
+        return "Projet{" +
+                "idProjet=" + idProjet +
+                ", nomMatiere='" + nomMatiere + '\'' +
+                ", sujet='" + sujet + '\'' +
+                ", datePrevueRemise=" + datePrevueRemise +
+                '}';
     }
 
     @Override

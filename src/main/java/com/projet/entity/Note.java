@@ -12,8 +12,8 @@ public class Note {
     public Note() {
     }
 
-    public Note(Binome binome, double noteRapport, Etudiant etudiant, double noteSoutenance, Projet projet) {
-        this.idBinome = binome.getIdBinome();
+    public Note(Integer idBinome, double noteRapport, Etudiant etudiant, double noteSoutenance, Projet projet) {
+        this.idBinome = idBinome;
         this.noteRapport = noteRapport;
         this.idEtudiant = etudiant.getIdEtudiant();
         this.noteSoutenance = noteSoutenance;
