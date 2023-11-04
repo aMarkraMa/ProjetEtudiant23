@@ -1,6 +1,7 @@
 package com.projet.entity;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class Binome {
@@ -8,12 +9,12 @@ public class Binome {
     private Integer idProjet;
     private Etudiant etudiant1;
     private Etudiant etudiant2;
-    private Date dateReelleRemise;
+    private LocalDate dateReelleRemise;
 
     public Binome() {
     }
 
-    public Binome(Integer idBinome, Integer idProjet, Etudiant etudiant1, Etudiant etudiant2, Date dateReelleRemise) {
+    public Binome(Integer idBinome, Integer idProjet, Etudiant etudiant1, Etudiant etudiant2, LocalDate dateReelleRemise) {
         this.idBinome = idBinome;
         this.idProjet = idProjet;
         this.etudiant1 = etudiant1;
@@ -53,11 +54,11 @@ public class Binome {
         this.etudiant2 = etudiant2;
     }
 
-    public Date getDateReelleRemise() {
+    public LocalDate getDateReelleRemise() {
         return dateReelleRemise;
     }
 
-    public void setDateReelleRemise(Date dateReelleRemise) {
+    public void setDateReelleRemise(LocalDate dateReelleRemise) {
         this.dateReelleRemise = dateReelleRemise;
     }
 

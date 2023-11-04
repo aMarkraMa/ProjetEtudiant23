@@ -31,7 +31,7 @@
             </if>
 
             <if test="etudiant2.idEtudiant != null">
-                AND b.id_etudiant2 = #{etudiant2.idEtudiant}
+                b.id_etudiant2 = #{etudiant2.idEtudiant}
             </if>
 
             <if test="dateRelleRemise != null">

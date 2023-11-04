@@ -41,15 +41,6 @@ public class Formation {
     }
 
     @Override
-    public String toString() {
-        return "Formation{" +
-                "idFormation=" + idFormation +
-                ", nomFormation='" + nomFormation + '\'' +
-                ", promotion='" + promotion + '\'' +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Formation)) return false;

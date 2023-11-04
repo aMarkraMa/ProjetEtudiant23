@@ -16,26 +16,34 @@
     </resultMap>
 
     <select id="selectById" resultMap="formationResultMap">
-        select id_formation, nom_formation, promotion
+        select *
         from formations
         where id_formation = #{idFormation};
     </select>
 
     <!--Requêtes conditionnelles dynamiques-->
     <select id="selectByCondition" resultMap="formationResultMap">
-        select id_formation, nom_formation, promotion
+        select *
         from formations
         <where>
             <if test="idFormation != null">
                 id_formation = #{idFormation}
             </if>
-            <if test="nomFormation != null and nomFormation != '' ">
-                AND nom_formation like concat('%', #{nomFormation}, '%')
+            <if test="nomFormation != null and nomFormation != ''">
+                and nom_formation like #{nomFormation}
             </if>
-            <if test="promotion != null and promotion != '' ">
-                AND promotion like concat('%', #{promotion}, '%')
+            <if test="promotion != null and promotion != ''">
+                and promotion like #{promotion}
             </if>
         </where>
+    </select>
+
+    <select id="getNomsFormation" resultType="java.lang.String">
+        SELECT DISTINCT nom_formation from formations
+    </select>
+
+    <select id="getPromotions" resultType="java.lang.String">
+        SELECT DISTINCT promotion from formations
     </select>
 
     <insert id="addFormation" useGeneratedKeys="true" keyProperty="idFormation">
@@ -60,5 +68,11 @@
         delete from formations
         where id_formation = #{idFormation};
     </delete>
+
+    <select id="selectAll" resultMap="formationResultMap" resultType="formation">
+        select f.id_formation, f.nom_formation, f.promotion
+        from formations f
+    </select>
+
 
 </mapper>

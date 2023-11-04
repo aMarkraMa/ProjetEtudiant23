@@ -16,10 +16,10 @@
             <Font size="27.0" />
          </font>
       </Label>
-      <Button fx:id="Gestion_Etudiant" layoutX="161.0" layoutY="113.0" mnemonicParsing="false" onAction="#gestionEtudiant" prefHeight="36.0" prefWidth="299.0" text="Gestion Etudiant" />
-      <Button fx:id="Gestion_Formation" layoutX="161.0" layoutY="164.0" mnemonicParsing="false" onAction="#gestionFormation" prefHeight="36.0" prefWidth="299.0" text="Gestion Formation" />
-      <Button fx:id="Gestion_Projet" layoutX="161.0" layoutY="217.0" mnemonicParsing="false" onAction="#gestionProjet" prefHeight="36.0" prefWidth="299.0" text="Gestion Projet" />
-      <Button fx:id="Gestion_Binome" layoutX="161.0" layoutY="321.0" mnemonicParsing="false" onAction="#gestionBinome" prefHeight="36.0" prefWidth="299.0" text="Gestion Binome" />
-      <Button fx:id="Gestion_Note" layoutX="161.0" layoutY="269.0" mnemonicParsing="false" onAction="#gestionNote" prefHeight="36.0" prefWidth="299.0" text="Gestion Note" />
+      <Button fx:id="Gestion_Etudiant" layoutX="161.0" layoutY="113.0" mnemonicParsing="false" onAction="#gestionEtudiant" prefHeight="36.0" prefWidth="299.0" text="Gestion d'étudiants" />
+      <Button fx:id="Gestion_Formation" layoutX="161.0" layoutY="164.0" mnemonicParsing="false" onAction="#gestionFormation" prefHeight="36.0" prefWidth="299.0" text="Gestion de formations" />
+      <Button fx:id="Gestion_Projet" layoutX="161.0" layoutY="217.0" mnemonicParsing="false" onAction="#gestionProjet" prefHeight="36.0" prefWidth="299.0" text="Gestion de projets" />
+      <Button fx:id="Gestion_Binome" layoutX="161.0" layoutY="321.0" mnemonicParsing="false" onAction="#gestionBinome" prefHeight="36.0" prefWidth="299.0" text="Gestion de binomes" />
+      <Button fx:id="Gestion_Note" layoutX="161.0" layoutY="269.0" mnemonicParsing="false" onAction="#gestionNote" prefHeight="36.0" prefWidth="299.0" text="Gestion de notes" />
    </children>
 </AnchorPane>

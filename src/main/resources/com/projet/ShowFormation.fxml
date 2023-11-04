@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.projet.controller.ShowFormationController">
+    <children>
+        <TableView fx:id="tableview_etudiant" layoutX="28.0" layoutY="90.0" prefHeight="253.0" prefWidth="545.0">
+
+        </TableView>
+        <Label alignment="CENTER" layoutX="161.0" layoutY="14.0" prefHeight="33.0" prefWidth="303.0"
+               text="Gestion des étudiants"/>
+        <Button fx:id="return_formation" layoutX="28.0" layoutY="350.0" mnemonicParsing="false" onAction="#retour"
+                prefHeight="25.0" prefWidth="83.0" text="Retour"/>
+        <Button fx:id="toAjouterFor" layoutX="485.0" layoutY="53.0" mnemonicParsing="false"
+                onAction="#toAjouterFormation" prefHeight="20.0" prefWidth="88.0" text="Ajouter"/>
+        <TextField fx:id="textfieldNomFormation" layoutX="28.0" layoutY="54.0" prefHeight="20.0" prefWidth="88.0"
+                   promptText="formation"/>
+        <TextField fx:id="textfieldPromotion" layoutX="205.0" layoutY="54.0" prefHeight="20.0" prefWidth="88.0"
+                   promptText="promotion"/>
+        <Button fx:id="search_formation" layoutX="301.0" layoutY="53.0" mnemonicParsing="false"
+                onAction="#searchFormation" prefHeight="20.0" prefWidth="20.0"/>
+        <Button fx:id="refresh_formation" layoutX="342.0" layoutY="53.0" mnemonicParsing="false" onAction="#refreshTable"
+                prefHeight="20.0" prefWidth="20.0"/>
+        <Button fx:id="toEtudiant" layoutX="333.0" layoutY="350.0" mnemonicParsing="false" onAction="#toFormation"
+                prefHeight="25.0" prefWidth="238.0" text="Gestion de etudiants"/>
+    </children>
+</AnchorPane>

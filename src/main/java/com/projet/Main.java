@@ -24,14 +24,14 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         Main.stage = stage;
-       // FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Etudiant.fxml"));
+       // FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("ShowEtudiant.fxml"));
         //Scene scene = new Scene(fxmlLoader.load(), 600, 420);
         stage.setTitle("Système de gestion de projets des étudiants");
        // stage.setScene(scene);
         stage.getIcons().add(new Image("logo.png"));
         stage.setResizable(true);
         stage.initStyle(StageStyle.DECORATED);
-        changeView("Main.fxml");
+        changeView("/com/projet/Main.fxml");
         stage.show();
     }
 
@@ -44,5 +44,17 @@ public class Main extends Application {
         catch(IOException e){
             e.printStackTrace();
         }
+    }
+
+    public static void addView(String fxml){
+        Stage stage = new Stage();
+        Parent root = null;
+        try {
+            root = FXMLLoader.load(Main.class.getResource(fxml));
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        stage.show();
     }
 }

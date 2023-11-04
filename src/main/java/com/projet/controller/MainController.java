@@ -12,10 +12,11 @@ public class MainController {
     private Button gestionNote;
 
     public void gestionEtudiant(ActionEvent actionEvent) {
-        Main.changeView("Etudiant.fxml");
+        Main.changeView("/com/projet/ShowEtudiant.fxml");
     }
 
     public void gestionFormation(ActionEvent actionEvent) {
+        Main.changeView("/com/projet/ShowFormation.fxml");
     }
 
     public void gestionProjet(ActionEvent actionEvent) {

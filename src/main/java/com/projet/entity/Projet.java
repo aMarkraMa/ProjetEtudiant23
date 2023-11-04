@@ -8,19 +8,19 @@ public class Projet {
     private Integer idProjet;
     private String nomMatiere;
     private String sujet;
-    private Date datePrevueRemise;
+    private LocalDate datePrevueRemise;
 
     public Projet() {
     }
 
-    public Projet(Integer idProjet, String nomMatiere, String sujet, Date datePrevueRemise) {
+    public Projet(Integer idProjet, String nomMatiere, String sujet, LocalDate datePrevueRemise) {
         this.idProjet = idProjet;
         this.nomMatiere = nomMatiere;
         this.sujet = sujet;
         this.datePrevueRemise = datePrevueRemise;
     }
 
-    public int getIdProjet() {
+    public Integer getIdProjet() {
         return idProjet;
     }
 
@@ -44,11 +44,11 @@ public class Projet {
         this.sujet = sujet;
     }
 
-    public Date getDatePrevueRemise() {
+    public LocalDate getDatePrevueRemise() {
         return datePrevueRemise;
     }
 
-    public void setDatePrevueRemise(Date datePrevueRemise) {
+    public void setDatePrevueRemise(LocalDate datePrevueRemise) {
         this.datePrevueRemise = datePrevueRemise;
     }
 

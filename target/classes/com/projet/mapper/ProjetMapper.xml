@@ -1,42 +1,42 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.projet.mapper.ProjetMapper">
-
-    <insert id="insertProjet">
-        INSERT INTO projets(nom_matiere, sujet, date_prevue_remise) VALUES (#{nomMatiere}, #{sujet}, #{datePrevueRemise})
-    </insert>
-
-    <delete id="deleteProjet">
-        DELETE FROM projets WHERE nom_matiere=#{nomMatiere} AND sujet = #{sujet} AND date_prevue_remise = #{datePrevueRemise}
-    </delete>
-
-    <update id="updateProjet">
-        UPDATE projets
-        <set>
-            <if test="nomMatiere != null and nomMatiere != ''">nom_matiere = #{nomMatiere},</if>
-            <if test="sujet != null and sujet !=''">sujet = #{sujet},</if>
-            <if test="datePrevueRemise != null"> date_prevue_remis = #{datePrevueRemise}</if>
-        </set>
-        WHERE id_projet = #{idProjet}
-    </update>
-
-    <select id="selectProjet" resultType="projet">
-        SELECT p.nom_matiere, p.sujet, p.date_prevue_remise
-        FROM projets p
+    <resultMap id="projetResultMap" type="Projet">
+        <!--
+                    id : clé primaire
+                    result : normal
+                        column : nom de table bdd
+                        property : nom d'attribut de java
+                 -->
+        <id column="id_projet" property="idProjet"/>
+        <result column="nom_matiere" property="nomMatiere"/>
+        <result column="date_prevue_remise" property="datePrevueRemise"/>
+    </resultMap>
+    <select id="selectById" resultMap="projetResultMap">select * from projets where id_projet = #{idProjet};</select>
+    <!-- Requêtes conditionnelles dynamiques -->
+    <select id="selectByCondition" resultMap="projetResultMap">
+        select * from projets
         <where>
-            <if test="nomMatiere != null and nomMatiere != ''">
-                p.nom_matiere = #{nomMatiere}
-            </if>
-
-            <if test="sujet != null and sujet != ''">
-                AND p.sujet = #{sujet}
-            </if>
-
-            <if test="datePrevueRemise !=null">
-                AND p.date_prevue_remise = #{datePrevueRemise}
-            </if>
+            <if test="idProjet != null">id_projet = #{idProjet}</if>
+            <if test="nomMatiere != null and nomMatiere != '' ">and nom_matiere like #{nomMatiere}</if>
+            <if test="sujet != null and sujet != '' ">and sujet like #{sujet}</if>
+            <if test="datePrevueRemise != null">and date_prevue_remise = #{datePrevueRemise}</if>
         </where>
     </select>
 
+    <insert id="addProjet" useGeneratedKeys="true" keyProperty="idProjet">insert into projets (nom_matiere, sujet,
+        date_prevue_remise) values (#{nomMatiere}, #{sujet}, #{datePrevueRemise});
+    </insert>
+    <update id="updateProjet">
+        update projets
+        <set>
+            <if test="nomMatiere != null and nomMatiere != ''">nom_matiere = #{nomMatiere},</if>
+            <if test="sujet != null and sujet != ''">sujet = #{sujet},</if>
+            <if test="datePrevueRemise != null">date_prevue_remise = #{datePrevueRemise},</if>
+        </set>
+        where id_projet = #{idProjet};
+    </update>
+    <delete id="deleteById">delete from projets where id_projet = #{idProjet};</delete>
 </mapper>

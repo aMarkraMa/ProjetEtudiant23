@@ -28,10 +28,10 @@ public class MybatisDemo {
         System.out.println("etudiant:");
         System.out.println(etudiants.toString());
 
-        int id = 1;
-        Etudiant etu = etudiantMapper.selectById(id);
-        System.out.println("etudiant:");
-        System.out.println(etu.toString());
+        // int id = 1;
+        // Etudiant etu = etudiantMapper.selectById(id);
+        // System.out.println("etudiant:");
+        // System.out.println(etu.toString());
 
         //librer les ressources
         sqlSession.close();

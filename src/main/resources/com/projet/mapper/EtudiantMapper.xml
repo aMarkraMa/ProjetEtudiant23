@@ -4,7 +4,7 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.projet.mapper.EtudiantMapper">
 
-    <resultMap id="etudiantFormationMap" type="Etudiant">
+    <resultMap id="etudiantResultMap" type="Etudiant">
         <!--
             id : clé primaire
             result : normal
@@ -15,63 +15,48 @@
         <result column="nom_etudiant" property="nomEtudiant"/>
         <result column="prenom_etudiant" property="prenomEtudiant"/>
         <association property="formation" javaType="formation">
-            <id property="idFormation" column="id_formation"/>
-            <result property="nomFormation" column="nom_formation"/>
-            <result property="promotion" column="promotion"/>
+            <id column="id_formation" property="idFormation"/>
+            <result column="nom_formation" property="nomFormation"/>
+            <result column="promotion" property="promotion"/>
         </association>
     </resultMap>
 
-    <select id="selectAll" resultMap="etudiantFormationMap">
+    <select id="selectAll" resultMap="etudiantResultMap" resultType="etudiant">
         select e.id_etudiant, e.nom_etudiant, e.prenom_etudiant, f.id_formation, f.nom_formation, f.promotion
         from etudiants e, formations f
         where e.id_formation = f.id_formation
-<!--        <where>-->
-<!--            -->
-<!--            <if test="nomEtudiant != null and nomEtudiant != ''">-->
-<!--                nom_etudiant = #{nomEtudiant}-->
-<!--            </if>-->
-
-<!--            <if test="prenomEtudiant != null and prenomEtudiant != ''">-->
-<!--                AND prenom_etudiant = #{prenomEtudiant}-->
-<!--            </if>-->
-
-<!--            <if test="idFormation != null">-->
-<!--                AND id_formation = #{idFormation}-->
-<!--            </if>-->
-<!--        </where>-->
     </select>
-    <select id="selectById">
-    <!--
-        #{}
-        ${} Injection Sql -> n'utilise pas
-    -->
-        select *
-        from etudiants
-        where id_etudiant = #{idEtudiant};
-    </select>
+
+
     <!--Requêtes conditionnelles dynamiques-->
-    <select id="selectByCondition">
-        select *
-        from etudiants
-        <where>
-            <if test="idEtudiant != null">
-                id_etudiant = #{idEtudiant}
-            </if>
-            <if test="nomEtudiant != null and nomEtudiant != ''">
-                AND nom_etudiant like concat('%',#{nomEtudiant},'%')
-            </if>
-            <if test="prenomEtudiant != null and prenomEtudiant != '' ">
-                AND prenom_etudiant like concat('%',#{prenomEtudiant},'%')
-            </if>
-            <if test="idFormation != null">
-                AND id_formation = #{idFormation}
-            </if>
-        </where>
+    <select id="selectByCondition" resultType="etudiant" resultMap="etudiantResultMap">
+        select e.id_etudiant, e.nom_etudiant, e.prenom_etudiant, f.id_formation, f.nom_formation, f.promotion
+        from etudiants e, formations f
+        where e.id_formation = f.id_formation
+
+        <if test="nomEtudiant != null and nomEtudiant != ''">
+            and lower(e.nom_etudiant) = lower(#{nomEtudiant})
+        </if>
+        <if test="prenomEtudiant != null and prenomEtudiant != ''">
+            and lower(e.prenom_etudiant) = lower(#{prenomEtudiant})
+        </if>
+        <if test="formation != null and formation.nomFormation != null and formation.nomFormation != ''">
+            and lower(f.nom_formation) = lower(#{formation.nomFormation})
+        </if>
+
     </select>
+
+    <select id="selectById" resultType="com.projet.entity.Etudiant" resultMap="etudiantResultMap">
+        select e.id_etudiant, e.nom_etudiant, e.prenom_etudiant, f.id_formation, f.nom_formation, f.promotion
+        from etudiants e, formations f
+        where e.id_formation = f.id_formation and e.id_etudiant = #{idEtudiant}
+    </select>
+
     <insert id="addEtudiant" useGeneratedKeys="true" keyProperty="idEtudiant">
         insert into etudiants (nom_etudiant, prenom_etudiant, id_formation)
-        values (#{nomEtudiant}, #{prenomEtudiant}, #{idFormation});
+        values (#{nomEtudiant}, #{prenomEtudiant}, #{formation.idFormation});
     </insert>
+
     <update id="updateEtudiant">
         update etudiants
         <set>
@@ -81,12 +66,13 @@
             <if test="prenomEtudiant != null and prenomEtudiant != ''">
                 prenom_etudiant = #{prenomEtudiant},
             </if>
-            <if test="idFormation != null">
-                id_formation = #{idFormation}
+            <if test="formation != null">
+                id_formation = #{formation.idFormation}
             </if>
         </set>
         where id_etudiant = #{idEtudiant};
     </update>
+
     <delete id="deleteById">
         delete from etudiants
         where id_etudiant = #{idEtudiant};

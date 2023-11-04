@@ -2,12 +2,12 @@ package com.projet.mapper;
 
 import com.projet.entity.Projet;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface ProjetMapper {
-    int insertProjet(Projet projet);
-
-    int deleteProjet(Projet projet);
+    Projet selectById(int idProjet);
+    List<Projet> selectByCondition(Projet projet);
+    void addProjet(Projet projet);
     int updateProjet(Projet projet);
-    ArrayList<Projet> selectProjet(Projet projet);
+    void deleteById(int idProjet);
 }
