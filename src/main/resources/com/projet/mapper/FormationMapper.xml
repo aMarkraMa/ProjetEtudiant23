@@ -13,27 +13,25 @@
         -->
         <id column="id_formation" property="idFormation"/>
         <result column="nom_formation" property="nomFormation"/>
+        <result column="promotion" property="promotion"/>
     </resultMap>
 
     <select id="selectById" resultMap="formationResultMap">
-        select *
-        from formations
+        select f.id_formation, f.nom_formation, f.promotion
+        from formations f
         where id_formation = #{idFormation};
     </select>
 
     <!--Requêtes conditionnelles dynamiques-->
-    <select id="selectByCondition" resultMap="formationResultMap">
-        select *
-        from formations
+    <select id="selectByCondition" resultMap="formationResultMap" resultType="formation">
+        select f.id_formation, f.nom_formation, f.promotion
+        from formations f
         <where>
-            <if test="idFormation != null">
-                id_formation = #{idFormation}
-            </if>
             <if test="nomFormation != null and nomFormation != ''">
-                and nom_formation like #{nomFormation}
+                and lower(f.nom_formation) like lower(#{nomFormation})
             </if>
             <if test="promotion != null and promotion != ''">
-                and promotion like #{promotion}
+                and lower(f.promotion) like lower(#{promotion})
             </if>
         </where>
     </select>
@@ -48,7 +46,7 @@
 
     <insert id="addFormation" useGeneratedKeys="true" keyProperty="idFormation">
         insert into formations (nom_formation, promotion)
-        values (#{nomFormation}, #{promotion});
+        values (#{nomFormation}, #{promotion})
     </insert>
 
     <update id="updateFormation">
