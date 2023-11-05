@@ -10,13 +10,7 @@
             fx:controller="com.projet.controller.ShowFormationController">
     <children>
         <TableView fx:id="tableview_etudiant" layoutX="28.0" layoutY="90.0" prefHeight="253.0" prefWidth="545.0">
-            <!--        <columns>
-                      <TableColumn fx:id="id_etudiant" prefWidth="44.0" text="Id" />
-                      <TableColumn fx:id="nom_etudiant" minWidth="0.0" prefWidth="101.0" text="Nom" />
-                        <TableColumn fx:id="prenom_etudiant" prefWidth="113.0" text="Prenom" />
-                        <TableColumn fx:id="nom_formation" minWidth="0.0" prefWidth="110.0" text="Formation" />
-                        <TableColumn fx:id="operationColume" minWidth="0.0" prefWidth="176.0" text="Operation" />
-                    </columns>-->
+
         </TableView>
         <Label alignment="CENTER" layoutX="161.0" layoutY="14.0" prefHeight="33.0" prefWidth="303.0"
                text="Gestion des étudiants"/>
@@ -32,7 +26,7 @@
                 onAction="#searchFormation" prefHeight="20.0" prefWidth="20.0"/>
         <Button fx:id="refresh_formation" layoutX="342.0" layoutY="53.0" mnemonicParsing="false" onAction="#refreshTable"
                 prefHeight="20.0" prefWidth="20.0"/>
-        <Button fx:id="toEtudiant" layoutX="333.0" layoutY="350.0" mnemonicParsing="false" onAction="#toEtudaint"
+        <Button fx:id="toEtudiant" layoutX="333.0" layoutY="350.0" mnemonicParsing="false" onAction="#toFormation"
                 prefHeight="25.0" prefWidth="238.0" text="Gestion de etudiants"/>
     </children>
 </AnchorPane>

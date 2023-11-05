@@ -20,6 +20,7 @@ public class MainController {
     }
 
     public void gestionProjet(ActionEvent actionEvent) {
+        Main.changeView("/com/projet/ShowProjet.fxml");
     }
 
     public void gestionBinome(ActionEvent actionEvent) {
