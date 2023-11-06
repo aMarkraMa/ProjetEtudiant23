@@ -1,9 +1,7 @@
 package com.projet.controller;
 
 import com.projet.Main;
-import com.projet.entity.Etudiant;
 import com.projet.entity.Formation;
-import com.projet.mapper.EtudiantMapper;
 import com.projet.mapper.FormationMapper;
 import com.projet.service.impl.UpdateFormationServiceImpl;
 import com.projet.utils.MyBatisUtils;
@@ -36,22 +34,37 @@ public class ShowFormationController {
 	private TableColumn<Formation, Void> boutons;
 	
 	@FXML
-	private TableView<Formation> tableview_formation;
+	private TableView<Formation> tableviewFormation;
 	
 	@FXML
-	private Button toAjouterFor;
+	private Button toAddFor;
 	
 	@FXML
-	private Button refresh_formation;
+	private Button refreshFormation;
 	
 	@FXML
-	private Button search_formation;
+	private Button searchFormation;
 	
 	@FXML
 	private TextField textfieldNomFormation;
 	
 	@FXML
 	private TextField textfieldPromotion;
+	
+	@FXML
+	private MenuItem returnFormations;
+	
+	@FXML
+	private MenuItem toEtudiants;
+	
+	@FXML
+	private MenuItem toProjets;
+	
+	@FXML
+	private MenuItem toBinomes;
+	
+	@FXML
+	private MenuItem toNotes;
 	
 	@FXML
 	public void initialize() {
@@ -86,9 +99,9 @@ public class ShowFormationController {
 						
 						supprimer.setOnAction((ActionEvent event) -> {
 							Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-							alert.setTitle("Supprimer un formation");
+							alert.setTitle("Supprimer une formation");
 							alert.setHeaderText("Confirmez votre choix");
-							alert.setContentText("Vous allez supprimer ce formation. Etes-vous sur?");
+							alert.setContentText("Vous allez supprimer cette formation. Etes-vous sur?");
 							Optional<ButtonType> resultat = alert.showAndWait();
 							if (resultat.isPresent() && resultat.get() == ButtonType.OK) {
 								Formation formation = getTableView().getItems().get(getIndex());
@@ -100,7 +113,7 @@ public class ShowFormationController {
 								ObservableList<Formation> data = FXCollections.observableArrayList();
 								List<Formation> formations = mapper.selectAll();
 								data.addAll(formations);
-								tableview_formation.setItems(data);
+								tableviewFormation.setItems(data);
 							}
 							
 							
@@ -123,29 +136,29 @@ public class ShowFormationController {
 			
 		});
 		
-		boutons.setPrefWidth(224);
+		boutons.setPrefWidth(336);
 		
-		tableview_formation.getColumns().add(id_formation);
-		tableview_formation.getColumns().add(nom_formation);
-		tableview_formation.getColumns().add(promotion);
-		tableview_formation.getColumns().add(boutons);
+		tableviewFormation.getColumns().add(id_formation);
+		tableviewFormation.getColumns().add(nom_formation);
+		tableviewFormation.getColumns().add(promotion);
+		tableviewFormation.getColumns().add(boutons);
 		
 		
 		SqlSession sqlSession = MyBatisUtils.getSqlSession();
-		EtudiantMapper mapper = sqlSession.getMapper(EtudiantMapper.class);
-		List<Etudiant> etudiants = mapper.selectAll();
-		refreshTable(etudiants);
+		FormationMapper mapper = sqlSession.getMapper(FormationMapper.class);
+		List<Formation> formations = mapper.selectAll();
+		refreshTable(formations);
 		
 		Image refresh = new Image("refresh.png");
 		ImageView refreshImageView = new ImageView(refresh);
 		refreshImageView.setFitHeight(20);
 		refreshImageView.setFitWidth(20);
-		refresh_formation.setGraphic(refreshImageView);
+		refreshFormation.setGraphic(refreshImageView);
 		Image search = new Image("search.png");
 		ImageView searchImageView = new ImageView(search);
 		searchImageView.setFitWidth(20);
 		searchImageView.setFitHeight(20);
-		search_formation.setGraphic(searchImageView);
+		searchFormation.setGraphic(searchImageView);
 		
 		
 	}
@@ -153,7 +166,7 @@ public class ShowFormationController {
 	public void refreshTable(List newData) {
 		ObservableList<Formation> data = FXCollections.observableArrayList();
 		data.addAll(newData);
-		tableview_formation.setItems(data);
+		tableviewFormation.setItems(data);
 	}
 	
 	
@@ -161,24 +174,24 @@ public class ShowFormationController {
 		Main.changeView("/com/projet/Main.fxml");
 	}
 	
-	public void toFormation(ActionEvent actionEvent) {
+	public void toEtudiants(ActionEvent actionEvent) {
 		Main.changeView("/com/projet/ShowEtudiant.fxml");
 	}
 	
 	public void toAjouterFormation(ActionEvent actionEvent) {
-		Main.addView("/com/projet/AddEtudiant.fxml");
+		Main.addView("/com/projet/AddFormation.fxml");
 	}
 	
 	public void searchFormation(ActionEvent actionEvent) {
 		SqlSession sqlSession = MyBatisUtils.getSqlSession();
 		FormationMapper mapper = sqlSession.getMapper(FormationMapper.class);
 		Formation formation = new Formation();
-		formation.setNomFormation(textfieldNomFormation.getText());
-		formation.setPromotion(textfieldPromotion.getText());
+		formation.setNomFormation("%" + textfieldNomFormation.getText() + "%");
+		formation.setPromotion("%" + textfieldPromotion.getText() + "%");
 		List<Formation> formations = mapper.selectByCondition(formation);
 		ObservableList<Formation> data = FXCollections.observableArrayList();
-		data.addAll(formation);
-		tableview_formation.setItems(data);
+		data.addAll(formations);
+		tableviewFormation.setItems(data);
 	}
 	
 	public void refreshTable(ActionEvent actionEvent) {
@@ -187,10 +200,20 @@ public class ShowFormationController {
 		List<Formation> formations = mapper.selectAll();
 		ObservableList<Formation> data = FXCollections.observableArrayList();
 		data.addAll(formations);
-		tableview_formation.setItems(data);
+		tableviewFormation.setItems(data);
 		
 		textfieldNomFormation.setText("");
 		textfieldPromotion.setText("");
-		tableview_formation.refresh();
+		tableviewFormation.refresh();
+	}
+	
+	
+	public void toProjets(ActionEvent actionEvent) {
+	}
+	
+	public void toBinomes(ActionEvent actionEvent) {
+	}
+	
+	public void toNotes(ActionEvent actionEvent) {
 	}
 }

@@ -18,8 +18,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import org.apache.ibatis.session.SqlSession;
-import com.projet.service.UpdateEtudiantService;
 import com.projet.service.impl.UpdateEtudiantServiceImpl;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -40,16 +40,16 @@ public class ShowEtudiantController {
 	private TableColumn<Etudiant, String> prenom_etudiant;
 	
 	@FXML
-	private TableView<Etudiant> tableview_etudiant;
+	private TableView<Etudiant> tableviewEtudiant;
 	
 	@FXML
 	private Button toAjouterEtu;
 	
 	@FXML
-	private Button refresh_etudiant;
+	private Button refreshEtudiant;
 	
 	@FXML
-	private Button search_etudiant;
+	private Button searchEtudiant;
 	
 	@FXML
 	private TextField textfieldNomEtudiant;
@@ -59,6 +59,22 @@ public class ShowEtudiantController {
 	
 	@FXML
 	private TextField textfieldNomFormation;
+	
+	@FXML
+	private MenuItem returnEtudiant;
+	
+	@FXML
+	private MenuItem toFormations;
+	
+	@FXML
+	private MenuItem toProjets;
+	
+	@FXML
+	private MenuItem toBinomes;
+	
+	@FXML
+	private MenuItem toNotes;
+	
 	
 	@FXML
 	public void initialize() {
@@ -115,7 +131,7 @@ public class ShowEtudiantController {
 								ObservableList<Etudiant> data = FXCollections.observableArrayList();
 								List<Etudiant> etudiants = mapper.selectAll();
 								data.addAll(etudiants);
-								tableview_etudiant.setItems(data);
+								tableviewEtudiant.setItems(data);
 							}
 							
 							
@@ -140,11 +156,11 @@ public class ShowEtudiantController {
 		
 		boutons.setPrefWidth(224);
 		
-		tableview_etudiant.getColumns().add(id_etudiant);
-		tableview_etudiant.getColumns().add(nom_etudiant);
-		tableview_etudiant.getColumns().add(prenom_etudiant);
-		tableview_etudiant.getColumns().add(nom_formation);
-		tableview_etudiant.getColumns().add(boutons);
+		tableviewEtudiant.getColumns().add(id_etudiant);
+		tableviewEtudiant.getColumns().add(nom_etudiant);
+		tableviewEtudiant.getColumns().add(prenom_etudiant);
+		tableviewEtudiant.getColumns().add(nom_formation);
+		tableviewEtudiant.getColumns().add(boutons);
 		
 		
 		SqlSession sqlSession = MyBatisUtils.getSqlSession();
@@ -156,12 +172,12 @@ public class ShowEtudiantController {
 		ImageView refreshImageView = new ImageView(refresh);
 		refreshImageView.setFitHeight(20);
 		refreshImageView.setFitWidth(20);
-		refresh_etudiant.setGraphic(refreshImageView);
+		refreshEtudiant.setGraphic(refreshImageView);
 		Image search = new Image("search.png");
 		ImageView searchImageView = new ImageView(search);
 		searchImageView.setFitWidth(20);
 		searchImageView.setFitHeight(20);
-		search_etudiant.setGraphic(searchImageView);
+		searchEtudiant.setGraphic(searchImageView);
 		
 		
 	}
@@ -169,7 +185,7 @@ public class ShowEtudiantController {
 	public void refreshTable(List newData) {
 		ObservableList<Etudiant> data = FXCollections.observableArrayList();
 		data.addAll(newData);
-		tableview_etudiant.setItems(data);
+		tableviewEtudiant.setItems(data);
 	}
 	
 	
@@ -177,7 +193,7 @@ public class ShowEtudiantController {
 		Main.changeView("/com/projet/Main.fxml");
 	}
 	
-	public void toFormation(ActionEvent actionEvent) {
+	public void toFormations(ActionEvent actionEvent) {
 		Main.changeView("/com/projet/ShowFormation.fxml");
 	}
 	
@@ -189,15 +205,15 @@ public class ShowEtudiantController {
 		SqlSession sqlSession = MyBatisUtils.getSqlSession();
 		EtudiantMapper mapper = sqlSession.getMapper(EtudiantMapper.class);
 		Etudiant etudiant = new Etudiant();
-		etudiant.setNomEtudiant(textfieldNomEtudiant.getText());
-		etudiant.setPrenomEtudiant(textfieldPrenomEtudiant.getText());
+		etudiant.setNomEtudiant("%" + textfieldNomEtudiant.getText() + "%");
+		etudiant.setPrenomEtudiant("%" + textfieldPrenomEtudiant.getText() + "%");
 		Formation formation = new Formation();
-		formation.setNomFormation(textfieldNomFormation.getText());
+		formation.setNomFormation("%" + textfieldNomFormation.getText() + "%");
 		etudiant.setFormation(formation);
 		List<Etudiant> etudiants = mapper.selectByCondition(etudiant);
 		ObservableList<Etudiant> data = FXCollections.observableArrayList();
 		data.addAll(etudiants);
-		tableview_etudiant.setItems(data);
+		tableviewEtudiant.setItems(data);
 	}
 	
 	public void refreshTable(ActionEvent actionEvent) {
@@ -206,11 +222,22 @@ public class ShowEtudiantController {
 		List<Etudiant> etudiants = mapper.selectAll();
 		ObservableList<Etudiant> data = FXCollections.observableArrayList();
 		data.addAll(etudiants);
-		tableview_etudiant.setItems(data);
+		tableviewEtudiant.setItems(data);
 		
 		textfieldNomEtudiant.setText("");
 		textfieldPrenomEtudiant.setText("");
 		textfieldNomFormation.setText("");
-		tableview_etudiant.refresh();
+		tableviewEtudiant.refresh();
+	}
+	
+	public void toProjets(ActionEvent actionEvent) {
+		Main.changeView("/com/projet/ShowProjet.fxml");
+	}
+	
+	public void toBinomes(ActionEvent actionEvent) {
+	}
+	
+	public void toNotes(ActionEvent actionEvent) {
+	
 	}
 }

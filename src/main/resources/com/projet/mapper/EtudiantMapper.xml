@@ -35,13 +35,13 @@
         where e.id_formation = f.id_formation
 
         <if test="nomEtudiant != null and nomEtudiant != ''">
-            and lower(e.nom_etudiant) = lower(#{nomEtudiant})
+            and lower(e.nom_etudiant) like lower(#{nomEtudiant})
         </if>
         <if test="prenomEtudiant != null and prenomEtudiant != ''">
-            and lower(e.prenom_etudiant) = lower(#{prenomEtudiant})
+            and lower(e.prenom_etudiant) like lower(#{prenomEtudiant})
         </if>
         <if test="formation != null and formation.nomFormation != null and formation.nomFormation != ''">
-            and lower(f.nom_formation) = lower(#{formation.nomFormation})
+            and lower(f.nom_formation) like lower(#{formation.nomFormation})
         </if>
 
     </select>
