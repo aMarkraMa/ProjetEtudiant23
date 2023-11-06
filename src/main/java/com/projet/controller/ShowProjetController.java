@@ -80,4 +80,14 @@ public class ShowProjetController {
         tableViewProjet.setItems(data);
     }
 
+    public void showAddView(){
+        Main.addView("/com/projet/AddProjet.fxml");
+        searchProjet(new ActionEvent());
+    }
+
+    public void refreshTable(List newData) {
+        ObservableList<Projet> data = FXCollections.observableArrayList();
+        data.addAll(newData);
+        tableViewProjet.setItems(data);
+    }
 }
