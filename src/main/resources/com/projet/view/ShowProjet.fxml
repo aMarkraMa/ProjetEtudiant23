@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projet.controller.ShowProjetController">
+    <children>
+        <TableView fx:id="tableViewProjet" layoutX="28.0" layoutY="90.0" prefHeight="253.0" prefWidth="545.0">
+            <columns>
+                <TableColumn fx:id="nomMatiere" prefWidth="134.0" text="nomMatière" />
+                <TableColumn fx:id="sujet" prefWidth="274.0" text="sujet" />
+                <TableColumn fx:id="datePrevueRemise" prefWidth="136.0" text="datePrévueRemise" />
+            </columns>
+        </TableView>
+        <Label alignment="CENTER" layoutX="161.0" layoutY="14.0" prefHeight="33.0" prefWidth="303.0" text="Gestion des projets" />
+        <Button fx:id="addProjet" layoutX="430.0" layoutY="53.0" mnemonicParsing="false" onAction="#showAddView" prefHeight="27.0" prefWidth="45.0" />
+        <TextField fx:id="textFieldNomMatiere" layoutX="28.0" layoutY="53.0" prefHeight="27.0" prefWidth="88.0" promptText="nomMatiere" />
+        <Button fx:id="searchProjet" layoutX="373.0" layoutY="53.0" mnemonicParsing="false" onAction="#searchProjet" prefHeight="27.0" prefWidth="45.0" />
+        <Button fx:id="refreshProjet" layoutX="506.0" layoutY="53.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0" />
+        <TextField fx:id="textFieldSujet" layoutX="133.0" layoutY="53.0" prefHeight="27.0" prefWidth="83.0" promptText="sujet" />
+        <DatePicker fx:id="datePicker" layoutX="236.0" layoutY="53.0" prefHeight="27.0" prefWidth="98.0" />
+
+        <MenuBar layoutX="2.0" layoutY="3.0" prefHeight="38.0" prefWidth="600.0">
+            <menus>
+                <Menu fx:id="menuProjet" mnemonicParsing="false" text="Menu">
+                    <items>
+                        <MenuItem fx:id="toShowEtudiant" mnemonicParsing="false" onAction="#toShowEtudiant" text="Etudiant" />
+                        <MenuItem fx:id="toShowFormation" mnemonicParsing="false" onAction="#toShowFormation" text="Formation" />
+                        <MenuItem fx:id="toProjets" mnemonicParsing="false" onAction="#toShowProjet" text="Projet" />
+                        <MenuItem fx:id="toBinomes" mnemonicParsing="false" onAction="#toShowBinome" text="Binome" />
+                        <MenuItem fx:id="toNotes" mnemonicParsing="false" onAction="#toShowNote" text="Note" />
+                    </items></Menu>
+                <Menu fx:id="downloadProjet" mnemonicParsing="false" text="Download" />
+            </menus>
+        </MenuBar>
+    </children>
+</AnchorPane>

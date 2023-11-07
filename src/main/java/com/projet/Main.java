@@ -1,6 +1,5 @@
 package com.projet;
 
-import com.sun.javafx.stage.EmbeddedWindow;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -28,10 +27,10 @@ public class Main extends Application {
         //Scene scene = new Scene(fxmlLoader.load(), 600, 420);
         stage.setTitle("Système de gestion de projets des étudiants");
        // stage.setScene(scene);
-        stage.getIcons().add(new Image("logo.png"));
+        stage.getIcons().add(new Image("com/projet/img/logo.png"));
         stage.setResizable(true);
         stage.initStyle(StageStyle.DECORATED);
-        changeView("/com/projet/Main.fxml");
+        changeView("/com/projet/view/Main.fxml");
         stage.show();
     }
 

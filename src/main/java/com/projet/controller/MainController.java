@@ -12,15 +12,15 @@ public class MainController {
     private Button gestionNote;
 
     public void gestionEtudiant(ActionEvent actionEvent) {
-        Main.changeView("/com/projet/ShowEtudiant.fxml");
+        Main.changeView("/com/projet/view/ShowEtudiant.fxml");
     }
 
     public void gestionFormation(ActionEvent actionEvent) {
-        Main.changeView("/com/projet/ShowFormation.fxml");
+        Main.changeView("/com/projet/view/ShowFormation.fxml");
     }
 
     public void gestionProjet(ActionEvent actionEvent) {
-        Main.changeView("/com/projet/ShowProjet.fxml");
+        Main.changeView("/com/projet/view/ShowProjet.fxml");
     }
 
     public void gestionBinome(ActionEvent actionEvent) {

@@ -1,13 +1,8 @@
 package com.projet.controller;
 
 import com.projet.Main;
-import com.projet.entity.Etudiant;
-import com.projet.entity.Formation;
 import com.projet.entity.Projet;
-import com.projet.mapper.EtudiantMapper;
-import com.projet.mapper.FormationMapper;
 import com.projet.mapper.ProjetMapper;
-import com.projet.service.impl.UpdateFormationServiceImpl;
 import com.projet.utils.MyBatisUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,15 +10,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.util.Callback;
 import org.apache.ibatis.session.SqlSession;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 public class ShowProjetController {
     @FXML
@@ -48,9 +41,6 @@ public class ShowProjetController {
     private Button searchProjet;
 
     @FXML
-    private Button toEtudiant;
-
-    @FXML
     private DatePicker datePicker;
 
     @FXML
@@ -61,10 +51,36 @@ public class ShowProjetController {
 
     @FXML
     public void initialize() {
+        tableViewProjet.setEditable(true);
+
         nomMatiere.setCellValueFactory(new PropertyValueFactory<>("nomMatiere"));
         sujet.setCellValueFactory(new PropertyValueFactory<>("sujet"));
         datePrevueRemise.setCellValueFactory(new PropertyValueFactory<>("datePrevueRemise"));
 
+        nomMatiere.setCellFactory(TextFieldTableCell.forTableColumn());
+        sujet.setCellFactory(TextFieldTableCell.forTableColumn());
+
+
+        nomMatiere.setOnEditCommit(
+                (TableColumn.CellEditEvent<Projet, String> t) -> {
+                    Projet projet = t.getTableView().getItems().get(t.getTablePosition().getRow());
+                    projet.setNomMatiere(t.getNewValue()); // mise à jour BDD
+
+                    // 更新数据库
+                    updateProjet(projet);
+                });
+
+        Image search = new Image("com/projet/img/search.png");
+        ImageView searchImageView = new ImageView(search);
+        searchImageView.setFitWidth(18);
+        searchImageView.setFitHeight(18);
+        searchProjet.setGraphic(searchImageView);
+
+        Image add = new Image("com/projet/img/add.png");
+        ImageView addImageView = new ImageView(add);
+        addImageView.setFitWidth(18);
+        addImageView.setFitHeight(18);
+        addProjet.setGraphic(addImageView);
     }
 
     public void searchProjet(ActionEvent actionEvent) {
@@ -81,13 +97,40 @@ public class ShowProjetController {
     }
 
     public void showAddView(){
-        Main.addView("/com/projet/AddProjet.fxml");
-        searchProjet(new ActionEvent());
+        Main.addView("/com/projet/view/AddProjet.fxml");
+    }
+
+    public void updateProjet(Projet projet){
+        SqlSession sqlSession = MyBatisUtils.getSqlSession();
+        ProjetMapper mapper = sqlSession.getMapper(ProjetMapper.class);
+        System.out.println(projet.toString());
+        mapper.updateProjet(projet);
+        sqlSession.commit();
     }
 
     public void refreshTable(List newData) {
         ObservableList<Projet> data = FXCollections.observableArrayList();
         data.addAll(newData);
         tableViewProjet.setItems(data);
+    }
+
+    public void toShowFormation(ActionEvent actionEvent) {
+        Main.changeView("/com/projet/view/ShowFormation.fxml");
+    }
+
+    public void toShowEtudiant(ActionEvent actionEvent) {
+        Main.changeView("/com/projet/view/ShowEtudiant.fxml");
+    }
+
+    public void toShowProjet(ActionEvent actionEvent) {
+        Main.changeView("/com/projet/view/ShowProjet.fxml");
+    }
+
+    public void toShowBinome(ActionEvent actionEvent) {
+        Main.changeView("/com/projet/view/ShowProjet.fxml");
+    }
+
+    public void toShowNote(ActionEvent actionEvent) {
+        Main.changeView("/com/projet/view/ShowProjet.fxml");
     }
 }
