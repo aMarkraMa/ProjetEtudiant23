@@ -19,7 +19,8 @@
         <Button fx:id="addProjet" layoutX="430.0" layoutY="53.0" mnemonicParsing="false" onAction="#showAddView" prefHeight="27.0" prefWidth="45.0" />
         <TextField fx:id="textFieldNomMatiere" layoutX="28.0" layoutY="53.0" prefHeight="27.0" prefWidth="88.0" promptText="nomMatiere" />
         <Button fx:id="searchProjet" layoutX="373.0" layoutY="53.0" mnemonicParsing="false" onAction="#searchProjet" prefHeight="27.0" prefWidth="45.0" />
-        <Button fx:id="refreshProjet" layoutX="506.0" layoutY="53.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0" />
+        <Button fx:id="refreshProjet" layoutX="553.0" layoutY="53.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0" />
+        <Button fx:id="deleteProjet" layoutX="488.0" layoutY="53.0" mnemonicParsing="false" onAction="#deleteProjet" prefHeight="27.0" prefWidth="45.0"/>
         <TextField fx:id="textFieldSujet" layoutX="133.0" layoutY="53.0" prefHeight="27.0" prefWidth="83.0" promptText="sujet" />
         <DatePicker fx:id="datePicker" layoutX="236.0" layoutY="53.0" prefHeight="27.0" prefWidth="98.0" />
 
@@ -36,5 +37,6 @@
                 <Menu fx:id="downloadProjet" mnemonicParsing="false" text="Download" />
             </menus>
         </MenuBar>
+
     </children>
 </AnchorPane>

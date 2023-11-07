@@ -19,6 +19,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class ShowProjetController {
+    private SqlSession sqlSession;
+
+    private ProjetMapper mapper;
+
     @FXML
     private TableColumn<Projet, String> nomMatiere;
 
@@ -41,6 +45,9 @@ public class ShowProjetController {
     private Button searchProjet;
 
     @FXML
+    private Button deleteProjet;
+
+    @FXML
     private DatePicker datePicker;
 
     @FXML
@@ -51,6 +58,10 @@ public class ShowProjetController {
 
     @FXML
     public void initialize() {
+
+        sqlSession = MyBatisUtils.getSqlSession();
+        mapper = sqlSession.getMapper(ProjetMapper.class);
+
         tableViewProjet.setEditable(true);
 
         nomMatiere.setCellValueFactory(new PropertyValueFactory<>("nomMatiere"));
@@ -81,11 +92,16 @@ public class ShowProjetController {
         addImageView.setFitWidth(18);
         addImageView.setFitHeight(18);
         addProjet.setGraphic(addImageView);
+
+        Image delete = new Image("com/projet/img/delete.png");
+        ImageView deleteImageView = new ImageView(delete);
+        deleteImageView.setFitWidth(18);
+        deleteImageView.setFitHeight(18);
+        deleteProjet.setGraphic(deleteImageView);
     }
 
     public void searchProjet(ActionEvent actionEvent) {
-        SqlSession sqlSession = MyBatisUtils.getSqlSession();
-        ProjetMapper mapper = sqlSession.getMapper(ProjetMapper.class);
+
         Projet projet = new Projet();
         projet.setNomMatiere("%" + textFieldNomMatiere.getText() + "%");
         projet.setSujet("%" + textFieldSujet.getText() + "%");
@@ -106,12 +122,35 @@ public class ShowProjetController {
         System.out.println(projet.toString());
         mapper.updateProjet(projet);
         sqlSession.commit();
+
     }
 
-    public void refreshTable(List newData) {
+    public void refreshTable() {
+        List<Projet> projets = mapper.selectByCondition(new Projet());
         ObservableList<Projet> data = FXCollections.observableArrayList();
-        data.addAll(newData);
+        data.addAll(projets);
         tableViewProjet.setItems(data);
+    }
+
+    public void deleteProjet(ActionEvent actionEvent){
+        Projet projet = tableViewProjet.getSelectionModel().getSelectedItem();
+
+        if(projet != null){
+            mapper.deleteById(projet.getIdProjet());
+        }else{
+            showErr("Pas de ligne selectioné");
+        }
+
+        refreshTable();
+    }
+
+    public void showErr(String msg){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error Dialog");
+        alert.setHeaderText("Oups");
+        alert.setContentText(msg);
+
+        alert.showAndWait();
     }
 
     public void toShowFormation(ActionEvent actionEvent) {
