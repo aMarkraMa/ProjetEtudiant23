@@ -111,7 +111,7 @@ public class ShowEtudiantController {
 						modifier.setOnAction((ActionEvent event) -> {
 							Etudiant etudiant = getTableView().getItems().get(getIndex());
 							UpdateEtudiantServiceImpl.etudiantToUpdate = etudiant;
-							Main.addView("/com/projet/UpdateEtudiant.fxml");
+							Main.addView("/com/projet/view/UpdateEtudiant.fxml");
 							
 						});
 						
@@ -168,12 +168,12 @@ public class ShowEtudiantController {
 		List<Etudiant> etudiants = mapper.selectAll();
 		refreshTable(etudiants);
 		
-		Image refresh = new Image("refresh.png");
+		Image refresh = new Image("com/projet/img/refresh.png");
 		ImageView refreshImageView = new ImageView(refresh);
 		refreshImageView.setFitHeight(20);
 		refreshImageView.setFitWidth(20);
 		refreshEtudiant.setGraphic(refreshImageView);
-		Image search = new Image("search.png");
+		Image search = new Image("com/projet/img/search.png");
 		ImageView searchImageView = new ImageView(search);
 		searchImageView.setFitWidth(20);
 		searchImageView.setFitHeight(20);
@@ -190,15 +190,15 @@ public class ShowEtudiantController {
 	
 	
 	public void retour(ActionEvent actionEvent) {
-		Main.changeView("/com/projet/Main.fxml");
+		Main.changeView("/com/projet/view/Main.fxml");
 	}
 	
 	public void toFormations(ActionEvent actionEvent) {
-		Main.changeView("/com/projet/ShowFormation.fxml");
+		Main.changeView("/com/projet/view/ShowFormation.fxml");
 	}
 	
 	public void toAjouterEtudiant(ActionEvent actionEvent) {
-		Main.addView("/com/projet/AddEtudiant.fxml");
+		Main.addView("/com/projet/view/AddEtudiant.fxml");
 	}
 	
 	public void searchEtudiant(ActionEvent actionEvent) {
@@ -231,7 +231,7 @@ public class ShowEtudiantController {
 	}
 	
 	public void toProjets(ActionEvent actionEvent) {
-		Main.changeView("/com/projet/ShowProjet.fxml");
+		Main.changeView("/com/projet/view/ShowProjet.fxml");
 	}
 	
 	public void toBinomes(ActionEvent actionEvent) {

@@ -93,7 +93,7 @@ public class ShowFormationController {
 						modifier.setOnAction((ActionEvent event) -> {
 							Formation formation = getTableView().getItems().get(getIndex());
 							UpdateFormationServiceImpl.formationToUpdate = formation;
-							Main.addView("/com/projet/UpdateFormation.fxml");
+							Main.addView("/com/projet/view/UpdateFormation.fxml");
 							
 						});
 						
@@ -149,12 +149,12 @@ public class ShowFormationController {
 		List<Formation> formations = mapper.selectAll();
 		refreshTable(formations);
 		
-		Image refresh = new Image("refresh.png");
+		Image refresh = new Image("com/projet/img/refresh.png");
 		ImageView refreshImageView = new ImageView(refresh);
 		refreshImageView.setFitHeight(20);
 		refreshImageView.setFitWidth(20);
 		refreshFormation.setGraphic(refreshImageView);
-		Image search = new Image("search.png");
+		Image search = new Image("com/projet/img/search.png");
 		ImageView searchImageView = new ImageView(search);
 		searchImageView.setFitWidth(20);
 		searchImageView.setFitHeight(20);
@@ -171,15 +171,15 @@ public class ShowFormationController {
 	
 	
 	public void retour(ActionEvent actionEvent) {
-		Main.changeView("/com/projet/Main.fxml");
+		Main.changeView("/com/projet/view/Main.fxml");
 	}
 	
 	public void toEtudiants(ActionEvent actionEvent) {
-		Main.changeView("/com/projet/ShowEtudiant.fxml");
+		Main.changeView("/com/projet/view/ShowEtudiant.fxml");
 	}
 	
 	public void toAjouterFormation(ActionEvent actionEvent) {
-		Main.addView("/com/projet/AddFormation.fxml");
+		Main.addView("/com/projet/view/AddFormation.fxml");
 	}
 	
 	public void searchFormation(ActionEvent actionEvent) {
