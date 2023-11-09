@@ -13,15 +13,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import org.apache.ibatis.session.SqlSession;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public class ShowProjetController {
-    private SqlSession sqlSession;
-
-    private ProjetMapper mapper;
 
     @FXML
     private TableColumn<Projet, String> nomMatiere;
@@ -36,7 +34,7 @@ public class ShowProjetController {
     private TableView<Projet> tableViewProjet;
 
     @FXML
-    private Button returnProjet;
+    private Button refreshProjet;
 
     @FXML
     private Button addProjet;
@@ -59,8 +57,8 @@ public class ShowProjetController {
     @FXML
     public void initialize() {
 
-        sqlSession = MyBatisUtils.getSqlSession();
-        mapper = sqlSession.getMapper(ProjetMapper.class);
+        SqlSession sqlSession = MyBatisUtils.getSqlSession();
+        ProjetMapper mapper = sqlSession.getMapper(ProjetMapper.class);
 
         tableViewProjet.setEditable(true);
 
@@ -70,17 +68,108 @@ public class ShowProjetController {
 
         nomMatiere.setCellFactory(TextFieldTableCell.forTableColumn());
         sujet.setCellFactory(TextFieldTableCell.forTableColumn());
+        datePrevueRemise.setCellFactory(column -> new TableCell<Projet, LocalDate>() {
+            private final DatePicker datePicker = new DatePicker();
+            {
+                datePicker.setOnAction(event -> {
+                    if(datePicker.getValue() != null) {
+                        commitEdit(datePicker.getValue());
+                    } else {
+                        cancelEdit();
+                    }
+                });
+                datePicker.setOnKeyReleased(event -> {
+                    if(event.getCode() == KeyCode.ENTER) {
+                        commitEdit(datePicker.getValue());
+                    } else if(event.getCode() == KeyCode.ESCAPE) {
+                        cancelEdit();
+                    }
+                });
+            }
 
+            @Override
+            protected void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    // 如果是当前行是正在编辑的行，则显示DatePicker
+                    if (isEditing()) {
+                        datePicker.setValue(item);
+                        setGraphic(datePicker);
+                    } else {
+                        setText(getItem() == null ? "" : getItem().toString());
+                        setGraphic(null);
+                    }
+                }
+            }
+
+            @Override
+            public void startEdit() {
+                super.startEdit();
+                if (!isEmpty()) {
+                    datePicker.setValue(getItem());
+                    setGraphic(datePicker);
+                    setText(null);
+                }
+            }
+
+            @Override
+            public void cancelEdit() {
+                super.cancelEdit();
+                setText(getItem().toString());
+                setGraphic(null);
+            }
+
+            // 当DatePicker的值改变时，提交编辑
+            {
+                datePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+                    if(isEditing()) {
+                        commitEdit(newValue);
+                    }
+                });
+            }
+
+            @Override
+            public void commitEdit(LocalDate newValue) {
+                super.commitEdit(newValue);
+                Projet projet = getTableView().getItems().get(getIndex());
+                // 更新项目的日期
+                projet.setDatePrevueRemise(newValue);
+                // 使用外部定义的方法更新数据库和刷新TableView
+                updateProjet(projet);
+            }
+
+        });
+
+        initializeImg();
 
         nomMatiere.setOnEditCommit(
                 (TableColumn.CellEditEvent<Projet, String> t) -> {
                     Projet projet = t.getTableView().getItems().get(t.getTablePosition().getRow());
-                    projet.setNomMatiere(t.getNewValue()); // mise à jour BDD
-
-                    // 更新数据库
+                    projet.setNomMatiere(t.getNewValue());
+                    // mise à jour BDD
                     updateProjet(projet);
                 });
 
+        sujet.setOnEditCommit(
+                (TableColumn.CellEditEvent<Projet, String> t) -> {
+                    Projet projet = t.getTableView().getItems().get(t.getTablePosition().getRow());
+                    projet.setSujet(t.getNewValue());
+                    // mise à jour BDD
+                    updateProjet(projet);
+                });
+
+
+
+
+        sqlSession.close();
+
+        refreshTable();
+    }
+
+    public void initializeImg(){
         Image search = new Image("com/projet/img/search.png");
         ImageView searchImageView = new ImageView(search);
         searchImageView.setFitWidth(18);
@@ -98,9 +187,18 @@ public class ShowProjetController {
         deleteImageView.setFitWidth(18);
         deleteImageView.setFitHeight(18);
         deleteProjet.setGraphic(deleteImageView);
+
+        Image refresh = new Image("com/projet/img/refresh.png");
+        ImageView refreshImageView = new ImageView(refresh);
+        refreshImageView.setFitWidth(18);
+        refreshImageView.setFitHeight(18);
+        refreshProjet.setGraphic(refreshImageView);
     }
 
     public void searchProjet(ActionEvent actionEvent) {
+
+        SqlSession sqlSession = MyBatisUtils.getSqlSession();
+        ProjetMapper mapper = sqlSession.getMapper(ProjetMapper.class);
 
         Projet projet = new Projet();
         projet.setNomMatiere("%" + textFieldNomMatiere.getText() + "%");
@@ -110,6 +208,8 @@ public class ShowProjetController {
         ObservableList<Projet> data = FXCollections.observableArrayList();
         data.addAll(projets);
         tableViewProjet.setItems(data);
+
+        sqlSession.close();
     }
 
     public void showAddView(){
@@ -119,20 +219,18 @@ public class ShowProjetController {
     public void updateProjet(Projet projet){
         SqlSession sqlSession = MyBatisUtils.getSqlSession();
         ProjetMapper mapper = sqlSession.getMapper(ProjetMapper.class);
-        System.out.println(projet.toString());
+
         mapper.updateProjet(projet);
         sqlSession.commit();
-
-    }
-
-    public void refreshTable() {
-        List<Projet> projets = mapper.selectByCondition(new Projet());
-        ObservableList<Projet> data = FXCollections.observableArrayList();
-        data.addAll(projets);
-        tableViewProjet.setItems(data);
+        sqlSession.close();
+        refreshTable();
     }
 
     public void deleteProjet(ActionEvent actionEvent){
+
+        SqlSession sqlSession = MyBatisUtils.getSqlSession();
+        ProjetMapper mapper = sqlSession.getMapper(ProjetMapper.class);
+
         Projet projet = tableViewProjet.getSelectionModel().getSelectedItem();
 
         if(projet != null){
@@ -140,10 +238,27 @@ public class ShowProjetController {
         }else{
             showErr("Pas de ligne selectioné");
         }
-
+        sqlSession.close();
         refreshTable();
     }
 
+    public void refreshTable() {
+        SqlSession sqlSession = MyBatisUtils.getSqlSession();
+        ProjetMapper mapper = sqlSession.getMapper(ProjetMapper.class);
+
+        List<Projet> projets = mapper.selectAll();
+
+        ObservableList<Projet> data = FXCollections.observableArrayList();
+        data.addAll(projets);
+
+        tableViewProjet.setItems(data);
+
+        sqlSession.close();
+    }
+
+    public void refreshTable(ActionEvent actionEvent) {
+        refreshTable();
+    }
     public void showErr(String msg){
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error Dialog");
