@@ -24,6 +24,7 @@ public class MainController {
     }
 
     public void gestionBinome(ActionEvent actionEvent) {
+        Main.changeView("/com/projet/view/ShowBinome.fxml");
     }
 
     public void gestionNote(ActionEvent actionEvent) {

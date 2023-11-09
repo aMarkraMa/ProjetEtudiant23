@@ -2,87 +2,91 @@ package com.projet.entity;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Binome {
-    private Integer idBinome;
-    private Integer idProjet;
-    private Etudiant etudiant1;
-    private Etudiant etudiant2;
-    private LocalDate dateReelleRemise;
-
-    public Binome() {
-    }
-
-    public Binome(Integer idBinome, Integer idProjet, Etudiant etudiant1, Etudiant etudiant2, LocalDate dateReelleRemise) {
-        this.idBinome = idBinome;
-        this.idProjet = idProjet;
-        this.etudiant1 = etudiant1;
-        this.etudiant2 = etudiant2;
-        this.dateReelleRemise = dateReelleRemise;
-    }
-
-    public Integer getIdBinome() {
-        return idBinome;
-    }
-
-    public void setIdBinome(Integer idBinome) {
-        this.idBinome = idBinome;
-    }
-
-    public Integer getIdProjet() {
-        return idProjet;
-    }
-
-    public void setIdProjet(Integer idProjet) {
-        this.idProjet = idProjet;
-    }
-
-    public Etudiant getEtudiant1() {
-        return etudiant1;
-    }
-
-    public void setEtudiant1(Etudiant etudiant1) {
-        this.etudiant1 = etudiant1;
-    }
-
-    public Etudiant getEtudiant2() {
-        return etudiant2;
-    }
-
-    public void setEtudiant2(Etudiant etudiant2) {
-        this.etudiant2 = etudiant2;
-    }
-
-    public LocalDate getDateReelleRemise() {
-        return dateReelleRemise;
-    }
-
-    public void setDateReelleRemise(LocalDate dateReelleRemise) {
-        this.dateReelleRemise = dateReelleRemise;
-    }
-
-    @Override
-    public String toString() {
-        return "Binome{" +
-                "idBinome=" + idBinome +
-                ", idProjet=" + idProjet +
-                ", etudiant1=" + etudiant1 +
-                ", etudiant2=" + etudiant2 +
-                ", dateReelleRemise=" + dateReelleRemise +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Binome binome = (Binome) o;
-        return Objects.equals(idBinome, binome.idBinome) && Objects.equals(idProjet, binome.idProjet) && Objects.equals(etudiant1, binome.etudiant1) && Objects.equals(etudiant2, binome.etudiant2) && Objects.equals(dateReelleRemise, binome.dateReelleRemise);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(idBinome, idProjet, etudiant1, etudiant2, dateReelleRemise);
-    }
+	private Integer idBinome;
+	private Projet projet;
+	private LocalDate dateReelleRemise;
+	
+	private double noteRapport;
+	
+	private List<Etudiant> etudiants;
+	
+	public Binome() {
+	}
+	
+	public Binome(Integer idBinome, Projet projet, LocalDate dateReelleRemise, double noteRapport) {
+		this.idBinome = idBinome;
+		this.projet = projet;
+		this.dateReelleRemise = dateReelleRemise;
+		this.noteRapport = noteRapport;
+		this.etudiants = new ArrayList<>();
+	}
+	
+	public Integer getIdBinome() {
+		return idBinome;
+	}
+	
+	public void setIdBinome(Integer idBinome) {
+		this.idBinome = idBinome;
+	}
+	
+	public Projet getProjet() {
+		return projet;
+	}
+	
+	public void setProjet(Projet projet) {
+		this.projet = projet;
+	}
+	
+	
+	public List<Etudiant> getEtudiants() {
+		return etudiants;
+	}
+	
+	public void setEtudiants(List<Etudiant> etudiants) {
+		this.etudiants = etudiants;
+	}
+	
+	public LocalDate getDateReelleRemise() {
+		return dateReelleRemise;
+	}
+	
+	public void setDateReelleRemise(LocalDate dateReelleRemise) {
+		this.dateReelleRemise = dateReelleRemise;
+	}
+	
+	public double getNoteRapport() {
+		return noteRapport;
+	}
+	
+	public void setNoteRapport(double noteRapport) {
+		this.noteRapport = noteRapport;
+	}
+	
+	@Override
+	public String toString() {
+		return "Binome{" +
+				"idBinome=" + idBinome +
+				", projet=" + projet +
+				", dateReelleRemise=" + dateReelleRemise +
+				", etudiants=" + etudiants +
+				'}';
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Binome)) return false;
+		Binome binome = (Binome) o;
+		return Objects.equals(getIdBinome(), binome.getIdBinome()) && Objects.equals(getProjet(), binome.getProjet());
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(getIdBinome(), getProjet());
+	}
 }

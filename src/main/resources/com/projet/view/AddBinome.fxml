@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="555.0" prefWidth="399.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projet.controller.AddBinomeController">
+    <children>
+        <Label alignment="CENTER" layoutX="73.0" layoutY="25.0" prefHeight="24.0" prefWidth="253.0" text="Ajouter un binome" />
+        <Label layoutX="23.0" layoutY="166.0" prefHeight="24.0" prefWidth="89.0" text="Projet" />
+        <Label layoutX="23.0" layoutY="234.0" prefHeight="24.0" prefWidth="89.0" text="Etudiant 1" />
+        <Label layoutX="23.0" layoutY="308.0" prefHeight="24.0" prefWidth="89.0" text="Etudiant 2" />
+        <Button fx:id="ajouterBi" layoutX="104.0" layoutY="469.0" mnemonicParsing="false" onAction="#ajouterBinome" prefHeight="36.0" prefWidth="191.0" text="Ajouter" />
+        <ChoiceBox fx:id="projet" layoutX="143.0" layoutY="160.0" prefHeight="36.0" prefWidth="242.0" />
+        <ChoiceBox fx:id="etudiant1" layoutX="143.0" layoutY="228.0" prefHeight="36.0" prefWidth="242.0" />
+        <ChoiceBox fx:id="etudiant2" layoutX="143.0" layoutY="302.0" prefHeight="36.0" prefWidth="242.0" />
+      <Label layoutX="23.0" layoutY="102.0" prefHeight="24.0" prefWidth="89.0" text="IdBinome" />
+      <TextField fx:id="idBinome" layoutX="143.0" layoutY="96.0" prefHeight="36.0" prefWidth="242.0" />
+    </children>
+</AnchorPane>

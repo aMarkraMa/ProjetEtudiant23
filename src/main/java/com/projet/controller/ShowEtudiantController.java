@@ -103,6 +103,7 @@ public class ShowEtudiantController {
 			public TableCell<Etudiant, Void> call(TableColumn<Etudiant, Void> etudiantVoidTableColumn) {
 				return new TableCell<>() {
 					private final Button modifier = new Button("Modifier");
+					
 					private final Button supprimer = new Button("Supprimer");
 					
 					private HBox pane = new HBox(modifier, supprimer);
@@ -225,8 +226,11 @@ public class ShowEtudiantController {
 		tableviewEtudiant.setItems(data);
 		
 		textfieldNomEtudiant.setText("");
+		textfieldNomEtudiant.setPromptText("Nom");
 		textfieldPrenomEtudiant.setText("");
+		textfieldPrenomEtudiant.setPromptText("Prenom");
 		textfieldNomFormation.setText("");
+		textfieldNomFormation.setPromptText("Formation");
 		tableviewEtudiant.refresh();
 	}
 	

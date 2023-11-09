@@ -1,6 +1,7 @@
 package com.projet.entity;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Etudiant {
@@ -8,6 +9,8 @@ public class Etudiant {
     private String nomEtudiant;
     private String prenomEtudiant;
     private Formation formation;
+    
+    // private List<Binome> binomes;
 
     public Etudiant() {
     }
@@ -17,6 +20,7 @@ public class Etudiant {
         this.nomEtudiant = nomEtudiant;
         this.prenomEtudiant = prenomEtudiant;
         this.formation = formation;
+        // binomes = new ArrayList<>();
     }
 
     public Integer getIdEtudiant() {
@@ -50,7 +54,16 @@ public class Etudiant {
     public void setFormation(Formation formation) {
         this.formation = formation;
     }
-
+    
+    // public List<Binome> getBinomes() {
+    //     return binomes;
+    // }
+    
+    // public void setBinomes(List<Binome> binomes) {
+    //     this.binomes = binomes;
+    // }
+    
+    
     @Override
     public String toString() {
         return "Etudiant{" +
@@ -60,7 +73,7 @@ public class Etudiant {
                 ", formation=" + formation +
                 '}';
     }
-
+    
     @Override
     public int hashCode() {
         return Objects.hash(idEtudiant);

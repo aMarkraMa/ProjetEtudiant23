@@ -22,10 +22,7 @@ public class EtudiantMapperTest {
 		sqlSession = MyBatisUtils.getSqlSession();
 	}
 	
-	@After
-	public void tearDown() {
-		MyBatisUtils.closeSqlSession(sqlSession);
-	}
+	
 	
 	@Test
 	public void testSelectByCondition() {

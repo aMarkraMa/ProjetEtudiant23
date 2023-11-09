@@ -13,5 +13,10 @@ public interface EtudiantMapper {
     int updateEtudiant(Etudiant etudiant);
     void deleteById(int idEtudiant);
     
+    List<String> getNomsEtudiant();
+    
+    List<String> getPrenomsEtudiant();
+    
+    List<Integer> getIdsEtudiant();
 
 }

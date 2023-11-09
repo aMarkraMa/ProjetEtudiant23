@@ -51,7 +51,24 @@
         from etudiants e, formations f
         where e.id_formation = f.id_formation and e.id_etudiant = #{idEtudiant}
     </select>
-
+    
+    
+    <select id="getNomsEtudiant" resultType="java.lang.String">
+        SELECT nom_etudiant
+        FROM etudiants
+    </select>
+    
+    <select id="getPrenomsEtudiant" resultType="java.lang.String">
+        SELECT prenom_etudiant
+        FROM etudiants
+    </select>
+    
+    <select id="getIdsEtudiant" resultType="java.lang.Integer">
+        SELECT id_etudiant
+        FROM etudiants
+    </select>
+    
+    
     <insert id="addEtudiant" useGeneratedKeys="true" keyProperty="idEtudiant">
         insert into etudiants (nom_etudiant, prenom_etudiant, id_formation)
         values (#{nomEtudiant}, #{prenomEtudiant}, #{formation.idFormation});
