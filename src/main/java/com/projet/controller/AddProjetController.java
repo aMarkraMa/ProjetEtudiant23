@@ -54,7 +54,7 @@ public class AddProjetController {
         projetMapper.addProjet(projet);
 
         sqlSession.commit();
-        MyBatisUtils.closeSqlSession(sqlSession);
+        sqlSession.close();
 
         Stage stage = (Stage)addProjet.getScene().getWindow();
         stage.close();
