@@ -78,13 +78,6 @@ public class ShowProjetController {
                         cancelEdit();
                     }
                 });
-                datePicker.setOnKeyReleased(event -> {
-                    if(event.getCode() == KeyCode.ENTER) {
-                        commitEdit(datePicker.getValue());
-                    } else if(event.getCode() == KeyCode.ESCAPE) {
-                        cancelEdit();
-                    }
-                });
             }
 
             @Override
@@ -98,6 +91,7 @@ public class ShowProjetController {
                     if (isEditing()) {
                         datePicker.setValue(item);
                         setGraphic(datePicker);
+                        System.out.println("id editing");
                     } else {
                         setText(getItem() == null ? "" : getItem().toString());
                         setGraphic(null);
@@ -113,6 +107,7 @@ public class ShowProjetController {
                     setGraphic(datePicker);
                     setText(null);
                 }
+                System.out.println("start edit");
             }
 
             @Override
@@ -120,6 +115,7 @@ public class ShowProjetController {
                 super.cancelEdit();
                 setText(getItem().toString());
                 setGraphic(null);
+                System.out.println("cancel edit");
             }
 
             // 当DatePicker的值改变时，提交编辑
@@ -139,6 +135,10 @@ public class ShowProjetController {
                 projet.setDatePrevueRemise(newValue);
                 // 使用外部定义的方法更新数据库和刷新TableView
                 updateProjet(projet);
+                System.out.println("commit edit");
+
+                setText(newValue.toString());
+                setGraphic(null);
             }
 
         });
@@ -217,13 +217,18 @@ public class ShowProjetController {
     }
 
     public void updateProjet(Projet projet){
-        SqlSession sqlSession = MyBatisUtils.getSqlSession();
-        ProjetMapper mapper = sqlSession.getMapper(ProjetMapper.class);
+        try(SqlSession sqlSession = MyBatisUtils.getSqlSession()){
+            ProjetMapper mapper = sqlSession.getMapper(ProjetMapper.class);
 
-        mapper.updateProjet(projet);
-        sqlSession.commit();
-        sqlSession.close();
-        refreshTable();
+            mapper.updateProjet(projet);
+            sqlSession.commit();
+
+            refreshTable();
+        }catch (Exception e){
+            showErr("mise à jour projet non réussi");
+        }
+
+
     }
 
     public void deleteProjet(ActionEvent actionEvent){
