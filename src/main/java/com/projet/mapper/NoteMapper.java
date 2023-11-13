@@ -14,4 +14,5 @@ public interface NoteMapper {
     int insertNote(Note note);
     int deleteNote(@Param("idBinome") Integer idBinome, @Param("idProjet") Integer idProjet, @Param("idEtudiant") Integer idEtudiant);
     int updateNote(Note note);
+    List<Note> selectByCondition(Note note);
 }

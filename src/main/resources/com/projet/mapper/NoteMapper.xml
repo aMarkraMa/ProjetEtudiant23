@@ -55,6 +55,32 @@
                b.note_rapport,
                e.nom_etudiant,
                e.prenom_etudiant,
+               p.nom_matiere,
+               p.sujet,
+               p.date_prevue_remise,
+               p.pourcentage_soutenance
+        FROM etudiants e,
+             binomes b,
+             projets p,
+             notes n,
+             appartenir a
+        WHERE n.id_projet = p.id_projet
+        AND n.id_binome = b.id_binome
+        AND n.id_etudiant = e.id_etudiant
+        AND b.id_binome = a.id_binome
+        AND p.id_projet = a.id_projet
+        AND e.id_etudiant = a.id_etudiant
+    </select>
+    
+    <select id="selectByCondition" resultType="com.projet.entity.Note">
+        select n.id_binome,
+               n.id_projet,
+               n.id_etudiant,
+               n.note_soutenance,
+               b.date_reelle_remise,
+               b.note_rapport,
+               e.nom_etudiant,
+               e.prenom_etudiant,
                f.id_formation,
                f.nom_formation,
                f.promotion,
@@ -62,16 +88,29 @@
                p.sujet,
                p.date_prevue_remise,
                p.pourcentage_soutenance
-        FROM etudiants e,
+        from etudiants e,
              binomes b,
              formations f,
              projets p,
              notes n
-        WHERE e.id_formation = f.id_formation
-          AND e.id_etudiant = n.id_etudiant
-          AND b.id_binome = n.id_binome
-          AND p.id_projet = n.id_projet
+        where e.id_formation = f.id_formation
+            AND e.id_etudiant = n.id_etudiant
+            AND b.id_binome = n.id_binome
+            AND p.id_projet = n.id_projet
+        
+        <if test="etudiant != null and etudiant.nomEtudiant != null and etudiant.nomEtudiant != ''">
+            and lower(e.nom_etudiant) like lower(#{etudiant.nomEtudiant})
+        </if>
+        <if test="etudiant != null and etudiant.prenomEtudiant != null and etudiant.prenomEtudiant != ''">
+            and lower(e.prenom_etudiant) like lower(#{etudiant.prenomEtudiant})
+        </if>
+        <if test="projet != null and projet.nomMatiere != null and projet.nomMatiere != ''">
+            and lower(p.nom_matiere) like lower(#{projet.nomMatiere})
+        </if>
+        <if test="projet != null and projet.sujet != null and projet.sujet != ''">
+            and lower(p.sujet) like lower(#{projet.sujet})
+        </if>
     </select>
-    
+
 
 </mapper>

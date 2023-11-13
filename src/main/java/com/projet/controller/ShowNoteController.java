@@ -288,18 +288,17 @@ public class ShowNoteController {
 	}
 	
 	public void searchNote(ActionEvent actionEvent) {
-		// SqlSession sqlSession = MyBatisUtils.getSqlSession();
-		// EtudiantMapper mapper = sqlSession.getMapper(EtudiantMapper.class);
-		// Etudiant etudiant = new Etudiant();
-		// etudiant.setNomEtudiant("%" + textfieldNomEtudiant.getText() + "%");
-		// etudiant.setPrenomEtudiant("%" + textfieldPrenomEtudiant.getText() + "%");
-		// Formation formation = new Formation();
-		// formation.setNomFormation("%" + textfieldNomFormation.getText() + "%");
-		// etudiant.setFormation(formation);
-		// List<Etudiant> etudiants = mapper.selectByCondition(etudiant);
-		// ObservableList<Etudiant> data = FXCollections.observableArrayList();
-		// data.addAll(etudiants);
-		// tableviewEtudiant.setItems(data);
+		SqlSession sqlSession = MyBatisUtils.getSqlSession();
+		NoteMapper mapper = sqlSession.getMapper(NoteMapper.class);
+		Note note = new Note();
+		Etudiant etudiant = new Etudiant();
+		etudiant.setNomEtudiant("%" + textfieldNomEtudiant.getText() + "%");
+		etudiant.setPrenomEtudiant("%" + textfieldPrenomEtudiant.getText() + "%");
+		note.setEtudiant(etudiant);
+		List<Note> notes = mapper.selectByCondition(note);
+		ObservableList<Note> data = FXCollections.observableArrayList();
+		data.addAll(notes);
+		tableviewNote.setItems(data);
 	}
 	
 	// public void refreshTable(ActionEvent actionEvent) {
