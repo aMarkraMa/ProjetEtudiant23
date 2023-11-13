@@ -1,11 +1,8 @@
 package com.projet.controller;
 
 import com.projet.Main;
-import com.projet.entity.Binome;
 import com.projet.entity.Note;
-import com.projet.mapper.BinomeMapper;
 import com.projet.mapper.NoteMapper;
-import com.projet.service.impl.UpdateBinomeServiceImpl;
 import com.projet.utils.MyBatisUtils;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -16,12 +13,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import org.apache.ibatis.session.SqlSession;
 
+import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Optional;
 
 public class ShowNoteController {
 	
@@ -34,7 +30,7 @@ public class ShowNoteController {
 	private TableColumn<Note, String> nomEtudiant;
 	
 	@FXML
-	private TableColumn<Note,String> prenomeEtudiant;
+	private TableColumn<Note, String> prenomeEtudiant;
 	
 	
 	@FXML
@@ -44,7 +40,7 @@ public class ShowNoteController {
 	private TableColumn<Note, String> noteRapport;
 	
 	@FXML
-	private TableColumn<Note, String> noteFinal;
+	private TableColumn<Note, String> noteFinale;
 	
 	
 	@FXML
@@ -147,89 +143,94 @@ public class ShowNoteController {
 			}
 		});
 		
-		noteFinal = new TableColumn<>("NoteSoutenance");
-		noteFinal.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Note, String>, ObservableValue<String>>() {
+		noteFinale = new TableColumn<>("NoteFinale");
+		noteFinale.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Note, String>, ObservableValue<String>>() {
+			
 			@Override
 			public ObservableValue<String> call(TableColumn.CellDataFeatures<Note, String> note) {
-				if (note.getValue().getNoteSoutenance() == 0.0) {
+				if ((note.getValue().getBinome().getNoteRapport() * note.getValue().getProjet().getPourcentageRapport() * 0.01 + note.getValue().getNoteSoutenance() * note.getValue().getProjet().getPourcentageSoutenance() * 0.01) == 0.0) {
 					return new SimpleStringProperty("");
 				} else {
+					Double noteFinale = note.getValue().getBinome().getNoteRapport() * note.getValue().getProjet().getPourcentageRapport() * 0.01 + note.getValue().getNoteSoutenance() * note.getValue().getProjet().getPourcentageSoutenance() * 0.01;
+					if (note.getValue().getBinome().getDateReelleRemise().isAfter(note.getValue().getProjet().getDatePrevueRemise())) {
+						noteFinale -= ChronoUnit.DAYS.between(note.getValue().getBinome().getDateReelleRemise(), note.getValue().getProjet().getDatePrevueRemise()) * 0.1;
+					}
 					return new SimpleStringProperty(note.getValue().getNoteSoutenance().toString());
 				}
 			}
 		});
 		
-		 boutons = new TableColumn<>("Operation");
-		 boutons.setCellFactory(new Callback<TableColumn<Note, Void>, TableCell<Note, Void>>() {
-		 	@Override
-		 	public TableCell<Note, Void> call(TableColumn<Note, Void> binomeVoidTableColumn) {
-		 		return new TableCell<>() {
-		 			private final Button modifier = new Button("Modifier");
-		 			private final Button supprimer = new Button("Supprimer");
-		//
-		// 			private HBox pane = new HBox(modifier, supprimer);
-		//
-		// 			{
-		// 				modifier.setOnAction((ActionEvent event) -> {
-		// 					Note note = getTableView().getItems().get(getIndex());
-		// 					SqlSession sqlSession = MyBatisUtils.getSqlSession();
-		// 					NoteMapper noteMapper = sqlSession.getMapper(NoteMapper.class);
-		// 					//UpdateNoteServiceImpl.binomeToUpdate = noteMapper.selectByIdBinomeAndIdProjet(note);
-		// 					//Main.addView("/com/projet/view/UpdateNote.fxml");
-		// 				});
-		//
-		// 				// supprimer.setOnAction((ActionEvent event) -> {
-		// 				// 	Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-		// 				// 	alert.setTitle("Supprimer un binome");
-		// 				// 	alert.setHeaderText("Confirmez votre choix");
-		// 				// 	alert.setContentText("Vous allez supprimer ce binome. Etes-vous sur?");
-		// 				// 	Optional<ButtonType> resultat = alert.showAndWait();
-		// 				// 	if (resultat.isPresent() && resultat.get() == ButtonType.OK) {
-		// 				// 		Binome binome = getTableView().getItems().get(getIndex());
-		// 				// 		Integer idBinome = binome.getIdBinome();
-		// 				// 		Integer idProjet = binome.getProjet().getIdProjet();
-		// 				// 		SqlSession sqlSession = null;
-		// 				// 		try {
-		// 				// 			sqlSession = MyBatisUtils.getNonAutoCommittingSqlSession();
-		// 				// 			BinomeMapper mapper = sqlSession.getMapper(BinomeMapper.class);
-		// 				// 			mapper.deleteBinome(idBinome,idProjet);
-		// 				// 			mapper.deleteAppartenir(idBinome,idProjet);
-		// 				// 			sqlSession.commit();
-		// 				// 			ObservableList<Binome> data = FXCollections.observableArrayList();
-		// 				// 			List<Binome> binomes = mapper.selectAll();
-		// 				// 			data.addAll(binomes);
-		// 				// 			tableviewBinome.setItems(data);
-		// 				// 		} catch (Exception e) {
-		// 				// 			if (sqlSession != null){
-		// 				// 				sqlSession.rollback();
-		// 				// 			}
-		// 				// 			e.printStackTrace();
-		// 				// 		} finally {
-		// 				// 			if (sqlSession != null) {
-		// 				// 				sqlSession.close();
-		// 				// 			}
-		// 				// 		}
-		// 				// 	}
-		//
-		//
-		// 				});
-		// 			}
-		//
-		// 			// @Override
-		// 			// protected void updateItem(Void item, boolean empty) {
-		// 			// 	super.updateItem(item, empty);
-		// 			// 	if (empty) {
-		// 			// 		setGraphic(null);
-		// 			// 	} else {
-		// 			// 		setGraphic(pane);
-		// 			// 	}
-		// 			// }
-		 		};
-		
-		 	}
-		
-		
-		 });
+		boutons = new TableColumn<>("Operation");
+		boutons.setCellFactory(new Callback<TableColumn<Note, Void>, TableCell<Note, Void>>() {
+			@Override
+			public TableCell<Note, Void> call(TableColumn<Note, Void> binomeVoidTableColumn) {
+				return new TableCell<>() {
+					private final Button modifier = new Button("Modifier");
+					private final Button supprimer = new Button("Supprimer");
+					//
+					// 			private HBox pane = new HBox(modifier, supprimer);
+					//
+					// 			{
+					// 				modifier.setOnAction((ActionEvent event) -> {
+					// 					Note note = getTableView().getItems().get(getIndex());
+					// 					SqlSession sqlSession = MyBatisUtils.getSqlSession();
+					// 					NoteMapper noteMapper = sqlSession.getMapper(NoteMapper.class);
+					// 					//UpdateNoteServiceImpl.binomeToUpdate = noteMapper.selectByIdBinomeAndIdProjet(note);
+					// 					//Main.addView("/com/projet/view/UpdateNote.fxml");
+					// 				});
+					//
+					// 				// supprimer.setOnAction((ActionEvent event) -> {
+					// 				// 	Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+					// 				// 	alert.setTitle("Supprimer un binome");
+					// 				// 	alert.setHeaderText("Confirmez votre choix");
+					// 				// 	alert.setContentText("Vous allez supprimer ce binome. Etes-vous sur?");
+					// 				// 	Optional<ButtonType> resultat = alert.showAndWait();
+					// 				// 	if (resultat.isPresent() && resultat.get() == ButtonType.OK) {
+					// 				// 		Binome binome = getTableView().getItems().get(getIndex());
+					// 				// 		Integer idBinome = binome.getIdBinome();
+					// 				// 		Integer idProjet = binome.getProjet().getIdProjet();
+					// 				// 		SqlSession sqlSession = null;
+					// 				// 		try {
+					// 				// 			sqlSession = MyBatisUtils.getNonAutoCommittingSqlSession();
+					// 				// 			BinomeMapper mapper = sqlSession.getMapper(BinomeMapper.class);
+					// 				// 			mapper.deleteBinome(idBinome,idProjet);
+					// 				// 			mapper.deleteAppartenir(idBinome,idProjet);
+					// 				// 			sqlSession.commit();
+					// 				// 			ObservableList<Binome> data = FXCollections.observableArrayList();
+					// 				// 			List<Binome> binomes = mapper.selectAll();
+					// 				// 			data.addAll(binomes);
+					// 				// 			tableviewBinome.setItems(data);
+					// 				// 		} catch (Exception e) {
+					// 				// 			if (sqlSession != null){
+					// 				// 				sqlSession.rollback();
+					// 				// 			}
+					// 				// 			e.printStackTrace();
+					// 				// 		} finally {
+					// 				// 			if (sqlSession != null) {
+					// 				// 				sqlSession.close();
+					// 				// 			}
+					// 				// 		}
+					// 				// 	}
+					//
+					//
+					// 				});
+					// 			}
+					//
+					// 			// @Override
+					// 			// protected void updateItem(Void item, boolean empty) {
+					// 			// 	super.updateItem(item, empty);
+					// 			// 	if (empty) {
+					// 			// 		setGraphic(null);
+					// 			// 	} else {
+					// 			// 		setGraphic(pane);
+					// 			// 	}
+					// 			// }
+				};
+				
+			}
+			
+			
+		});
 		
 		tableviewNote.getColumns().add(nomMatiere);
 		tableviewNote.getColumns().add(sujet);
@@ -237,7 +238,7 @@ public class ShowNoteController {
 		tableviewNote.getColumns().add(prenomeEtudiant);
 		tableviewNote.getColumns().add(noteRapport);
 		tableviewNote.getColumns().add(noteSoutenance);
-		tableviewNote.getColumns().add(noteFinal);
+		tableviewNote.getColumns().add(noteFinale);
 		tableviewNote.getColumns().add(boutons);
 		
 		
@@ -279,8 +280,8 @@ public class ShowNoteController {
 	}
 	
 	public void searchNote(ActionEvent actionEvent) {
-		 SqlSession sqlSession = MyBatisUtils.getSqlSession();
-		 NoteMapper mapper = sqlSession.getMapper(NoteMapper.class);
+		SqlSession sqlSession = MyBatisUtils.getSqlSession();
+		NoteMapper mapper = sqlSession.getMapper(NoteMapper.class);
 	}
 	
 	// public void refreshTable(ActionEvent actionEvent) {
@@ -307,11 +308,13 @@ public class ShowNoteController {
 		Main.changeView("/com/projet/view/ShowProjet.fxml");
 	}
 	
-	public void toEtudiants(ActionEvent actionEvent) {Main.changeView("/com/projet/view/ShowEtudiant.fxml");}
+	public void toEtudiants(ActionEvent actionEvent) {
+		Main.changeView("/com/projet/view/ShowEtudiant.fxml");
+	}
 	
 	public void toBinomes(ActionEvent actionEvent) {
 		Main.changeView("/com/projet/view/ShowBinome.fxml");
-	
+		
 	}
 	
 	

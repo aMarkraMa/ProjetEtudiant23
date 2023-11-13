@@ -292,4 +292,8 @@ public class ShowProjetController {
     public void toShowNote(ActionEvent actionEvent) {
         Main.changeView("/com/projet/view/ShowProjet.fxml");
     }
+    
+    public void retour(ActionEvent actionEvent) {
+        Main.changeView("/com/projet/view/Main.fxml");
+    }
 }

@@ -28,12 +28,14 @@
             <menus>
                 <Menu fx:id="menuProjet" mnemonicParsing="false" text="Menu">
                     <items>
+                        <MenuItem fx:id="returnFormation" mnemonicParsing="false" onAction="#retour" text="Retour" />
                         <MenuItem fx:id="toShowEtudiant" mnemonicParsing="false" onAction="#toShowEtudiant" text="Etudiant" />
                         <MenuItem fx:id="toShowFormation" mnemonicParsing="false" onAction="#toShowFormation" text="Formation" />
                         <MenuItem fx:id="toProjets" mnemonicParsing="false" onAction="#toShowProjet" text="Projet" />
                         <MenuItem fx:id="toBinomes" mnemonicParsing="false" onAction="#toShowBinome" text="Binome" />
                         <MenuItem fx:id="toNotes" mnemonicParsing="false" onAction="#toShowNote" text="Note" />
-                    </items></Menu>
+                    </items>
+                </Menu>
                 <Menu fx:id="downloadProjet" mnemonicParsing="false" text="Download" />
             </menus>
         </MenuBar>

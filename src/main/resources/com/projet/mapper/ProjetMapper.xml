@@ -14,14 +14,15 @@
         <result column="nom_matiere" property="nomMatiere"/>
         <result column="sujet" property="sujet"/>
         <result column="date_prevue_remise" property="datePrevueRemise"/>
+        <result column="pourcentage_soutenance" property="pourcentageSoutenance"/>
+        <result column="pourcentage_rapport" property="pourcentageRapport"/>
     </resultMap>
 
     <select id="selectAll" resultMap="projetResultMap" resultType="projet">
         select *
         from projets;
     </select>
-
-
+    
     <select id="selectById" resultMap="projetResultMap">select * from projets where id_projet = #{idProjet};</select>
     <!-- Requêtes conditionnelles dynamiques -->
     <select id="selectByCondition" resultMap="projetResultMap">

@@ -10,6 +10,8 @@
             <result column="nom_matiere" property="nomMatiere"/>
             <result column="sujet" property="sujet"/>
             <result column="date_prevue_remise" property="datePrevueRemise"/>
+            <result column="pourcentage_rapport" property="pourcentageRapport"/>
+            <result column="pourcentage_soutenance" property="pourcentageSoutenance"/>
         </association>
         <association property="binome" javaType="binome">
             <id column="id_binome" property="idBinome"/>
@@ -25,11 +27,11 @@
     </resultMap>
 
     <insert id="insertNote">
-        INSERT INTO notes(id_projet, id_binome, id_etudiant,note_rapport,note_soutenance) VALUES (#{idProjet}, #{idBinome}, #{idEtudiant}, #{noteRapport}, #{noteSoutenance})
+        INSERT INTO notes(id_projet, id_binome, id_etudiant,note_soutenance) VALUES (#{idProjet}, #{idBinome}, #{idEtudiant}, 0.0)
     </insert>
 
     <delete id="deleteNote">
-        DELETE FROM notes WHERE id_etudiant = #{idEtudiant} AND id_binome = #{idBinome} AND id_projet = #{idProjet} AND note_soutenance = #{noteSoutenance} AND note_rapport = #{noteRapport}
+        DELETE FROM notes WHERE id_etudiant = #{idEtudiant} AND id_binome = #{idBinome} AND id_projet = #{idProjet} AND note_soutenance = #{noteSoutenance}
     </delete>
 
     <update id="updateNote">
@@ -43,19 +45,7 @@
         AND id_projet = #{idProjet}
     </update>
 
-    <select id="selectNote" resultType="note">
-        SELECT n.note_rapport, n.note_soutenance
-        FROM notes n
-        <where>
-            <if test="noteSoutenance != null">
-                n.note_soutenance = #{noteSoutenance}
-            </if>
-
-            <if test="noteRapport != null">
-                AND n.note_rapport = #{noteRapport}
-            </if>
-        </where>
-    </select>
+  
     
     <select id="selectAll" resultMap="resultMapNote" resultType="com.projet.entity.Note">
         SELECT n.id_binome,
@@ -63,7 +53,7 @@
                n.id_etudiant,
                n.note_soutenance,
                b.date_reelle_remise,
-               n.note_rapport,
+               b.note_rapport,
                e.nom_etudiant,
                e.prenom_etudiant,
                f.id_formation,
@@ -71,7 +61,9 @@
                f.promotion,
                p.nom_matiere,
                p.sujet,
-               p.date_prevue_remise
+               p.date_prevue_remise,
+               p.pourcentage_soutenance,
+               p.pourcentage_rapport
             
         FROM etudiants e,
              binomes b,

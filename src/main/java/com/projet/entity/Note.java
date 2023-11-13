@@ -4,9 +4,9 @@ import java.util.Objects;
 
 public class Note {
     private Binome binome;
+    private Projet projet;
     private Etudiant etudiant;
     private Double noteSoutenance;
-    private Projet projet;
     
     public Note() {
     }

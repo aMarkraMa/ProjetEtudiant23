@@ -13,5 +13,4 @@ public interface NoteMapper {
     int insertNote(Note note);
     int deleteNote(Note note);
     int updateNote(Note note);
-    ArrayList<Note> selectNote(Note note);
 }
