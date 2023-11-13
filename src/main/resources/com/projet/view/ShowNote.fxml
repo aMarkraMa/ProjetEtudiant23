@@ -26,7 +26,7 @@
                         <MenuItem fx:id="toEtudiants" mnemonicParsing="false" onAction="#toEtudiants" text="Gestion d'etudiants" />
                         <MenuItem fx:id="toFormations" mnemonicParsing="false" onAction="#toFormations" text="Gestion de formations" />
                         <MenuItem fx:id="toProjets" mnemonicParsing="false" onAction="#toProjets" text="Gestion de projets" />
-                        <MenuItem fx:id="toBinomes" mnemonicParsing="false" onAction="#toBinomes" text="Gestion de notes" />
+                        <MenuItem fx:id="toBinomes" mnemonicParsing="false" onAction="#toBinomes" text="Gestion de binomes" />
                     </items>
                 </Menu>
                 <Menu fx:id="downloadNote" mnemonicParsing="false" text="Download" />

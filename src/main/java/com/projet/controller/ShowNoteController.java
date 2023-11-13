@@ -1,8 +1,14 @@
 package com.projet.controller;
 
 import com.projet.Main;
+import com.projet.entity.Binome;
+import com.projet.entity.Etudiant;
+import com.projet.entity.Formation;
 import com.projet.entity.Note;
+import com.projet.mapper.BinomeMapper;
+import com.projet.mapper.EtudiantMapper;
 import com.projet.mapper.NoteMapper;
+import com.projet.service.impl.UpdateNoteServiceImpl;
 import com.projet.utils.MyBatisUtils;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -13,11 +19,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import org.apache.ibatis.session.SqlSession;
 
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 
 public class ShowNoteController {
 	
@@ -148,10 +156,10 @@ public class ShowNoteController {
 			
 			@Override
 			public ObservableValue<String> call(TableColumn.CellDataFeatures<Note, String> note) {
-				if ((note.getValue().getBinome().getNoteRapport() * (1 - note.getValue().getProjet().getPourcentageSoutenance()) * 0.01 + note.getValue().getNoteSoutenance() * note.getValue().getProjet().getPourcentageSoutenance() * 0.01) == 0.0) {
+				if (note.getValue().getNoteSoutenance() == 0.0 || note.getValue().getBinome().getNoteRapport() == 0.0) {
 					return new SimpleStringProperty("");
 				} else {
-					Double noteFinale = note.getValue().getBinome().getNoteRapport() * (1 - note.getValue().getProjet().getPourcentageSoutenance()) * 0.01 + note.getValue().getNoteSoutenance() * note.getValue().getProjet().getPourcentageSoutenance() * 0.01;
+					Double noteFinale = note.getValue().getBinome().getNoteRapport() * (100-note.getValue().getBinome().getNoteRapport()) * 0.01 + note.getValue().getNoteSoutenance() * note.getValue().getProjet().getPourcentageSoutenance() * 0.01;
 					if (note.getValue().getBinome().getDateReelleRemise().isAfter(note.getValue().getProjet().getDatePrevueRemise())) {
 						noteFinale -= ChronoUnit.DAYS.between(note.getValue().getBinome().getDateReelleRemise(), note.getValue().getProjet().getDatePrevueRemise()) * 0.1;
 					}
@@ -167,64 +175,64 @@ public class ShowNoteController {
 				return new TableCell<>() {
 					private final Button modifier = new Button("Modifier");
 					private final Button supprimer = new Button("Supprimer");
-					//
-					// 			private HBox pane = new HBox(modifier, supprimer);
-					//
-					// 			{
-					// 				modifier.setOnAction((ActionEvent event) -> {
-					// 					Note note = getTableView().getItems().get(getIndex());
-					// 					SqlSession sqlSession = MyBatisUtils.getSqlSession();
-					// 					NoteMapper noteMapper = sqlSession.getMapper(NoteMapper.class);
-					// 					//UpdateNoteServiceImpl.binomeToUpdate = noteMapper.selectByIdBinomeAndIdProjet(note);
-					// 					//Main.addView("/com/projet/view/UpdateNote.fxml");
-					// 				});
-					//
-					// 				// supprimer.setOnAction((ActionEvent event) -> {
-					// 				// 	Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-					// 				// 	alert.setTitle("Supprimer un binome");
-					// 				// 	alert.setHeaderText("Confirmez votre choix");
-					// 				// 	alert.setContentText("Vous allez supprimer ce binome. Etes-vous sur?");
-					// 				// 	Optional<ButtonType> resultat = alert.showAndWait();
-					// 				// 	if (resultat.isPresent() && resultat.get() == ButtonType.OK) {
-					// 				// 		Binome binome = getTableView().getItems().get(getIndex());
-					// 				// 		Integer idBinome = binome.getIdBinome();
-					// 				// 		Integer idProjet = binome.getProjet().getIdProjet();
-					// 				// 		SqlSession sqlSession = null;
-					// 				// 		try {
-					// 				// 			sqlSession = MyBatisUtils.getNonAutoCommittingSqlSession();
-					// 				// 			BinomeMapper mapper = sqlSession.getMapper(BinomeMapper.class);
-					// 				// 			mapper.deleteBinome(idBinome,idProjet);
-					// 				// 			mapper.deleteAppartenir(idBinome,idProjet);
-					// 				// 			sqlSession.commit();
-					// 				// 			ObservableList<Binome> data = FXCollections.observableArrayList();
-					// 				// 			List<Binome> binomes = mapper.selectAll();
-					// 				// 			data.addAll(binomes);
-					// 				// 			tableviewBinome.setItems(data);
-					// 				// 		} catch (Exception e) {
-					// 				// 			if (sqlSession != null){
-					// 				// 				sqlSession.rollback();
-					// 				// 			}
-					// 				// 			e.printStackTrace();
-					// 				// 		} finally {
-					// 				// 			if (sqlSession != null) {
-					// 				// 				sqlSession.close();
-					// 				// 			}
-					// 				// 		}
-					// 				// 	}
-					//
-					//
-					// 				});
-					// 			}
-					//
-					// 			// @Override
-					// 			// protected void updateItem(Void item, boolean empty) {
-					// 			// 	super.updateItem(item, empty);
-					// 			// 	if (empty) {
-					// 			// 		setGraphic(null);
-					// 			// 	} else {
-					// 			// 		setGraphic(pane);
-					// 			// 	}
-					// 			// }
+					
+					private HBox pane = new HBox(modifier, supprimer);
+					
+					{
+						// 	modifier.setOnAction((ActionEvent event) -> {
+						// 		Note note = getTableView().getItems().get(getIndex());
+						// 		SqlSession sqlSession = MyBatisUtils.getSqlSession();
+						// 		NoteMapper noteMapper = sqlSession.getMapper(NoteMapper.class);
+						// 		UpdateNoteServiceImpl.noteToUpdate = noteMapper.selectByIdBinomeAndIdProjet(note);
+						// 		Main.addView("/com/projet/view/UpdateNote.fxml");
+						// 	});
+						
+						supprimer.setOnAction((ActionEvent event) -> {
+							Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+							alert.setTitle("Supprimer un note");
+							alert.setHeaderText("Confirmez votre choix");
+							alert.setContentText("Vous allez supprimer ce note. Etes-vous sur?");
+							Optional<ButtonType> resultat = alert.showAndWait();
+							if (resultat.isPresent() && resultat.get() == ButtonType.OK) {
+								Note note = getTableView().getItems().get(getIndex());
+								Integer idBinome = note.getBinome().getIdBinome();
+								Integer idProjet = note.getProjet().getIdProjet();
+								Integer idEtudiant = note.getEtudiant().getIdEtudiant();
+								SqlSession sqlSession = null;
+								try {
+									sqlSession = MyBatisUtils.getNonAutoCommittingSqlSession();
+									NoteMapper mapper = sqlSession.getMapper(NoteMapper.class);
+									mapper.deleteNote(idBinome, idProjet, idEtudiant);
+									sqlSession.commit();
+									ObservableList<Note> data = FXCollections.observableArrayList();
+									List<Note> notes = mapper.selectAll();
+									data.addAll(notes);
+									tableviewNote.setItems(data);
+								} catch (Exception e) {
+									if (sqlSession != null) {
+										sqlSession.rollback();
+									}
+									e.printStackTrace();
+								} finally {
+									if (sqlSession != null) {
+										sqlSession.close();
+									}
+								}
+							}
+							
+							
+						});
+					}
+					
+					@Override
+					protected void updateItem(Void item, boolean empty) {
+						super.updateItem(item, empty);
+						if (empty) {
+							setGraphic(null);
+						} else {
+							setGraphic(pane);
+						}
+					}
 				};
 				
 			}
@@ -280,8 +288,18 @@ public class ShowNoteController {
 	}
 	
 	public void searchNote(ActionEvent actionEvent) {
-		SqlSession sqlSession = MyBatisUtils.getSqlSession();
-		NoteMapper mapper = sqlSession.getMapper(NoteMapper.class);
+		// SqlSession sqlSession = MyBatisUtils.getSqlSession();
+		// EtudiantMapper mapper = sqlSession.getMapper(EtudiantMapper.class);
+		// Etudiant etudiant = new Etudiant();
+		// etudiant.setNomEtudiant("%" + textfieldNomEtudiant.getText() + "%");
+		// etudiant.setPrenomEtudiant("%" + textfieldPrenomEtudiant.getText() + "%");
+		// Formation formation = new Formation();
+		// formation.setNomFormation("%" + textfieldNomFormation.getText() + "%");
+		// etudiant.setFormation(formation);
+		// List<Etudiant> etudiants = mapper.selectByCondition(etudiant);
+		// ObservableList<Etudiant> data = FXCollections.observableArrayList();
+		// data.addAll(etudiants);
+		// tableviewEtudiant.setItems(data);
 	}
 	
 	// public void refreshTable(ActionEvent actionEvent) {

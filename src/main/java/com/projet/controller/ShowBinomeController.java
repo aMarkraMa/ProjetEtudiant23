@@ -247,7 +247,6 @@ public class ShowBinomeController {
 		});
 		
 		tableviewBinome.getColumns().add(idBinomes);
-		//tableviewBinome.getColumns().add(idProjet);
 		tableviewBinome.getColumns().add(nomMatiere);
 		tableviewBinome.getColumns().add(sujet);
 		tableviewBinome.getColumns().add(etudiant1);
@@ -260,6 +259,7 @@ public class ShowBinomeController {
 		SqlSession sqlSession = MyBatisUtils.getSqlSession();
 		BinomeMapper mapper = sqlSession.getMapper(BinomeMapper.class);
 		List<Binome> binomes = mapper.selectAll();
+		binomes.forEach(System.out::println);
 		refreshTable(binomes);
 		
 		Image refresh = new Image("/com/projet/img/refresh.png");
