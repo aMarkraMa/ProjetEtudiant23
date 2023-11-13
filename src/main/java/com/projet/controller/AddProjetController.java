@@ -23,7 +23,17 @@ public class AddProjetController {
     @FXML
     private DatePicker datePicker;
     @FXML
+    private TextField pourcentageSoutenance;
+    @FXML
     private Button addProjet;
+
+    public void initialize(){
+        pourcentageSoutenance.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d+")) {
+                pourcentageSoutenance.setText(newValue.replaceAll("[^\\d]+", ""));
+            }
+        });
+    }
 
 
     public void addProjet(){
@@ -32,16 +42,19 @@ public class AddProjetController {
 
         Projet projet = new Projet();
 
-        if(sujet.getText() != "" && sujet.getText() != null){
-            projet.setSujet(sujet.getText());
-        }else{
-            showErr("Sujet ne peux pas être vide");
-            return;
-        }
-        if(nomMatiere.getText() != "" && nomMatiere.getText() != null){
+
+        if(nomMatiere.getText() != null && !nomMatiere.getText().isEmpty()){
+            System.out.println("set Matiere");
             projet.setNomMatiere(nomMatiere.getText());
         }else{
             showErr("Nom Matière ne peux pas être vide");
+            return;
+        }
+        if(sujet.getText() != null && !sujet.getText().isEmpty()){
+            System.out.println("set sujet!");
+            projet.setSujet(sujet.getText());
+        }else{
+            showErr("Sujet ne peux pas être vide");
             return;
         }
         if(datePicker.getValue() != null){
@@ -50,6 +63,21 @@ public class AddProjetController {
             showErr("DatePrevueRemise ne peux pas être vide");
             return;
         }
+
+        if(pourcentageSoutenance.getText() != null && !pourcentageSoutenance.getText().isEmpty()){
+            projet.setPourcentageSoutenance(Integer.valueOf(pourcentageSoutenance.getText()));
+        }else{
+            showErr("pourcentageSoutenance ne peux pas être vide");
+            return;
+        }
+        if(Integer.valueOf(pourcentageSoutenance.getText()) <= 100 && Integer.valueOf(pourcentageSoutenance.getText()) >= 0){
+            projet.setPourcentageSoutenance(Integer.valueOf(pourcentageSoutenance.getText()));
+        }else{
+            showErr("pourcentageSoutenance doit entre 0 et 100");
+            return;
+        }
+        System.out.println("sujet " + sujet.getText());
+        System.out.println("nomMa " + nomMatiere.getText());
 
         projetMapper.addProjet(projet);
 

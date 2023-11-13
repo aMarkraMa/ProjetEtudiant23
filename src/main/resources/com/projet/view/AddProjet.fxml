@@ -6,15 +6,17 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="384.0" prefWidth="399.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projet.controller.AddProjetController">
+<AnchorPane prefHeight="406.0" prefWidth="399.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projet.controller.AddProjetController">
     <children>
         <Label alignment="CENTER" layoutX="73.0" layoutY="54.0" prefHeight="24.0" prefWidth="253.0" text="Ajouter un projet" />
         <Label layoutX="59.0" layoutY="110.0" prefHeight="24.0" prefWidth="69.0" text="nomMatiere" />
         <Label layoutX="59.0" layoutY="171.0" prefHeight="24.0" prefWidth="69.0" text="sujet" />
         <Label layoutX="59.0" layoutY="228.0" prefHeight="24.0" prefWidth="106.0" text="datePrévueRemise" />
-        <Button fx:id="addProjet" layoutX="104.0" layoutY="305.0" mnemonicParsing="false" onAction="#addProjet" prefHeight="36.0" prefWidth="191.0" text="Ajouter" />
+        <Button fx:id="addProjet" layoutX="104.0" layoutY="335.0" mnemonicParsing="false" onAction="#addProjet" prefHeight="36.0" prefWidth="191.0" text="Ajouter" />
         <TextField fx:id="nomMatiere" layoutX="179.0" layoutY="108.0" />
         <TextField fx:id="sujet" layoutX="179.0" layoutY="169.0" />
         <DatePicker fx:id="datePicker" layoutX="179.0" layoutY="225.0" prefHeight="27.0" prefWidth="161.0" />
+      <Label layoutX="59.0" layoutY="287.0" prefHeight="17.0" prefWidth="106.0" text="tauxSoutenance" />
+      <TextField fx:id="pourcentageSoutenance" layoutX="179.0" layoutY="282.0" />
     </children>
 </AnchorPane>

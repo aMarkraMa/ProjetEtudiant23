@@ -13,11 +13,15 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
+import javafx.scene.control.TextFormatter;
+import javafx.util.converter.IntegerStringConverter;
+
+import javafx.util.converter.IntegerStringConverter;
 import org.apache.ibatis.session.SqlSession;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 public class ShowProjetController {
 
@@ -72,6 +76,42 @@ public class ShowProjetController {
 
         nomMatiere.setCellFactory(TextFieldTableCell.forTableColumn());
         sujet.setCellFactory(TextFieldTableCell.forTableColumn());
+        pourcentageSoutenance.setCellFactory(column -> {
+            // 创建一个新的TextFieldTableCell，并使用自定义的IntegerStringConverter
+            return new TextFieldTableCell<Projet, Integer>(new IntegerStringConverter() {
+                @Override
+                public Integer fromString(String value) {
+                    // 覆写fromString方法以便在转换失败时返回null
+                    try {
+                        int intValue = Integer.parseInt(value);
+                        return (intValue >= 0 && intValue <= 100) ? intValue : null;
+                    } catch (NumberFormatException e) {
+                        return null;
+                    }
+                }
+            }) {
+                @Override
+                public void startEdit() {
+                    super.startEdit();
+                    // 获取当前单元格内的TextField
+                    TextField textField = (TextField) getGraphic();
+                    // 设置TextFormatter来限制输入
+                    textField.setTextFormatter(new TextFormatter<>(new IntegerStringConverter(), getItem(), c -> {
+                        if (c.getControlNewText().isEmpty()) {
+                            return c; // 允许为空值，用户可能在清空文本以便输入新值
+                        }
+                        try {
+                            int value = Integer.parseInt(c.getControlNewText());
+                            if (value >= 0 && value <= 100) { // 检查值的范围
+                                return c;
+                            }
+                        } catch (NumberFormatException ignored) {
+                        }
+                        return null; // 不接受输入，因为它不在0到100的范围内或者不是数字
+                    }));
+                }
+            };
+        });
 
         datePrevueRemise.setCellFactory(column -> new TableCell<Projet, LocalDate>() {
             private final DatePicker datePicker = new DatePicker();
@@ -166,6 +206,12 @@ public class ShowProjetController {
                     updateProjet(projet);
                 });
 
+        pourcentageSoutenance.setOnEditCommit(
+                (TableColumn.CellEditEvent<Projet, Integer> t) -> {
+                    Projet projet = t.getTableView().getItems().get(t.getTablePosition().getRow());
+                    projet.setPourcentageSoutenance(t.getNewValue());
+                    updateProjet(projet);
+                });
 
 
 
