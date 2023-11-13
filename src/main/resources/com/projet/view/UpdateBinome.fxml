@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="590.0" prefWidth="475.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projet.controller.UpdateBinomeController">
+	<children>
+		<Label alignment="CENTER" layoutX="111.0" layoutY="27.0" prefHeight="24.0" prefWidth="253.0" text="Modifier un binome" />
+		<Label layoutX="20.0" layoutY="94.0" prefHeight="24.0" prefWidth="154.0" text="IdBinome" />
+		<Label layoutX="20.0" layoutY="161.0" prefHeight="24.0" prefWidth="154.0" text="projet" />
+		<Label layoutX="20.0" layoutY="229.0" prefHeight="24.0" prefWidth="154.0" text="etudiant1" />
+		<Label layoutX="20.0" layoutY="294.0" prefHeight="24.0" prefWidth="154.0" text="etudiant2" />
+		<Button fx:id="updateBinome" layoutX="142.0" layoutY="514.0" mnemonicParsing="false" onAction="#updateBinome" prefHeight="36.0" prefWidth="191.0" text="Modifier" />
+		<TextField fx:id="idBinome" layoutX="189.0" layoutY="88.0" />
+		<ChoiceBox fx:id="etudiant1" layoutX="189.0" layoutY="223.0" prefHeight="36.0" prefWidth="242.0" />
+		<ChoiceBox fx:id="etudiant2" layoutX="189.0" layoutY="288.0" prefHeight="36.0" prefWidth="242.0" />
+		<ChoiceBox fx:id="projet" layoutX="189.0" layoutY="155.0" prefHeight="36.0" prefWidth="242.0" />
+		<Label layoutX="20.0" layoutY="360.0" prefHeight="24.0" prefWidth="154.0" text="noteRapport" />
+		<Label layoutX="20.0" layoutY="420.0" prefHeight="24.0" prefWidth="154.0" text="DateReelleRemise" />
+		<TextField fx:id="noteRapport" layoutX="189.0" layoutY="354.0" />
+		<DatePicker fx:id="dateRelleRemise" layoutX="189.0" layoutY="414.0" prefHeight="36.0" prefWidth="242.0" />
+	</children>
+</AnchorPane>

@@ -21,10 +21,7 @@ public class ProjetMapperTest {
         sqlSession = MyBatisUtils.getSqlSession();
     }
 
-    @After
-    public void tearDown() {
-        MyBatisUtils.closeSqlSession(sqlSession);
-    }
+ 
     @Test
     public void testSelectById(){
         // Obtenir une instance de l'interface UserMapper

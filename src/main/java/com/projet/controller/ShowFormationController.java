@@ -1,7 +1,9 @@
 package com.projet.controller;
 
 import com.projet.Main;
+import com.projet.entity.Etudiant;
 import com.projet.entity.Formation;
+import com.projet.mapper.EtudiantMapper;
 import com.projet.mapper.FormationMapper;
 import com.projet.service.impl.UpdateFormationServiceImpl;
 import com.projet.utils.MyBatisUtils;
@@ -98,22 +100,34 @@ public class ShowFormationController {
 						});
 						
 						supprimer.setOnAction((ActionEvent event) -> {
-							Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-							alert.setTitle("Supprimer une formation");
-							alert.setHeaderText("Confirmez votre choix");
-							alert.setContentText("Vous allez supprimer cette formation. Etes-vous sur?");
-							Optional<ButtonType> resultat = alert.showAndWait();
+							Alert alert1 = new Alert(Alert.AlertType.CONFIRMATION);
+							alert1.setTitle("Supprimer une formation");
+							alert1.setHeaderText("Confirmez votre choix");
+							alert1.setContentText("Vous allez supprimer cette formation. Etes-vous sur?");
+							Optional<ButtonType> resultat = alert1.showAndWait();
 							if (resultat.isPresent() && resultat.get() == ButtonType.OK) {
-								Formation formation = getTableView().getItems().get(getIndex());
-								System.out.println(formation);
-								Integer idFormation = formation.getIdFormation();
 								SqlSession sqlSession = MyBatisUtils.getSqlSession();
-								FormationMapper mapper = sqlSession.getMapper(FormationMapper.class);
-								mapper.deleteById(idFormation);
-								ObservableList<Formation> data = FXCollections.observableArrayList();
-								List<Formation> formations = mapper.selectAll();
-								data.addAll(formations);
-								tableviewFormation.setItems(data);
+								EtudiantMapper etudiantMapper = sqlSession.getMapper(EtudiantMapper.class);
+								FormationMapper formationMapper = sqlSession.getMapper(FormationMapper.class);
+								Formation formation = getTableView().getItems().get(getIndex());
+								Etudiant etudiant = new Etudiant();
+								etudiant.setFormation(formation);
+								List<Etudiant> etudiants = etudiantMapper.getEtudiantsByIdFormation(etudiant);
+								if (etudiants != null && etudiants.size() != 0) {
+									Alert alert2 = new Alert(Alert.AlertType.ERROR);
+									alert2.setTitle("ERREUR: Il y a encore des etudiants dans cette formation!");
+									alert2.setHeaderText("Il y a encore des etudiants dans cette formation!");
+									alert2.setContentText("Il y a encore des etudiants dans cette formation, vous ne pouvez pas la supprimer.");
+									alert2.getDialogPane().setPrefWidth(800);
+									alert2.show();
+								} else {
+									Integer idFormation = formation.getIdFormation();
+									formationMapper.deleteById(idFormation);
+									ObservableList<Formation> data = FXCollections.observableArrayList();
+									List<Formation> formations = formationMapper.selectAll();
+									data.addAll(formations);
+									tableviewFormation.setItems(data);
+								}
 							}
 							
 							
@@ -209,9 +223,11 @@ public class ShowFormationController {
 	
 	
 	public void toProjets(ActionEvent actionEvent) {
+		Main.changeView("/com/projet/view/ShowProjet.fxml");
 	}
 	
 	public void toBinomes(ActionEvent actionEvent) {
+		Main.changeView("/com/projet/view/ShowBinome.fxml");
 	}
 	
 	public void toNotes(ActionEvent actionEvent) {

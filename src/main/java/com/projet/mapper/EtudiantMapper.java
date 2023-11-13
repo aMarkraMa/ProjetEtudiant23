@@ -19,4 +19,5 @@ public interface EtudiantMapper {
     
     List<Integer> getIdsEtudiant();
 
+    List<Etudiant> getEtudiantsByIdFormation(Etudiant etudiant);
 }

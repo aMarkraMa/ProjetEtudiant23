@@ -11,14 +11,14 @@ public class Binome {
 	private Projet projet;
 	private LocalDate dateReelleRemise;
 	
-	private double noteRapport;
+	private Double noteRapport;
 	
 	private List<Etudiant> etudiants;
 	
 	public Binome() {
 	}
 	
-	public Binome(Integer idBinome, Projet projet, LocalDate dateReelleRemise, double noteRapport) {
+	public Binome(Integer idBinome, Projet projet, LocalDate dateReelleRemise, Double noteRapport) {
 		this.idBinome = idBinome;
 		this.projet = projet;
 		this.dateReelleRemise = dateReelleRemise;
@@ -42,7 +42,6 @@ public class Binome {
 		this.projet = projet;
 	}
 	
-	
 	public List<Etudiant> getEtudiants() {
 		return etudiants;
 	}
@@ -59,11 +58,11 @@ public class Binome {
 		this.dateReelleRemise = dateReelleRemise;
 	}
 	
-	public double getNoteRapport() {
+	public Double getNoteRapport() {
 		return noteRapport;
 	}
 	
-	public void setNoteRapport(double noteRapport) {
+	public void setNoteRapport(Double noteRapport) {
 		this.noteRapport = noteRapport;
 	}
 	

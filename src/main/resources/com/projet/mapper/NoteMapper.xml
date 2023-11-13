@@ -2,6 +2,27 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.projet.mapper.NoteMapper">
+    
+    <resultMap id="resultMapNote" type="note">
+        <result property="noteSoutenance" column="note_soutenance"/>
+        <association property="projet" javaType="projet">
+            <id column="id_projet" property="idProjet"/>
+            <result column="nom_matiere" property="nomMatiere"/>
+            <result column="sujet" property="sujet"/>
+            <result column="date_prevue_remise" property="datePrevueRemise"/>
+        </association>
+        <association property="binome" javaType="binome">
+            <id column="id_binome" property="idBinome"/>
+            <result column="date_reelle_remise" property="dateReelleRemise"/>
+            <result column="note_rapport" property="noteRapport"/>
+        </association>
+        <collection property="etudiant" ofType="etudiant">
+            <id column="id_etudiant" property="idEtudiant"/>
+            <result column="nom_etudiant" property="nomEtudiant"/>
+            <result column="prenom_etudiant" property="prenomEtudiant"/>
+            <association property="formation" javaType="formation" column="id_formation" select="com.projet.mapper.FormationMapper.selectById"/>
+        </collection>
+    </resultMap>
 
     <insert id="insertNote">
         INSERT INTO notes(id_projet, id_binome, id_etudiant,note_rapport,note_soutenance) VALUES (#{idProjet}, #{idBinome}, #{idEtudiant}, #{noteRapport}, #{noteSoutenance})
@@ -34,6 +55,33 @@
                 AND n.note_rapport = #{noteRapport}
             </if>
         </where>
+    </select>
+    
+    <select id="selectAll" resultMap="resultMapNote" resultType="com.projet.entity.Note">
+        SELECT n.id_binome,
+               n.id_projet,
+               n.id_etudiant,
+               n.note_soutenance,
+               b.date_reelle_remise,
+               n.note_rapport,
+               e.nom_etudiant,
+               e.prenom_etudiant,
+               f.id_formation,
+               f.nom_formation,
+               f.promotion,
+               p.nom_matiere,
+               p.sujet,
+               p.date_prevue_remise
+            
+        FROM etudiants e,
+             binomes b,
+             formations f,
+             projets p,
+             notes n
+        WHERE e.id_formation = f.id_formation
+          AND e.id_etudiant = n.id_etudiant
+          AND b.id_binome = n.id_binome
+          AND p.id_projet = n.id_projet
     </select>
 
 </mapper>

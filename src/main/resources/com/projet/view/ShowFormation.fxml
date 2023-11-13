@@ -20,7 +20,6 @@
             <menus>
                 <Menu fx:id="menuFormation" mnemonicParsing="false" text="Menu">
                     <items>
-                        <MenuItem fx:id="returnFormation" mnemonicParsing="false" onAction="#retour" text="Retour" />
                         <MenuItem fx:id="toEtudiants" mnemonicParsing="false" onAction="#toEtudiants" text="Gestion d'etudiants" />
                         <MenuItem fx:id="toProjets" mnemonicParsing="false" onAction="#toProjets" text="Gestion de projets" />
                         <MenuItem fx:id="toBinomes" mnemonicParsing="false" onAction="#toBinomes" text="Gestion de binomes" />

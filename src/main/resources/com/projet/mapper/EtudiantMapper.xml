@@ -68,8 +68,14 @@
         FROM etudiants
     </select>
     
-    
-    <insert id="addEtudiant" useGeneratedKeys="true" keyProperty="idEtudiant">
+	<select id="getEtudiantsByIdFormation" resultType="com.projet.entity.Etudiant">
+        SELECT *
+        FROM etudiants
+        WHERE id_formation = #{formation.idFormation}
+    </select>
+	
+	
+	<insert id="addEtudiant" useGeneratedKeys="true" keyProperty="idEtudiant">
         insert into etudiants (nom_etudiant, prenom_etudiant, id_formation)
         values (#{nomEtudiant}, #{prenomEtudiant}, #{formation.idFormation});
     </insert>

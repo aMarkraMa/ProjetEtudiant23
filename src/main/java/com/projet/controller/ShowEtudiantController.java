@@ -61,9 +61,6 @@ public class ShowEtudiantController {
 	private TextField textfieldNomFormation;
 	
 	@FXML
-	private MenuItem returnEtudiant;
-	
-	@FXML
 	private MenuItem toFormations;
 	
 	@FXML
@@ -239,6 +236,7 @@ public class ShowEtudiantController {
 	}
 	
 	public void toBinomes(ActionEvent actionEvent) {
+		Main.changeView("/com/projet/view/ShowBinome.fxml");
 	}
 	
 	public void toNotes(ActionEvent actionEvent) {

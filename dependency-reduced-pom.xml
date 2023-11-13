@@ -28,10 +28,7 @@
               <goal>shade</goal>
             </goals>
             <configuration>
-              <excludes>
-                <exclude>junit:junit</exclude>
-                <exclude>log4j:log4j</exclude>
-              </excludes>
+
             </configuration>
           </execution>
         </executions>
