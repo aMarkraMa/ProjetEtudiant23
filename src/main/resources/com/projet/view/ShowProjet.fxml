@@ -11,8 +11,9 @@
         <TableView fx:id="tableViewProjet" layoutX="28.0" layoutY="90.0" prefHeight="253.0" prefWidth="545.0">
             <columns>
                 <TableColumn fx:id="nomMatiere" prefWidth="134.0" text="nomMatière" />
-                <TableColumn fx:id="sujet" prefWidth="274.0" text="sujet" />
-                <TableColumn fx:id="datePrevueRemise" prefWidth="136.0" text="datePrévueRemise" />
+                <TableColumn fx:id="sujet" prefWidth="130.0" text="sujet" />
+                <TableColumn fx:id="datePrevueRemise" minWidth="0.0" prefWidth="131.0" text="datePrévueRemise" />
+                <TableColumn fx:id="pourcentageSoutenance" minWidth="0.0" prefWidth="149.0" text="pourcentageSoutenance" />
             </columns>
         </TableView>
         <Label alignment="CENTER" layoutX="161.0" layoutY="14.0" prefHeight="33.0" prefWidth="303.0" text="Gestion des projets" />

@@ -15,7 +15,6 @@
         <result column="sujet" property="sujet"/>
         <result column="date_prevue_remise" property="datePrevueRemise"/>
         <result column="pourcentage_soutenance" property="pourcentageSoutenance"/>
-        <result column="pourcentage_rapport" property="pourcentageRapport"/>
     </resultMap>
 
     <select id="selectAll" resultMap="projetResultMap" resultType="projet">
@@ -46,6 +45,7 @@
             <if test="nomMatiere != null and nomMatiere != ''">nom_matiere = #{nomMatiere},</if>
             <if test="sujet != null and sujet != ''">sujet = #{sujet},</if>
             <if test="datePrevueRemise != null">date_prevue_remise = #{datePrevueRemise},</if>
+            <if test="pourcentageSoutenance != null">pourcentage_soutenance = #{pourcentageSoutenance},</if>
         </set>
         where id_projet = #{idProjet};
     </update>

@@ -9,18 +9,16 @@ public class Projet {
     private String nomMatiere;
     private String sujet;
     private LocalDate datePrevueRemise;
-    private Integer pourcentageRapport;
     private Integer pourcentageSoutenance;
 
     public Projet() {
     }
     
-    public Projet(Integer idProjet, String nomMatiere, String sujet, LocalDate datePrevueRemise, Integer pourcentageRapport, Integer pourcentageSoutenance) {
+    public Projet(Integer idProjet, String nomMatiere, String sujet, LocalDate datePrevueRemise, Integer pourcentageSoutenance) {
         this.idProjet = idProjet;
         this.nomMatiere = nomMatiere;
         this.sujet = sujet;
         this.datePrevueRemise = datePrevueRemise;
-        this.pourcentageRapport = pourcentageRapport;
         this.pourcentageSoutenance = pourcentageSoutenance;
     }
     
@@ -55,15 +53,7 @@ public class Projet {
     public void setDatePrevueRemise(LocalDate datePrevueRemise) {
         this.datePrevueRemise = datePrevueRemise;
     }
-    
-    public Integer getPourcentageRapport() {
-        return pourcentageRapport;
-    }
-    
-    public void setPourcentageRapport(Integer pourcentageRapport) {
-        this.pourcentageRapport = pourcentageRapport;
-    }
-    
+
     public Integer getPourcentageSoutenance() {
         return pourcentageSoutenance;
     }
@@ -71,7 +61,7 @@ public class Projet {
     public void setPourcentageSoutenance(Integer pourcentageSoutenance) {
         this.pourcentageSoutenance = pourcentageSoutenance;
     }
-    
+
     @Override
     public String toString() {
         return "Projet{" +
@@ -79,9 +69,10 @@ public class Projet {
                 ", nomMatiere='" + nomMatiere + '\'' +
                 ", sujet='" + sujet + '\'' +
                 ", datePrevueRemise=" + datePrevueRemise +
+                ", pourcentageSoutenance=" + pourcentageSoutenance +
                 '}';
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)

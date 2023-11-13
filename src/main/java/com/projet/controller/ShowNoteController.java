@@ -148,10 +148,10 @@ public class ShowNoteController {
 			
 			@Override
 			public ObservableValue<String> call(TableColumn.CellDataFeatures<Note, String> note) {
-				if ((note.getValue().getBinome().getNoteRapport() * note.getValue().getProjet().getPourcentageRapport() * 0.01 + note.getValue().getNoteSoutenance() * note.getValue().getProjet().getPourcentageSoutenance() * 0.01) == 0.0) {
+				if ((note.getValue().getBinome().getNoteRapport() * (1 - note.getValue().getProjet().getPourcentageSoutenance()) * 0.01 + note.getValue().getNoteSoutenance() * note.getValue().getProjet().getPourcentageSoutenance() * 0.01) == 0.0) {
 					return new SimpleStringProperty("");
 				} else {
-					Double noteFinale = note.getValue().getBinome().getNoteRapport() * note.getValue().getProjet().getPourcentageRapport() * 0.01 + note.getValue().getNoteSoutenance() * note.getValue().getProjet().getPourcentageSoutenance() * 0.01;
+					Double noteFinale = note.getValue().getBinome().getNoteRapport() * (1 - note.getValue().getProjet().getPourcentageSoutenance()) * 0.01 + note.getValue().getNoteSoutenance() * note.getValue().getProjet().getPourcentageSoutenance() * 0.01;
 					if (note.getValue().getBinome().getDateReelleRemise().isAfter(note.getValue().getProjet().getDatePrevueRemise())) {
 						noteFinale -= ChronoUnit.DAYS.between(note.getValue().getBinome().getDateReelleRemise(), note.getValue().getProjet().getDatePrevueRemise()) * 0.1;
 					}

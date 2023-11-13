@@ -31,6 +31,9 @@ public class ShowProjetController {
     private TableColumn<Projet, LocalDate> datePrevueRemise;
 
     @FXML
+    private TableColumn<Projet, Integer> pourcentageSoutenance;
+
+    @FXML
     private TableView<Projet> tableViewProjet;
 
     @FXML
@@ -65,9 +68,11 @@ public class ShowProjetController {
         nomMatiere.setCellValueFactory(new PropertyValueFactory<>("nomMatiere"));
         sujet.setCellValueFactory(new PropertyValueFactory<>("sujet"));
         datePrevueRemise.setCellValueFactory(new PropertyValueFactory<>("datePrevueRemise"));
+        pourcentageSoutenance.setCellValueFactory(new PropertyValueFactory<>("pourcentageSoutenance"));
 
         nomMatiere.setCellFactory(TextFieldTableCell.forTableColumn());
         sujet.setCellFactory(TextFieldTableCell.forTableColumn());
+
         datePrevueRemise.setCellFactory(column -> new TableCell<Projet, LocalDate>() {
             private final DatePicker datePicker = new DatePicker();
             {
