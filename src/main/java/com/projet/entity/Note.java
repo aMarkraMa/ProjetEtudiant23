@@ -52,6 +52,16 @@ public class Note {
     }
     
     @Override
+    public String toString() {
+        return "Note{" +
+                "binome=" + binome +
+                ", projet=" + projet +
+                ", etudiant=" + etudiant +
+                ", noteSoutenance=" + noteSoutenance +
+                '}';
+    }
+    
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Note)) return false;

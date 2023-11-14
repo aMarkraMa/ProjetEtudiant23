@@ -47,8 +47,7 @@
   
     
     <select id="selectAll" resultMap="resultMapNote" resultType="com.projet.entity.Note">
-        SELECT n.id_binome,
-               n.id_projet,
+        SELECT n.id_projet,
                n.id_etudiant,
                n.note_soutenance,
                b.date_reelle_remise,
@@ -65,11 +64,11 @@
              notes n,
              appartenir a
         WHERE n.id_projet = p.id_projet
-        AND n.id_binome = b.id_binome
-        AND n.id_etudiant = e.id_etudiant
-        AND b.id_binome = a.id_binome
-        AND p.id_projet = a.id_projet
-        AND e.id_etudiant = a.id_etudiant
+          AND n.id_binome = b.id_binome
+          AND n.id_etudiant = e.id_etudiant
+          AND b.id_binome = a.id_binome
+          AND p.id_projet = a.id_projet
+          AND e.id_etudiant = a.id_etudiant
     </select>
     
     <select id="selectByCondition" resultType="com.projet.entity.Note">

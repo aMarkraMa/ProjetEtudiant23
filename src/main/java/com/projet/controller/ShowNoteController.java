@@ -236,8 +236,6 @@ public class ShowNoteController {
 				};
 				
 			}
-			
-			
 		});
 		
 		tableviewNote.getColumns().add(nomMatiere);
@@ -253,6 +251,7 @@ public class ShowNoteController {
 		SqlSession sqlSession = MyBatisUtils.getSqlSession();
 		NoteMapper mapper = sqlSession.getMapper(NoteMapper.class);
 		List<Note> notes = mapper.selectAll();
+		notes.forEach(System.out::println);
 		refreshTable(notes);
 		
 		Image refresh = new Image("/com/projet/img/refresh.png");
