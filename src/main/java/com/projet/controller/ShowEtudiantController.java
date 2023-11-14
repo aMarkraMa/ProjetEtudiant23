@@ -81,18 +81,16 @@ public class ShowEtudiantController {
 		id_etudiant.setPrefWidth(40);
 		nom_etudiant = new TableColumn<>("Nom");
 		nom_etudiant.setCellValueFactory(new PropertyValueFactory<>("nomEtudiant"));
-		nom_etudiant.setPrefWidth(112);
 		prenom_etudiant = new TableColumn<>("Prenom");
 		prenom_etudiant.setCellValueFactory(new PropertyValueFactory<>("prenomEtudiant"));
-		prenom_etudiant.setPrefWidth(112);
 		nom_formation = new TableColumn<>("Formation");
 		nom_formation.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Etudiant, String>, ObservableValue<String>>() {
+			//接收一个TableColumn.CellDataFeatures<T, U> 对象作为参数，并返回一个ObservableValue<U>对象
 			@Override
 			public ObservableValue<String> call(TableColumn.CellDataFeatures<Etudiant, String> etudiant) {
 				return new SimpleStringProperty(etudiant.getValue().getFormation().getNomFormation());
 			}
 		});
-		nom_formation.setPrefWidth(112);
 		
 		boutons = new TableColumn<>("Operation");
 		boutons.setCellFactory(new Callback<TableColumn<Etudiant, Void>, TableCell<Etudiant, Void>>() {
@@ -152,13 +150,20 @@ public class ShowEtudiantController {
 			
 		});
 		
-		boutons.setPrefWidth(224);
 		
 		tableviewEtudiant.getColumns().add(id_etudiant);
 		tableviewEtudiant.getColumns().add(nom_etudiant);
 		tableviewEtudiant.getColumns().add(prenom_etudiant);
 		tableviewEtudiant.getColumns().add(nom_formation);
 		tableviewEtudiant.getColumns().add(boutons);
+		
+		tableviewEtudiant.widthProperty().addListener((observable, oldValue, newValue) -> {
+			double tableWidth = newValue.doubleValue();
+			nom_etudiant.setPrefWidth((tableWidth-40) / 4);
+			prenom_etudiant.setPrefWidth((tableWidth-40) / 4);
+			nom_formation.setPrefWidth((tableWidth-40) / 4);
+			boutons.setPrefWidth((tableWidth-40) / 4);
+		});
 		
 		
 		SqlSession sqlSession = MyBatisUtils.getSqlSession();
@@ -240,6 +245,7 @@ public class ShowEtudiantController {
 	}
 	
 	public void toNotes(ActionEvent actionEvent) {
+		Main.changeView("/com/projet/view/ShowNote.fxml");
 	
 	}
 }

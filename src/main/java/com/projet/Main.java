@@ -51,6 +51,7 @@ public class Main extends Application {
         try {
             root = FXMLLoader.load(Main.class.getResource(fxml));
             stage.setScene(new Scene(root));
+            stage.setResizable(false);
         } catch (IOException e) {
             e.printStackTrace();
         }

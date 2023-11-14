@@ -39,7 +39,7 @@ public class ShowFormationController {
 	private TableView<Formation> tableviewFormation;
 	
 	@FXML
-	private Button toAddFor;
+	private Button toAjouterFor;
 	
 	@FXML
 	private Button refreshFormation;
@@ -52,9 +52,6 @@ public class ShowFormationController {
 	
 	@FXML
 	private TextField textfieldPromotion;
-	
-	@FXML
-	private MenuItem returnFormations;
 	
 	@FXML
 	private MenuItem toEtudiants;
@@ -76,10 +73,8 @@ public class ShowFormationController {
 		id_formation.setPrefWidth(40);
 		nom_formation = new TableColumn<>("Formation");
 		nom_formation.setCellValueFactory(new PropertyValueFactory<>("nomFormation"));
-		nom_formation.setPrefWidth(112);
 		promotion = new TableColumn<>("Promotion");
 		promotion.setCellValueFactory(new PropertyValueFactory<>("promotion"));
-		promotion.setPrefWidth(112);
 		
 		boutons = new TableColumn<>("Operation");
 		boutons.setCellFactory(new Callback<TableColumn<Formation, Void>, TableCell<Formation, Void>>() {
@@ -150,12 +145,18 @@ public class ShowFormationController {
 			
 		});
 		
-		boutons.setPrefWidth(336);
 		
 		tableviewFormation.getColumns().add(id_formation);
 		tableviewFormation.getColumns().add(nom_formation);
 		tableviewFormation.getColumns().add(promotion);
 		tableviewFormation.getColumns().add(boutons);
+		
+		tableviewFormation.widthProperty().addListener((observable, oldValue, newValue) -> {
+			double tableWidth = newValue.doubleValue();
+			nom_formation.setPrefWidth((tableWidth-40) / 3);
+			promotion.setPrefWidth((tableWidth-40) / 3);
+			boutons.setPrefWidth((tableWidth-40) / 3);
+		});
 		
 		
 		SqlSession sqlSession = MyBatisUtils.getSqlSession();
@@ -231,5 +232,7 @@ public class ShowFormationController {
 	}
 	
 	public void toNotes(ActionEvent actionEvent) {
+		Main.changeView("/com/projet/view/ShowNote.fxml");
+		
 	}
 }
