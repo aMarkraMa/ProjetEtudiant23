@@ -30,6 +30,8 @@ public class Main extends Application {
         stage.getIcons().add(new Image("com/projet/img/logo.png"));
         stage.setResizable(true);
         stage.initStyle(StageStyle.DECORATED);
+        stage.setMinWidth(600);
+        stage.setMinHeight(400);
         changeView("/com/projet/view/Main.fxml");
         stage.show();
     }
