@@ -12,4 +12,6 @@ public interface ProjetMapper {
     void addProjet(Projet projet);
     int updateProjet(Projet projet);
     void deleteById(int idProjet);
+    
+    List<Integer> getIdsProjet();
 }

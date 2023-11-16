@@ -23,8 +23,6 @@ import java.util.List;
 
 public class AddBinomeController {
 	
-	@FXML
-	private TextField idBinome;
 	
 	@FXML
 	private ChoiceBox<String> projet;
@@ -37,6 +35,9 @@ public class AddBinomeController {
 	
 	@FXML
 	private Button ajouterBi;
+	
+	@FXML
+	private TextField idBinome;
 	
 	
 	@FXML
@@ -173,6 +174,13 @@ public class AddBinomeController {
 								alert.getDialogPane().setPrefWidth(800);
 								alert.show();
 							} else {
+								// Integer maxIdBinome = binomeMapper.getMaxIdBinome();
+								// if (maxIdBinome == null) {
+								// 	binome.setIdBinome(1);
+								// } else {
+								// 	Integer idBinome = maxIdBinome + 1;
+								// 	binome.setIdBinome(idBinome);
+								// }
 								binomeMapper.insertBinomeStep1(binome);
 								binomeMapper.insertOrUpdateBinomeStep2(binome);
 								if (binome.getEtudiants().size() > 1) {

@@ -137,4 +137,12 @@ public class ProjetMapperTest {
         // Résultats des assertions
         assertNull(projet);
     }
+    
+    @Test
+    public void testGetIdsProjet() {
+        SqlSession session = MyBatisUtils.getSqlSession();
+        ProjetMapper projetMapper = session.getMapper(ProjetMapper.class);
+        List<Integer> idsProjet = projetMapper.getIdsProjet();
+        idsProjet.forEach(System.out::println);
+    }
 }

@@ -6,6 +6,7 @@ import com.projet.entity.Etudiant;
 import com.projet.entity.Formation;
 import com.projet.entity.Projet;
 import com.projet.mapper.BinomeMapper;
+import com.projet.mapper.ProjetMapper;
 import com.projet.service.impl.UpdateBinomeServiceImpl;
 import com.projet.utils.MyBatisUtils;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -35,6 +36,8 @@ public class ShowBinomeController {
 	// private TableColumn<Binome, String> idProjet;
 	@FXML
 	private TableColumn<Binome, String> nomMatiere;
+	
+	
 	@FXML
 	private TableColumn<Binome, String> sujet;
 	
@@ -67,8 +70,6 @@ public class ShowBinomeController {
 	@FXML
 	private Button searchBinome;
 	
-	
-	
 	@FXML
 	private TextField textfieldNomMatiere;
 	
@@ -91,30 +92,26 @@ public class ShowBinomeController {
 	
 	@FXML
 	public void initialize() {
+		SqlSession sqlSession = MyBatisUtils.getSqlSession();
+		BinomeMapper binomeMapper = sqlSession.getMapper(BinomeMapper.class);
+		ProjetMapper projetMapper = sqlSession.getMapper(ProjetMapper.class);
+		List<Integer> idsProjet = projetMapper.getIdsProjet();
+		ObservableList<Binome> data = FXCollections.observableArrayList();
+		for (Integer idProjet : idsProjet) {
+			List<Binome> binomes = binomeMapper.getBinomesByIdProjet(idProjet);
+			// for (int i = 0; i < binomes.size(); i++) {
+			// 	binomes.get(i).setIdBinome(i + 1);
+			// }
+			binomes.forEach(System.out::println);
+			data.addAll(binomes);
+		}
+		tableviewBinome.setItems(data);
 		
 		idBinomes = new TableColumn<>("id");
-		idBinomes.setCellFactory(column -> {
-			return new TableCell<>() {
-				@Override
-				protected void updateItem(String item, boolean empty) {
-					super.updateItem(item, empty);
-					
-					if (this.getTableRow() != null && !empty) {
-						setText(this.getTableRow().getIndex() + 1 + "");
-					} else {
-						setText("");
-					}
-				}
-			};
-		});
+		idBinomes.setCellValueFactory(new PropertyValueFactory<>("idBinome"));
+		idBinomes.setPrefWidth(40);
 		
-		// idProjet = new TableColumn<>("idProjet");
-		// idProjet.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Binome, String>, ObservableValue<String>>() {
-		// 	@Override
-		// 	public ObservableValue<String> call(TableColumn.CellDataFeatures<Binome, String> binome) {
-		// 		return new SimpleStringProperty(binome.getValue().getProjet().getIdProjet().toString());
-		// 	}
-		// });
+
 		
 		nomMatiere = new TableColumn<>("Nom matiere");
 		nomMatiere.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Binome, String>, ObservableValue<String>>() {
@@ -255,12 +252,18 @@ public class ShowBinomeController {
 		tableviewBinome.getColumns().add(dateRelleRemise);
 		tableviewBinome.getColumns().add(boutons);
 		
+		tableviewBinome.widthProperty().addListener((observable, oldValue, newValue) -> {
+			double tableWidth = newValue.doubleValue();
+			nomMatiere.setPrefWidth((tableWidth - 40) / 7);
+			sujet.setPrefWidth((tableWidth - 40) / 7);
+			etudiant1.setPrefWidth((tableWidth - 40) / 7);
+			etudiant2.setPrefWidth((tableWidth - 40) / 7);
+			noteRapport.setPrefWidth((tableWidth - 40) / 7);
+			dateRelleRemise.setPrefWidth((tableWidth - 40) / 7);
+			boutons.setPrefWidth((tableWidth - 40) / 7);
+		});
 		
-		SqlSession sqlSession = MyBatisUtils.getSqlSession();
-		BinomeMapper mapper = sqlSession.getMapper(BinomeMapper.class);
-		List<Binome> binomes = mapper.selectAll();
-		binomes.forEach(System.out::println);
-		refreshTable(binomes);
+		
 		
 		Image refresh = new Image("/com/projet/img/refresh.png");
 		ImageView refreshImageView = new ImageView(refresh);
@@ -311,10 +314,18 @@ public class ShowBinomeController {
 	
 	public void refreshTable(ActionEvent actionEvent) {
 		SqlSession sqlSession = MyBatisUtils.getSqlSession();
-		BinomeMapper mapper = sqlSession.getMapper(BinomeMapper.class);
-		List<Binome> binomes = mapper.selectAll();
+		BinomeMapper binomeMapper = sqlSession.getMapper(BinomeMapper.class);
+		ProjetMapper projetMapper = sqlSession.getMapper(ProjetMapper.class);
+		List<Integer> idsProjet = projetMapper.getIdsProjet();
 		ObservableList<Binome> data = FXCollections.observableArrayList();
-		data.addAll(binomes);
+		for (Integer idProjet : idsProjet) {
+			List<Binome> binomes = binomeMapper.getBinomesByIdProjet(idProjet);
+			// for (int i = 0; i < binomes.size(); i++) {
+			// 	binomes.get(i).setIdBinome(i + 1);
+			// }
+			binomes.forEach(System.out::println);
+			data.addAll(binomes);
+		}
 		tableviewBinome.setItems(data);
 		
 		textfieldNomMatiere.setText("");
@@ -334,6 +345,7 @@ public class ShowBinomeController {
 	}
 	
 	public void toNotes(ActionEvent actionEvent) {
-	
+		Main.changeView("/com/projet/view/ShowNote.fxml");
+		
 	}
 }

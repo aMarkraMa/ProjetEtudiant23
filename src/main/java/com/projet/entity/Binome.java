@@ -1,5 +1,7 @@
 package com.projet.entity;
 
+import org.apache.ibatis.annotations.One;
+
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -7,12 +9,11 @@ import java.util.List;
 import java.util.Objects;
 
 public class Binome {
+	
 	private Integer idBinome;
 	private Projet projet;
 	private LocalDate dateReelleRemise;
-	
 	private Double noteRapport;
-	
 	private List<Etudiant> etudiants;
 	
 	public Binome() {

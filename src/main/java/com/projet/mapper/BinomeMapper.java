@@ -23,4 +23,10 @@ public interface BinomeMapper {
 	Binome selectByIdBinomeAndIdProjet(Binome binome);
 	
 	Binome getBinomeByIdProjetAndIdEtudiant(@Param("idEtudiant") Integer idEtudiant, @Param("idProjet") Integer idProjet);
+	
+	Integer getMaxIdBinome();
+	
+	Integer getNombreBinomeByIdProjet(@Param("idProjet") Integer idProjet);
+	
+	List<Binome> getBinomesByIdProjet(@Param("idProjet") Integer idProjet);
 }
