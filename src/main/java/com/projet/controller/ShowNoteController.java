@@ -360,16 +360,13 @@ public class ShowNoteController {
 				PdfWriter.getInstance(document, new FileOutputStream(file));
 				document.open();
 				
-				// 创建PDF表格，列数与TableView一致
 				PdfPTable pdfTable = new PdfPTable(tableviewNote.getColumns().size() - 1);
 				
-				// 添加表头
 				for (int i = 0; i < tableviewNote.getColumns().size() - 1; i++) {
 					TableColumn<?, ?> col = (TableColumn<?, ?>) tableviewNote.getColumns().get(i);
 					pdfTable.addCell(col.getText());
 				}
 				
-				// 添加行数据
 				for (int i = 0; i < tableviewNote.getItems().size(); i++) {
 					for (int j = 0; j < tableviewNote.getColumns().size() - 1; j++) {
 						Object cellData = tableviewNote.getColumns().get(j).getCellData(tableviewNote.getItems().get(i));
@@ -381,10 +378,9 @@ public class ShowNoteController {
 					}
 				}
 				
-				// 将表格添加到文档中
 				document.add(pdfTable);
 				
-				document.close(); // 关闭文档
+				document.close();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -392,7 +388,7 @@ public class ShowNoteController {
 	}
 	
 	public void toExcel(ActionEvent actionEvent) {
-		Stage stage = (Stage) tableviewNote.getScene().getWindow(); // 获取当前窗口以显示文件选择器
+		Stage stage = (Stage) tableviewNote.getScene().getWindow();
 		
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Save as Excel");
@@ -417,21 +413,18 @@ public class ShowNoteController {
 						Cell cell = dataRow.createCell(colIndex);
 						Object cellValue = ((TableColumn<?, ?>) tableviewNote.getColumns().get(colIndex)).getCellData(rowIndex);
 						if (cellValue != null) {
-							cell.setCellValue(cellValue.toString()); // 适当转换数据类型
+							cell.setCellValue(cellValue.toString());
 						}
 					}
 				}
 				
-				// 自动调整所有列的宽度
 				for (int i = 0; i < tableviewNote.getColumns().size() - 1; i++) {
 					sheet.autoSizeColumn(i);
 				}
 				
-				// 写入文件
 				workbook.write(fileOut);
 			} catch (Exception e) {
 				e.printStackTrace();
-				// 显示错误消息或日志
 			}
 		}
 	}
