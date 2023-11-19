@@ -282,16 +282,16 @@ public class ShowEtudiantController {
 				PdfWriter.getInstance(document, new FileOutputStream(file));
 				document.open();
 				
-				// Créer un tableau PDF avec le même nombre de colonnes que le TableView
+				// 创建PDF表格，列数与TableView一致
 				PdfPTable pdfTable = new PdfPTable(tableviewEtudiant.getColumns().size() - 1);
 				
-				// En-tête
+				// 添加表头
 				for (int i = 0; i < tableviewEtudiant.getColumns().size() - 1; i++) {
 					TableColumn<?, ?> col = (TableColumn<?, ?>) tableviewEtudiant.getColumns().get(i);
 					pdfTable.addCell(col.getText());
 				}
 				
-				// Données de ligne
+				// 添加行数据
 				for (int i = 0; i < tableviewEtudiant.getItems().size(); i++) {
 					for (int j = 0; j < tableviewEtudiant.getColumns().size() - 1; j++) {
 						Object cellData = tableviewEtudiant.getColumns().get(j).getCellData(tableviewEtudiant.getItems().get(i));
@@ -303,10 +303,10 @@ public class ShowEtudiantController {
 					}
 				}
 				
-				// Ajouter le table dans le fichier
+				// 将表格添加到文档中
 				document.add(pdfTable);
 				
-				document.close(); // Fermer le fichier
+				document.close(); // 关闭文档
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -314,7 +314,7 @@ public class ShowEtudiantController {
 	}
 	
 	public void toExcel(ActionEvent actionEvent) {
-		Stage stage = (Stage) tableviewEtudiant.getScene().getWindow(); // Obtenir la fenêtre actuelle pour afficher le sélecteur de fichiers
+		Stage stage = (Stage) tableviewEtudiant.getScene().getWindow(); // 获取当前窗口以显示文件选择器
 		
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Save as Excel");
@@ -326,33 +326,34 @@ public class ShowEtudiantController {
 				Sheet sheet = workbook.createSheet("Data");
 				
 				Row headerRow = sheet.createRow(0);
-				// En-tête
+				// 表头
 				for (int i = 0; i < tableviewEtudiant.getColumns().size() - 1; i++) {
 					Cell headerCell = headerRow.createCell(i);
 					headerCell.setCellValue(tableviewEtudiant.getColumns().get(i).getText());
 				}
 				
-				// Données de ligne
+				// 行数据
 				for (int rowIndex = 0; rowIndex < tableviewEtudiant.getItems().size(); rowIndex++) {
 					Row dataRow = sheet.createRow(rowIndex + 1);
 					for (int colIndex = 0; colIndex < tableviewEtudiant.getColumns().size() - 1; colIndex++) {
 						Cell cell = dataRow.createCell(colIndex);
 						Object cellValue = ((TableColumn<?, ?>) tableviewEtudiant.getColumns().get(colIndex)).getCellData(rowIndex);
 						if (cellValue != null) {
-							cell.setCellValue(cellValue.toString()); // Convertir automatiquement les types de données
+							cell.setCellValue(cellValue.toString()); // 适当转换数据类型
 						}
 					}
 				}
 				
-				// Ajuster automatiquement la largeur de toutes les colonnes
+				// 自动调整所有列的宽度
 				for (int i = 0; i < tableviewEtudiant.getColumns().size() - 1; i++) {
 					sheet.autoSizeColumn(i);
 				}
 				
-				// Écrire dans un fichier
+				// 写入文件
 				workbook.write(fileOut);
 			} catch (Exception e) {
 				e.printStackTrace();
+				// 显示错误消息或日志
 			}
 		}
 		

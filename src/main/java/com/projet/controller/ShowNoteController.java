@@ -4,13 +4,11 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.projet.Main;
-import com.projet.entity.Binome;
-import com.projet.entity.Etudiant;
-import com.projet.entity.Formation;
-import com.projet.entity.Note;
+import com.projet.entity.*;
 import com.projet.mapper.BinomeMapper;
 import com.projet.mapper.EtudiantMapper;
 import com.projet.mapper.NoteMapper;
+import com.projet.mapper.ProjetMapper;
 import com.projet.service.impl.UpdateNoteServiceImpl;
 import com.projet.utils.MyBatisUtils;
 import javafx.beans.property.SimpleStringProperty;
@@ -20,6 +18,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -68,25 +67,16 @@ public class ShowNoteController {
 	
 	
 	@FXML
-	private TableView<Note> tableviewNote;
+	private TableView<Note> tableViewNote;
 	
 	@FXML
-	private Button toAjouterNote;
+	private TextField textFieldNomEtudiant;
 	
 	@FXML
-	private Button refreshNote;
+	private TextField textFieldPrenomEtudiant;
 	
 	@FXML
-	private Button searchNote;
-	
-	@FXML
-	private TextField textfieldNomEtudiant;
-	
-	@FXML
-	private TextField textfieldPrenomEtudiant;
-	
-	@FXML
-	private TextField textfieldNomMatiere;
+	private TextField textFieldNomMatiere;
 	
 	@FXML
 	private TextField textfieldSujet;
@@ -100,249 +90,129 @@ public class ShowNoteController {
 	@FXML
 	private MenuItem toProjets;
 	
-	
 	@FXML
 	private MenuItem toBinomes;
+
+	@FXML
+	private Button refreshNote;
+
+	@FXML
+	private Button addNote;
+
+	@FXML
+	private Button searchNote;
+
+	@FXML
+	private Button deleteNote;
 	
 	
 	@FXML
 	public void initialize() {
-		nomMatiere = new TableColumn<>("Nom matiere");
-		nomMatiere.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Note, String>, ObservableValue<String>>() {
-			@Override
-			public ObservableValue<String> call(TableColumn.CellDataFeatures<Note, String> note) {
-				return new SimpleStringProperty(note.getValue().getProjet().getNomMatiere());
-			}
-		});
-		
-		sujet = new TableColumn<>("Sujet");
-		sujet.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Note, String>, ObservableValue<String>>() {
-			@Override
-			public ObservableValue<String> call(TableColumn.CellDataFeatures<Note, String> note) {
-				return new SimpleStringProperty(note.getValue().getProjet().getSujet());
-			}
-		});
-		
-		nomEtudiant = new TableColumn<>("NomEtudanit");
-		nomEtudiant.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Note, String>, ObservableValue<String>>() {
-			@Override
-			public ObservableValue<String> call(TableColumn.CellDataFeatures<Note, String> note) {
-				return new SimpleStringProperty(note.getValue().getEtudiant().getNomEtudiant());
-			}
-		});
-		
-		prenomeEtudiant = new TableColumn<>("prenomeEtudaint");
-		prenomeEtudiant.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Note, String>, ObservableValue<String>>() {
-			@Override
-			public ObservableValue<String> call(TableColumn.CellDataFeatures<Note, String> note) {
-				return new SimpleStringProperty(note.getValue().getEtudiant().getPrenomEtudiant());
-			}
-		});
-		
-		noteRapport = new TableColumn<>("NoteRapport");
-		noteRapport.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Note, String>, ObservableValue<String>>() {
-			@Override
-			public ObservableValue<String> call(TableColumn.CellDataFeatures<Note, String> note) {
-				if (note.getValue().getBinome().getNoteRapport() == 0.0) {
-					return new SimpleStringProperty("");
-				} else {
-					return new SimpleStringProperty(note.getValue().getBinome().getNoteRapport().toString());
-				}
-			}
-		});
-		
-		noteSoutenance = new TableColumn<>("NoteSoutenance");
-		noteSoutenance.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Note, String>, ObservableValue<String>>() {
-			@Override
-			public ObservableValue<String> call(TableColumn.CellDataFeatures<Note, String> note) {
-				if (note.getValue().getNoteSoutenance() == 0.0) {
-					return new SimpleStringProperty("");
-				} else {
-					return new SimpleStringProperty(note.getValue().getNoteSoutenance().toString());
-				}
-			}
-		});
-		
-		noteFinale = new TableColumn<>("NoteFinale");
-		noteFinale.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Note, String>, ObservableValue<String>>() {
-			
-			@Override
-			public ObservableValue<String> call(TableColumn.CellDataFeatures<Note, String> note) {
-				if (note.getValue().getNoteSoutenance() == 0.0 || note.getValue().getBinome().getNoteRapport() == 0.0) {
-					return new SimpleStringProperty("");
-				} else {
-					Double noteFinale = note.getValue().getBinome().getNoteRapport() * (100-note.getValue().getBinome().getNoteRapport()) * 0.01 + note.getValue().getNoteSoutenance() * note.getValue().getProjet().getPourcentageSoutenance() * 0.01;
-					if (note.getValue().getBinome().getDateReelleRemise().isAfter(note.getValue().getProjet().getDatePrevueRemise())) {
-						noteFinale -= ChronoUnit.DAYS.between(note.getValue().getBinome().getDateReelleRemise(), note.getValue().getProjet().getDatePrevueRemise()) * 0.1;
-					}
-					return new SimpleStringProperty(note.getValue().getNoteSoutenance().toString());
-				}
-			}
-		});
-		
-		boutons = new TableColumn<>("Operation");
-		boutons.setCellFactory(new Callback<TableColumn<Note, Void>, TableCell<Note, Void>>() {
-			@Override
-			public TableCell<Note, Void> call(TableColumn<Note, Void> binomeVoidTableColumn) {
-				return new TableCell<>() {
-					private final Button modifier = new Button("Modifier");
-					private final Button supprimer = new Button("Supprimer");
-					
-					private HBox pane = new HBox(modifier, supprimer);
-					
-					{
-						// 	modifier.setOnAction((ActionEvent event) -> {
-						// 		Note note = getTableView().getItems().get(getIndex());
-						// 		SqlSession sqlSession = MyBatisUtils.getSqlSession();
-						// 		NoteMapper noteMapper = sqlSession.getMapper(NoteMapper.class);
-						// 		UpdateNoteServiceImpl.noteToUpdate = noteMapper.selectByIdBinomeAndIdProjet(note);
-						// 		Main.addView("/com/projet/view/UpdateNote.fxml");
-						// 	});
-						
-						supprimer.setOnAction((ActionEvent event) -> {
-							Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-							alert.setTitle("Supprimer un note");
-							alert.setHeaderText("Confirmez votre choix");
-							alert.setContentText("Vous allez supprimer ce note. Etes-vous sur?");
-							Optional<ButtonType> resultat = alert.showAndWait();
-							if (resultat.isPresent() && resultat.get() == ButtonType.OK) {
-								Note note = getTableView().getItems().get(getIndex());
-								Integer idBinome = note.getBinome().getIdBinome();
-								Integer idProjet = note.getProjet().getIdProjet();
-								Integer idEtudiant = note.getEtudiant().getIdEtudiant();
-								SqlSession sqlSession = null;
-								try {
-									sqlSession = MyBatisUtils.getNonAutoCommittingSqlSession();
-									NoteMapper mapper = sqlSession.getMapper(NoteMapper.class);
-									mapper.deleteNote(idBinome, idProjet, idEtudiant);
-									sqlSession.commit();
-									ObservableList<Note> data = FXCollections.observableArrayList();
-									List<Note> notes = mapper.selectAll();
-									data.addAll(notes);
-									tableviewNote.setItems(data);
-								} catch (Exception e) {
-									if (sqlSession != null) {
-										sqlSession.rollback();
-									}
-									e.printStackTrace();
-								} finally {
-									if (sqlSession != null) {
-										sqlSession.close();
-									}
-								}
-							}
-							
-							
-						});
-					}
-					
-					@Override
-					protected void updateItem(Void item, boolean empty) {
-						super.updateItem(item, empty);
-						if (empty) {
-							setGraphic(null);
-						} else {
-							setGraphic(pane);
-						}
-					}
-				};
-				
-			}
-		});
-		
-		tableviewNote.getColumns().add(nomMatiere);
-		tableviewNote.getColumns().add(sujet);
-		tableviewNote.getColumns().add(nomEtudiant);
-		tableviewNote.getColumns().add(prenomeEtudiant);
-		tableviewNote.getColumns().add(noteRapport);
-		tableviewNote.getColumns().add(noteSoutenance);
-		tableviewNote.getColumns().add(noteFinale);
-		tableviewNote.getColumns().add(boutons);
-		
-		
-		SqlSession sqlSession = MyBatisUtils.getSqlSession();
-		NoteMapper mapper = sqlSession.getMapper(NoteMapper.class);
-		List<Note> notes = mapper.selectAll();
-		notes.forEach(System.out::println);
-		refreshTable(notes);
-		
-		Image refresh = new Image("/com/projet/img/refresh.png");
-		ImageView refreshImageView = new ImageView(refresh);
-		refreshImageView.setFitHeight(20);
-		refreshImageView.setFitWidth(20);
-		refreshNote.setGraphic(refreshImageView);
-		Image search = new Image("/com/projet/img/search.png");
+
+		nomMatiere.setCellValueFactory(new PropertyValueFactory<>("nomMatiere"));
+		sujet.setCellValueFactory(new PropertyValueFactory<>("sujet"));
+		nomEtudiant.setCellValueFactory(new PropertyValueFactory<>("nomEtudiant"));
+		prenomeEtudiant.setCellValueFactory(new PropertyValueFactory<>("prenomeEtudiant"));
+		noteSoutenance.setCellValueFactory(new PropertyValueFactory<>("noteSoutenance"));
+		noteRapport.setCellValueFactory(new PropertyValueFactory<>("noteRapport"));
+		noteFinale.setCellValueFactory(new PropertyValueFactory<>("noteFinale"));
+		refreshTable();
+		initializeImg();
+	}
+
+	public void initializeImg() {
+		Image search = new Image("com/projet/img/search.png");
 		ImageView searchImageView = new ImageView(search);
-		searchImageView.setFitWidth(20);
-		searchImageView.setFitHeight(20);
+		searchImageView.setFitWidth(18);
+		searchImageView.setFitHeight(18);
 		searchNote.setGraphic(searchImageView);
-		
-		
+
+		Image add = new Image("com/projet/img/add.png");
+		ImageView addImageView = new ImageView(add);
+		addImageView.setFitWidth(18);
+		addImageView.setFitHeight(18);
+		addNote.setGraphic(addImageView);
+
+		Image delete = new Image("com/projet/img/delete.png");
+		ImageView deleteImageView = new ImageView(delete);
+		deleteImageView.setFitWidth(18);
+		deleteImageView.setFitHeight(18);
+		deleteNote.setGraphic(deleteImageView);
+
+		Image refresh = new Image("com/projet/img/refresh.png");
+		ImageView refreshImageView = new ImageView(refresh);
+		refreshImageView.setFitWidth(18);
+		refreshImageView.setFitHeight(18);
+		refreshNote.setGraphic(refreshImageView);
 	}
-	
-	public void refreshTable(List newData) {
-		ObservableList<Note> data = FXCollections.observableArrayList();
-		data.addAll(newData);
-		tableviewNote.setItems(data);
-	}
-	
-	public void refreshTable(ActionEvent actionEvent) {
-	}
-	
-	
-	public void toFormations(ActionEvent actionEvent) {
-		Main.changeView("/com/projet/view/ShowFormation.fxml");
-	}
-	
-	public void toAjouterNote(ActionEvent actionEvent) {
-		Main.addView("/com/projet/view/AddNote.fxml");
-	}
-	
+
 	public void searchNote(ActionEvent actionEvent) {
 		SqlSession sqlSession = MyBatisUtils.getSqlSession();
 		NoteMapper mapper = sqlSession.getMapper(NoteMapper.class);
 		Note note = new Note();
 		Etudiant etudiant = new Etudiant();
-		etudiant.setNomEtudiant("%" + textfieldNomEtudiant.getText() + "%");
-		etudiant.setPrenomEtudiant("%" + textfieldPrenomEtudiant.getText() + "%");
+		etudiant.setNomEtudiant("%" + textFieldNomEtudiant.getText() + "%");
+		etudiant.setPrenomEtudiant("%" + textFieldPrenomEtudiant.getText() + "%");
 		note.setEtudiant(etudiant);
 		List<Note> notes = mapper.selectByCondition(note);
 		ObservableList<Note> data = FXCollections.observableArrayList();
 		data.addAll(notes);
-		tableviewNote.setItems(data);
+		tableViewNote.setItems(data);
 	}
-	
-	// public void refreshTable(ActionEvent actionEvent) {
-	// 	SqlSession sqlSession = MyBatisUtils.getSqlSession();
-	// 	BinomeMapper mapper = sqlSession.getMapper(NoteMapper.class);
-	// 	List<Binome> notes = mapper.selectAll();
-	// 	ObservableList<Note> data = FXCollections.observableArrayList();
-	// 	data.addAll(notes);
-	// 	tableviewNote.setItems(data);
-	//
-	// 	textfieldNomEtudiant.setText("");
-	// 	textfieldNomEtudiant.setPromptText("Nom");
-	// 	textfieldPrenomEtudiant.setText("");
-	// 	textfieldPrenomEtudiant.setPromptText("Prenom");
-	// 	textfieldNomMatiere.setText("");
-	// 	textfieldNomMatiere.setPromptText("Nom Matiere");
-	// 	textfieldSujet.setText("");
-	// 	textfieldSujet.setPromptText("Sujet");
-	//
-	// 	tableviewNote.refresh();
-	// }
-	
-	public void toProjets(ActionEvent actionEvent) {
-		Main.changeView("/com/projet/view/ShowProjet.fxml");
+
+	public void deleteNote(ActionEvent actionEvent){
+
 	}
+
+
 	
-	public void toEtudiants(ActionEvent actionEvent) {
+	public void refreshTable() {
+
+
+		SqlSession sqlSession = MyBatisUtils.getSqlSession();
+		NoteMapper mapper = sqlSession.getMapper(NoteMapper.class);
+
+		List<Note> notes = mapper.selectAll();
+
+		ObservableList<Note> data = FXCollections.observableArrayList();
+		data.addAll(notes);
+
+		tableViewNote.setItems(data);
+
+		sqlSession.close();
+	}
+
+	
+	public void refreshTable(ActionEvent actionEvent) {
+		refreshTable();
+	}
+
+	public void showAddView(ActionEvent actionEvent) {
+		Main.addView("/com/projet/view/AddNote.fxml");
+	}
+
+	public void toShowFormation(ActionEvent actionEvent) {
+		Main.changeView("/com/projet/view/ShowFormation.fxml");
+	}
+
+	public void toShowEtudiant(ActionEvent actionEvent) {
 		Main.changeView("/com/projet/view/ShowEtudiant.fxml");
 	}
-	
-	public void toBinomes(ActionEvent actionEvent) {
+
+	public void toShowProjet(ActionEvent actionEvent) {
+		Main.changeView("/com/projet/view/ShowProjet.fxml");
+	}
+
+	public void toShowBinome(ActionEvent actionEvent) {
 		Main.changeView("/com/projet/view/ShowBinome.fxml");
-		
+	}
+
+	public void toShowNote(ActionEvent actionEvent) {
+		Main.changeView("/com/projet/view/ShowNote.fxml");
+	}
+
+	public void retour(ActionEvent actionEvent) {
+		Main.changeView("/com/projet/view/Main.fxml");
 	}
 	
 	
@@ -351,7 +221,7 @@ public class ShowNoteController {
 		fileChooser.setTitle("Save as PDF");
 		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
 		
-		Stage stage = (Stage) tableviewNote.getScene().getWindow();
+		Stage stage = (Stage) tableViewNote.getScene().getWindow();
 		File file = fileChooser.showSaveDialog(stage);
 		
 		if (file != null) {
@@ -360,16 +230,19 @@ public class ShowNoteController {
 				PdfWriter.getInstance(document, new FileOutputStream(file));
 				document.open();
 				
-				PdfPTable pdfTable = new PdfPTable(tableviewNote.getColumns().size() - 1);
+				// 创建PDF表格，列数与TableView一致
+				PdfPTable pdfTable = new PdfPTable(tableViewNote.getColumns().size() - 1);
 				
-				for (int i = 0; i < tableviewNote.getColumns().size() - 1; i++) {
-					TableColumn<?, ?> col = (TableColumn<?, ?>) tableviewNote.getColumns().get(i);
+				// 添加表头
+				for (int i = 0; i < tableViewNote.getColumns().size() - 1; i++) {
+					TableColumn<?, ?> col = (TableColumn<?, ?>) tableViewNote.getColumns().get(i);
 					pdfTable.addCell(col.getText());
 				}
 				
-				for (int i = 0; i < tableviewNote.getItems().size(); i++) {
-					for (int j = 0; j < tableviewNote.getColumns().size() - 1; j++) {
-						Object cellData = tableviewNote.getColumns().get(j).getCellData(tableviewNote.getItems().get(i));
+				// 添加行数据
+				for (int i = 0; i < tableViewNote.getItems().size(); i++) {
+					for (int j = 0; j < tableViewNote.getColumns().size() - 1; j++) {
+						Object cellData = tableViewNote.getColumns().get(j).getCellData(tableViewNote.getItems().get(i));
 						if (cellData != null) {
 							pdfTable.addCell(cellData.toString());
 						} else {
@@ -378,9 +251,10 @@ public class ShowNoteController {
 					}
 				}
 				
+				// 将表格添加到文档中
 				document.add(pdfTable);
 				
-				document.close();
+				document.close(); // 关闭文档
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -388,7 +262,7 @@ public class ShowNoteController {
 	}
 	
 	public void toExcel(ActionEvent actionEvent) {
-		Stage stage = (Stage) tableviewNote.getScene().getWindow();
+		Stage stage = (Stage) tableViewNote.getScene().getWindow(); // 获取当前窗口以显示文件选择器
 		
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Save as Excel");
@@ -401,30 +275,33 @@ public class ShowNoteController {
 				
 				Row headerRow = sheet.createRow(0);
 				// 表头
-				for (int i = 0; i < tableviewNote.getColumns().size() - 1; i++) {
+				for (int i = 0; i < tableViewNote.getColumns().size() - 1; i++) {
 					org.apache.poi.ss.usermodel.Cell headerCell = headerRow.createCell(i);
-					headerCell.setCellValue(tableviewNote.getColumns().get(i).getText());
+					headerCell.setCellValue(tableViewNote.getColumns().get(i).getText());
 				}
 				
 				// 行数据
-				for (int rowIndex = 0; rowIndex < tableviewNote.getItems().size(); rowIndex++) {
+				for (int rowIndex = 0; rowIndex < tableViewNote.getItems().size(); rowIndex++) {
 					Row dataRow = sheet.createRow(rowIndex + 1);
-					for (int colIndex = 0; colIndex < tableviewNote.getColumns().size() - 1; colIndex++) {
+					for (int colIndex = 0; colIndex < tableViewNote.getColumns().size() - 1; colIndex++) {
 						Cell cell = dataRow.createCell(colIndex);
-						Object cellValue = ((TableColumn<?, ?>) tableviewNote.getColumns().get(colIndex)).getCellData(rowIndex);
+						Object cellValue = ((TableColumn<?, ?>) tableViewNote.getColumns().get(colIndex)).getCellData(rowIndex);
 						if (cellValue != null) {
-							cell.setCellValue(cellValue.toString());
+							cell.setCellValue(cellValue.toString()); // 适当转换数据类型
 						}
 					}
 				}
 				
-				for (int i = 0; i < tableviewNote.getColumns().size() - 1; i++) {
+				// 自动调整所有列的宽度
+				for (int i = 0; i < tableViewNote.getColumns().size() - 1; i++) {
 					sheet.autoSizeColumn(i);
 				}
 				
+				// 写入文件
 				workbook.write(fileOut);
 			} catch (Exception e) {
 				e.printStackTrace();
+				// 显示错误消息或日志
 			}
 		}
 	}

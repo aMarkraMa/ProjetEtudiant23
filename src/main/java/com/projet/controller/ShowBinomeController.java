@@ -375,13 +375,16 @@ public class ShowBinomeController {
 				PdfWriter.getInstance(document, new FileOutputStream(file));
 				document.open();
 				
+				// 创建PDF表格，列数与TableView一致
 				PdfPTable pdfTable = new PdfPTable(tableviewBinome.getColumns().size() - 1);
 				
+				// 添加表头
 				for (int i = 0; i < tableviewBinome.getColumns().size() - 1; i++) {
 					TableColumn<?, ?> col = (TableColumn<?, ?>) tableviewBinome.getColumns().get(i);
 					pdfTable.addCell(col.getText());
 				}
 				
+				// 添加行数据
 				for (int i = 0; i < tableviewBinome.getItems().size(); i++) {
 					for (int j = 0; j < tableviewBinome.getColumns().size() - 1; j++) {
 						Object cellData = tableviewBinome.getColumns().get(j).getCellData(tableviewBinome.getItems().get(i));
@@ -393,9 +396,10 @@ public class ShowBinomeController {
 					}
 				}
 				
+				// 将表格添加到文档中
 				document.add(pdfTable);
 				
-				document.close();
+				document.close(); // 关闭文档
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -403,7 +407,7 @@ public class ShowBinomeController {
 	}
 	
 	public void toExcel(ActionEvent actionEvent) {
-		Stage stage = (Stage) tableviewBinome.getScene().getWindow();
+		Stage stage = (Stage) tableviewBinome.getScene().getWindow(); // 获取当前窗口以显示文件选择器
 		
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Save as Excel");
@@ -415,29 +419,34 @@ public class ShowBinomeController {
 				Sheet sheet = workbook.createSheet("Data");
 				
 				Row headerRow = sheet.createRow(0);
+				// 表头
 				for (int i = 0; i < tableviewBinome.getColumns().size() - 1; i++) {
 					org.apache.poi.ss.usermodel.Cell headerCell = headerRow.createCell(i);
 					headerCell.setCellValue(tableviewBinome.getColumns().get(i).getText());
 				}
 				
+				// 行数据
 				for (int rowIndex = 0; rowIndex < tableviewBinome.getItems().size(); rowIndex++) {
 					Row dataRow = sheet.createRow(rowIndex + 1);
 					for (int colIndex = 0; colIndex < tableviewBinome.getColumns().size() - 1; colIndex++) {
 						Cell cell = dataRow.createCell(colIndex);
 						Object cellValue = ((TableColumn<?, ?>) tableviewBinome.getColumns().get(colIndex)).getCellData(rowIndex);
 						if (cellValue != null) {
-							cell.setCellValue(cellValue.toString());
+							cell.setCellValue(cellValue.toString()); // 适当转换数据类型
 						}
 					}
 				}
 				
+				// 自动调整所有列的宽度
 				for (int i = 0; i < tableviewBinome.getColumns().size() - 1; i++) {
 					sheet.autoSizeColumn(i);
 				}
 				
+				// 写入文件
 				workbook.write(fileOut);
 			} catch (Exception e) {
 				e.printStackTrace();
+				// 显示错误消息或日志
 			}
 		}
 		

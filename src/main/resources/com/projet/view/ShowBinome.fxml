@@ -6,7 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projet.controller.ShowBinomeController">
+<AnchorPane prefHeight="522.0" prefWidth="784.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projet.controller.ShowBinomeController">
     <children>
         <TableView fx:id="tableviewBinome" layoutX="28.0" layoutY="127.0" prefHeight="253.0" prefWidth="545.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="127.0">
         </TableView>
@@ -27,10 +27,10 @@
                         <MenuItem fx:id="toNotes" mnemonicParsing="false" onAction="#toNotes" text="Gestion de notes" />
                     </items>
                 </Menu>
-                <Menu fx:id="file" mnemonicParsing="false" text="File" >
+                <Menu fx:id="file" mnemonicParsing="false" text="File">
                     <items>
-                        <MenuItem fx:id="downloadPDF" mnemonicParsing="false" onAction="#toPDF" text="Telecharger le PDF"/>
-                        <MenuItem fx:id="downloadExcel" mnemonicParsing="false" onAction="#toExcel" text="Telecharger l'excel"/>
+                        <MenuItem fx:id="downloadPDF" mnemonicParsing="false" onAction="#toPDF" text="Telecharger le PDF" />
+                        <MenuItem fx:id="downloadExcel" mnemonicParsing="false" onAction="#toExcel" text="Telecharger l'excel" />
                     </items>
                 </Menu>
             </menus>
