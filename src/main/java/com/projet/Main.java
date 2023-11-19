@@ -33,7 +33,20 @@ public class Main extends Application {
         stage.setMinWidth(600);
         stage.setMinHeight(400);
         changeView("/com/projet/view/Main.fxml");
+        //startView("/com/projet/view/LogIn.fxml");
         stage.show();
+    }
+    
+    public static void startView(String fxml){
+        Parent root = null;
+        try{
+            root = FXMLLoader.load(Main.class.getResource(fxml));
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
     }
 
     public static void changeView(String fxml){

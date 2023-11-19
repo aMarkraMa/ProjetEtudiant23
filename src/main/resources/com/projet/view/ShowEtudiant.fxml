@@ -33,7 +33,13 @@
                    <MenuItem fx:id="toBinomes" mnemonicParsing="false" onAction="#toBinomes" text="Gestion de binomes" />
                    <MenuItem fx:id="toNotes" mnemonicParsing="false" onAction="#toNotes" text="Gestion de notes" />
                </items></Menu>
-          <Menu fx:id="downloadEtudiant" mnemonicParsing="false" text="Download" />
+          <Menu fx:id="file" mnemonicParsing="false" text="File" >
+              <items>
+                  <MenuItem fx:id="downloadPDF" mnemonicParsing="false" onAction="#toPDF" text="Telecharger le PDF"/>
+                  <MenuItem fx:id="downloadExcel" mnemonicParsing="false" onAction="#toExcel" text="Telecharger l'excel"/>
+              </items>
+          </Menu>
+          
         </menus>
       </MenuBar>
       <Label alignment="CENTER" layoutX="172.0" layoutY="53.0" prefHeight="33.0" prefWidth="303.0" text="Gestion d‘etudaints" AnchorPane.leftAnchor="172.0" AnchorPane.rightAnchor="125.0" AnchorPane.topAnchor="43.0" />

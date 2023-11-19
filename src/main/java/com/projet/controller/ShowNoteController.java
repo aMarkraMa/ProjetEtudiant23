@@ -1,5 +1,8 @@
 package com.projet.controller;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.projet.Main;
 import com.projet.entity.Binome;
 import com.projet.entity.Etudiant;
@@ -20,9 +23,18 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.apache.ibatis.session.SqlSession;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
@@ -334,4 +346,93 @@ public class ShowNoteController {
 	}
 	
 	
+	public void toPDF(ActionEvent actionEvent) {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Save as PDF");
+		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+		
+		Stage stage = (Stage) tableviewNote.getScene().getWindow();
+		File file = fileChooser.showSaveDialog(stage);
+		
+		if (file != null) {
+			Document document = new Document();
+			try {
+				PdfWriter.getInstance(document, new FileOutputStream(file));
+				document.open();
+				
+				// 创建PDF表格，列数与TableView一致
+				PdfPTable pdfTable = new PdfPTable(tableviewNote.getColumns().size() - 1);
+				
+				// 添加表头
+				for (int i = 0; i < tableviewNote.getColumns().size() - 1; i++) {
+					TableColumn<?, ?> col = (TableColumn<?, ?>) tableviewNote.getColumns().get(i);
+					pdfTable.addCell(col.getText());
+				}
+				
+				// 添加行数据
+				for (int i = 0; i < tableviewNote.getItems().size(); i++) {
+					for (int j = 0; j < tableviewNote.getColumns().size() - 1; j++) {
+						Object cellData = tableviewNote.getColumns().get(j).getCellData(tableviewNote.getItems().get(i));
+						if (cellData != null) {
+							pdfTable.addCell(cellData.toString());
+						} else {
+							pdfTable.addCell("");
+						}
+					}
+				}
+				
+				// 将表格添加到文档中
+				document.add(pdfTable);
+				
+				document.close(); // 关闭文档
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void toExcel(ActionEvent actionEvent) {
+		Stage stage = (Stage) tableviewNote.getScene().getWindow(); // 获取当前窗口以显示文件选择器
+		
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Save as Excel");
+		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
+		File file = fileChooser.showSaveDialog(stage);
+		
+		if (file != null) {
+			try (Workbook workbook = new XSSFWorkbook(); FileOutputStream fileOut = new FileOutputStream(file)) {
+				Sheet sheet = workbook.createSheet("Data");
+				
+				Row headerRow = sheet.createRow(0);
+				// 表头
+				for (int i = 0; i < tableviewNote.getColumns().size() - 1; i++) {
+					org.apache.poi.ss.usermodel.Cell headerCell = headerRow.createCell(i);
+					headerCell.setCellValue(tableviewNote.getColumns().get(i).getText());
+				}
+				
+				// 行数据
+				for (int rowIndex = 0; rowIndex < tableviewNote.getItems().size(); rowIndex++) {
+					Row dataRow = sheet.createRow(rowIndex + 1);
+					for (int colIndex = 0; colIndex < tableviewNote.getColumns().size() - 1; colIndex++) {
+						Cell cell = dataRow.createCell(colIndex);
+						Object cellValue = ((TableColumn<?, ?>) tableviewNote.getColumns().get(colIndex)).getCellData(rowIndex);
+						if (cellValue != null) {
+							cell.setCellValue(cellValue.toString()); // 适当转换数据类型
+						}
+					}
+				}
+				
+				// 自动调整所有列的宽度
+				for (int i = 0; i < tableviewNote.getColumns().size() - 1; i++) {
+					sheet.autoSizeColumn(i);
+				}
+				
+				// 写入文件
+				workbook.write(fileOut);
+			} catch (Exception e) {
+				e.printStackTrace();
+				// 显示错误消息或日志
+			}
+		}
+	}
 }

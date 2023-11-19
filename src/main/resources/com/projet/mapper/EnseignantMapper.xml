@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.projet.mapper.EnseignantMapper">
+	
+	<resultMap id="EnseigantResultMap" type="enseigant">
+		<id column="id_enseignant" property="idEnseignant"/>
+		<result column="numero_enseignant" property="numeroEnseignant"/>
+		<result column="mot_de_passe_enseignant" property="motDePasseEnseignant"/>
+		<result column="email_enseignant" property="emailEnseignant"/>
+	</resultMap>
+	
+	<insert id="insertEnseignant">
+		INSERT INTO enseignants(numero_enseignant, mot_de_passe_enseignant, email_enseignant)
+		VALUES (#{numeroEnseignant}, #{motDePasseEnseignant}, #{emailEnseignant})
+	</insert>
+	
+	<select id="getEnseignant" resultType="enseigant" resultMap="EnseigantResultMap">
+		SELECT id_enseignant, numero_enseignant, mot_de_passe_enseignant, email_enseignant
+		FROM enseignants
+		WHERE numero_enseignant = #{numeroEnseignant}
+	</select>
+</mapper>
