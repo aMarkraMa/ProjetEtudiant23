@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import org.apache.ibatis.session.SqlSession;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class AddProjetController {
 
@@ -79,7 +80,18 @@ public class AddProjetController {
         System.out.println("sujet " + sujet.getText());
         System.out.println("nomMa " + nomMatiere.getText());
 
-        projetMapper.addProjet(projet);
+        Projet p = new Projet();
+        p.setNomMatiere(projet.getNomMatiere());
+        p.setSujet(projet.getSujet());
+        List<Projet> ps = projetMapper.selectByCondition(p);
+        if(ps.isEmpty()){
+            projetMapper.addProjet(projet);
+        }else {
+            showErr("Projet : " + nomMatiere.getText() + "-" + sujet.getText() + " existe déjà");
+            return;
+        }
+
+
 
         sqlSession.commit();
         sqlSession.close();

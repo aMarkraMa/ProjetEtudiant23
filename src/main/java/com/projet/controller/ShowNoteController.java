@@ -79,19 +79,7 @@ public class ShowNoteController {
 	private TextField textFieldNomMatiere;
 	
 	@FXML
-	private TextField textfieldSujet;
-	
-	@FXML
-	private MenuItem toEtudiants;
-	
-	@FXML
-	private MenuItem toFormations;
-	
-	@FXML
-	private MenuItem toProjets;
-	
-	@FXML
-	private MenuItem toBinomes;
+	private TextField textFieldSujet;
 
 	@FXML
 	private Button refreshNote;
