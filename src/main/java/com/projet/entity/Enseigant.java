@@ -12,14 +12,20 @@ public class Enseigant {
 	
 	private String emailEnseignant;
 	
+	private String question;
+	
+	private String reponse;
+	
 	public Enseigant() {
 	}
 	
-	public Enseigant(Integer idEnseignant, Integer numeroEnseignant, String motDePasseEnseignant, String emailEnseignant) {
+	public Enseigant(Integer idEnseignant, Integer numeroEnseignant, String motDePasseEnseignant, String emailEnseignant, String question, String reponse) {
 		this.idEnseignant = idEnseignant;
 		this.numeroEnseignant = numeroEnseignant;
 		this.motDePasseEnseignant = motDePasseEnseignant;
 		this.emailEnseignant = emailEnseignant;
+		this.question = question;
+		this.reponse = reponse;
 	}
 	
 	public Integer getIdEnseignant() {
@@ -54,6 +60,22 @@ public class Enseigant {
 		this.emailEnseignant = emailEnseignant;
 	}
 	
+	public String getQuestion() {
+		return question;
+	}
+	
+	public void setQuestion(String question) {
+		this.question = question;
+	}
+	
+	public String getReponse() {
+		return reponse;
+	}
+	
+	public void setReponse(String reponse) {
+		this.reponse = reponse;
+	}
+	
 	@Override
 	public String toString() {
 		return "Enseigant{" +
@@ -61,6 +83,8 @@ public class Enseigant {
 				", numeroEnseignant=" + numeroEnseignant +
 				", motDePasseEnseignant='" + motDePasseEnseignant + '\'' +
 				", emailEnseignant='" + emailEnseignant + '\'' +
+				", question='" + question + '\'' +
+				", reponse='" + reponse + '\'' +
 				'}';
 	}
 	
