@@ -65,15 +65,15 @@ public class AddProjetController {
         }
 
         if(pourcentageSoutenance.getText() != null && !pourcentageSoutenance.getText().isEmpty()){
-            projet.setPourcentageSoutenance(Integer.valueOf(pourcentageSoutenance.getText()));
+            if(Integer.valueOf(pourcentageSoutenance.getText()) >= 0 && Integer.valueOf(pourcentageSoutenance.getText()) <= 20){
+                projet.setPourcentageSoutenance(Integer.valueOf(pourcentageSoutenance.getText()));
+            }else{
+                showErr("taux de note doit etre entre 0 - 100");
+                return;
+            }
+
         }else{
             showErr("pourcentageSoutenance ne peux pas être vide");
-            return;
-        }
-        if(Integer.valueOf(pourcentageSoutenance.getText()) <= 100 && Integer.valueOf(pourcentageSoutenance.getText()) >= 0){
-            projet.setPourcentageSoutenance(Integer.valueOf(pourcentageSoutenance.getText()));
-        }else{
-            showErr("pourcentageSoutenance doit entre 0 et 100");
             return;
         }
         System.out.println("sujet " + sujet.getText());
