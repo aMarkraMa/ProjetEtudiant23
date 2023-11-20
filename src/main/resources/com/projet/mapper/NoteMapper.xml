@@ -1,115 +1,1 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.projet.mapper.NoteMapper">
-    
-    <resultMap id="resultMapNote" type="note">
-        <result property="noteSoutenance" column="note_soutenance"/>
-        <association property="projet" javaType="projet">
-            <id column="id_projet" property="idProjet"/>
-            <result column="nom_matiere" property="nomMatiere"/>
-            <result column="sujet" property="sujet"/>
-            <result column="date_prevue_remise" property="datePrevueRemise"/>
-            <result column="pourcentage_soutenance" property="pourcentageSoutenance"/>
-        </association>
-        <association property="binome" javaType="binome">
-            <id column="id_binome" property="idBinome"/>
-            <result column="date_reelle_remise" property="dateReelleRemise"/>
-            <result column="note_rapport" property="noteRapport"/>
-        </association>
-        <collection property="etudiant" ofType="etudiant">
-            <id column="id_etudiant" property="idEtudiant"/>
-            <result column="nom_etudiant" property="nomEtudiant"/>
-            <result column="prenom_etudiant" property="prenomEtudiant"/>
-            <association property="formation" javaType="formation" column="id_formation" select="com.projet.mapper.FormationMapper.selectById"/>
-        </collection>
-    </resultMap>
-
-    <insert id="insertNote">
-        INSERT INTO notes(id_projet, id_binome, id_etudiant,note_soutenance) VALUES (#{idProjet}, #{idBinome}, #{idEtudiant}, 0.0)
-    </insert>
-
-    <delete id="deleteNote">
-        DELETE FROM notes WHERE id_etudiant = #{idEtudiant} AND id_binome = #{idBinome} AND id_projet = #{idProjet}
-    </delete>
-
-    <update id="updateNote">
-        UPDATE notes
-        <set>
-            <if test="noteRapport != null"> note_rapport= #{noteRapport},</if>
-            <if test="noteSoutenance != null"> note_soutenance= #{noteSoutenance},</if>
-        </set>
-        WHERE id_etudiant = #{idEtudiant}
-        AND id_binome = #{idBinome}
-        AND id_projet = #{idProjet}
-    </update>
-
-  
-    
-    <select id="selectAll" resultMap="resultMapNote" resultType="com.projet.entity.Note">
-        SELECT n.id_projet,
-               n.id_etudiant,
-               n.note_soutenance,
-               b.date_reelle_remise,
-               b.note_rapport,
-               e.nom_etudiant,
-               e.prenom_etudiant,
-               p.nom_matiere,
-               p.sujet,
-               p.date_prevue_remise,
-               p.pourcentage_soutenance
-        FROM etudiants e,
-             binomes b,
-             projets p,
-             notes n,
-             appartenir a
-        WHERE n.id_projet = p.id_projet
-          AND n.id_binome = b.id_binome
-          AND n.id_etudiant = e.id_etudiant
-          AND b.id_binome = a.id_binome
-          AND p.id_projet = a.id_projet
-          AND e.id_etudiant = a.id_etudiant
-    </select>
-    
-    <select id="selectByCondition" resultType="com.projet.entity.Note">
-        select n.id_binome,
-               n.id_projet,
-               n.id_etudiant,
-               n.note_soutenance,
-               b.date_reelle_remise,
-               b.note_rapport,
-               e.nom_etudiant,
-               e.prenom_etudiant,
-               f.id_formation,
-               f.nom_formation,
-               f.promotion,
-               p.nom_matiere,
-               p.sujet,
-               p.date_prevue_remise,
-               p.pourcentage_soutenance
-        from etudiants e,
-             binomes b,
-             formations f,
-             projets p,
-             notes n
-        where e.id_formation = f.id_formation
-            AND e.id_etudiant = n.id_etudiant
-            AND b.id_binome = n.id_binome
-            AND p.id_projet = n.id_projet
-        
-        <if test="etudiant != null and etudiant.nomEtudiant != null and etudiant.nomEtudiant != ''">
-            and lower(e.nom_etudiant) like lower(#{etudiant.nomEtudiant})
-        </if>
-        <if test="etudiant != null and etudiant.prenomEtudiant != null and etudiant.prenomEtudiant != ''">
-            and lower(e.prenom_etudiant) like lower(#{etudiant.prenomEtudiant})
-        </if>
-        <if test="projet != null and projet.nomMatiere != null and projet.nomMatiere != ''">
-            and lower(p.nom_matiere) like lower(#{projet.nomMatiere})
-        </if>
-        <if test="projet != null and projet.sujet != null and projet.sujet != ''">
-            and lower(p.sujet) like lower(#{projet.sujet})
-        </if>
-    </select>
-
-
-</mapper>
+<?xml version="1.0" encoding="utf-8" ?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" ><mapper namespace="com.projet.mapper.NoteMapper">    <resultMap id="noteResultMap" type="Note">        <result property="noteSoutenance" column="note_soutenance"/>        <association property="binome" resultMap="com.projet.mapper.BinomeMapper.resultMapBinome"/>        <association property="etudiant" resultMap="com.projet.mapper.EtudiantMapper.etudiantResultMap"/>    </resultMap>        <insert id="insertNote">        INSERT INTO notes(id_projet, id_binome, id_etudiant,note_soutenance) VALUES (#{idProjet}, #{idBinome}, #{idEtudiant}, 0.0)    </insert>    <delete id="deleteNote">        DELETE FROM notes WHERE id_etudiant = #{idEtudiant} AND id_binome = #{idBinome} AND id_projet = #{idProjet}    </delete>    <update id="updateNote">        UPDATE notes        <set>            <if test="noteRapport != null"> note_rapport= #{noteRapport},</if>            <if test="noteSoutenance != null"> note_soutenance= #{noteSoutenance},</if>        </set>        WHERE id_etudiant = #{idEtudiant}        AND id_binome = #{idBinome}        AND id_projet = #{idProjet}    </update>          <select id="selectAll" resultMap="noteResultMap" resultType="com.projet.entity.Note">        SELECT n.id_projet,               n.id_etudiant,               n.note_soutenance,               b.date_reelle_remise,               b.note_rapport,               e.nom_etudiant,               e.prenom_etudiant,               p.nom_matiere,               p.sujet,               p.date_prevue_remise,               p.pourcentage_soutenance        FROM etudiants e,             binomes b,             projets p,             notes n,             appartenir a        WHERE n.id_projet = p.id_projet          AND n.id_binome = b.id_binome          AND n.id_etudiant = e.id_etudiant          AND b.id_binome = a.id_binome          AND p.id_projet = a.id_projet          AND e.id_etudiant = a.id_etudiant    </select>        <select id="selectByCondition" resultType="com.projet.entity.Note">        select n.id_binome,               n.id_projet,               n.id_etudiant,               n.note_soutenance,               b.date_reelle_remise,               b.note_rapport,               e.nom_etudiant,               e.prenom_etudiant,               f.id_formation,               f.nom_formation,               f.promotion,               p.nom_matiere,               p.sujet,               p.date_prevue_remise,               p.pourcentage_soutenance        from etudiants e,             binomes b,             formations f,             projets p,             notes n        where e.id_formation = f.id_formation            AND e.id_etudiant = n.id_etudiant            AND b.id_binome = n.id_binome            AND p.id_projet = n.id_projet                <if test="etudiant != null and etudiant.nomEtudiant != null and etudiant.nomEtudiant != ''">            and lower(e.nom_etudiant) like lower(#{etudiant.nomEtudiant})        </if>        <if test="etudiant != null and etudiant.prenomEtudiant != null and etudiant.prenomEtudiant != ''">            and lower(e.prenom_etudiant) like lower(#{etudiant.prenomEtudiant})        </if>        <if test="projet != null and projet.nomMatiere != null and projet.nomMatiere != ''">            and lower(p.nom_matiere) like lower(#{projet.nomMatiere})        </if>        <if test="projet != null and projet.sujet != null and projet.sujet != ''">            and lower(p.sujet) like lower(#{projet.sujet})        </if>    </select></mapper>

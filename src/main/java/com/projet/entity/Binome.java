@@ -66,7 +66,14 @@ public class Binome {
 	public void setNoteRapport(Double noteRapport) {
 		this.noteRapport = noteRapport;
 	}
-	
+
+	public Integer getIdProjet(){
+		return projet.getIdProjet();
+	}
+
+	public void setIdProjet(Integer idProjet){
+		this.projet.setIdProjet(idProjet);
+	}
 	@Override
 	public String toString() {
 		return "Binome{" +

@@ -21,6 +21,8 @@ public interface BinomeMapper {
 	
 	List<Binome> selectByCondition(Binome binome);
 	Binome selectByIdBinomeAndIdProjet(Binome binome);
+
+	List<Binome> selectByIdProjet(Binome binome);
 	
 	Binome getBinomeByIdProjetAndIdEtudiant(@Param("idEtudiant") Integer idEtudiant, @Param("idProjet") Integer idProjet);
 	

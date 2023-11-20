@@ -126,6 +126,12 @@
 			AND lower(p.sujet) like lower(#{projet.sujet})
 		</if>
 	</select>
+	<select id="selectByIdProjet" resultMap="resultMapBinome" resultType="binome">
+		select * from binomes
+		<where>
+			<if test="idProjet != null">id_projet = #{idProjet}</if>
+		</where>
+	</select>
 	
 	<select id="getMaxIdBinome" resultType="java.lang.Integer">
 		SELECT MAX(id_binome)
