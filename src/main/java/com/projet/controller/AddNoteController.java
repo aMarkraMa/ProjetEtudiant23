@@ -9,6 +9,7 @@ import com.projet.mapper.EtudiantMapper;
 import com.projet.mapper.NoteMapper;
 import com.projet.mapper.ProjetMapper;
 import com.projet.utils.MyBatisUtils;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -87,19 +88,28 @@ public class AddNoteController {
     }
 
 
-    public void addNote(){
+    public void addNote(ActionEvent actionEvent){
         SqlSession sqlSession = MyBatisUtils.getSqlSession();
         NoteMapper noteMapper = sqlSession.getMapper(NoteMapper.class);
 
-        binomeChoiceBox.getValue();
-
-        Binome binome = new Binome();
-        binome.setIdBinome(binomeChoiceBox.getValue());
+        String[] infoProjet = projetChoiceBox.getValue().split(" ");
         Projet projet = new Projet();
+        projet.setIdProjet(Integer.parseInt(infoProjet[0]));
+
+        Integer idBinome = binomeChoiceBox.getValue();
+        Binome binome = new Binome();
+        binome.setIdBinome(idBinome);
+        binome.setProjet(projet);
+
+        String[] infoEtudiant = etudiantChoiceBox.getValue().split(" ");
+        Etudiant etudiant = new Etudiant();
+        etudiant.setIdEtudiant(Integer.parseInt(infoEtudiant[0]));
+
         Note note = new Note();
-//        note.setBinome();
-//        note.setEtudiant();
-//        note.setNoteSoutenance();
+        note.setBinome(binome);
+        note.setEtudiant(etudiant);
+        note.setNoteSoutenance(Double.valueOf(noteSoutenance.getText()));
+
 
         noteMapper.insertNote(note);
     }

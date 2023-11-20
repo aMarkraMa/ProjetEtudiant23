@@ -39,7 +39,8 @@
         FROM projets
     </select>
 	
-	<insert id="addProjet" useGeneratedKeys="true" keyProperty="idProjet">insert into projets (nom_matiere, sujet,
+	<insert id="addProjet" useGeneratedKeys="true" keyProperty="idProjet">
+        insert into projets (nom_matiere, sujet,
         date_prevue_remise, pourcentage_soutenance) values (#{nomMatiere}, #{sujet}, #{datePrevueRemise}, #{pourcentageSoutenance});
     </insert>
     

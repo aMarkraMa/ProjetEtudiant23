@@ -40,6 +40,27 @@ public class Note {
         this.noteSoutenance = noteSoutenance;
     }
 
+    public Integer getIdProjet(){
+        return binome.getIdProjet();
+    }
+    public void setIdProjet(Integer idProjet){
+        binome.setIdProjet(idProjet);
+    }
+
+    public Integer getIdBinome(){
+        return binome.getIdBinome();
+    }
+
+    public void setIdBinome(Integer idBinome){
+        binome.setIdBinome(idBinome);
+    }
+
+    public Integer getIdEtudiant(){
+        return etudiant.getIdEtudiant();
+    }
+    public void setIdEtudiant(Integer idEtudiant){
+        etudiant.setIdEtudiant(idEtudiant);
+    }
     @Override
     public String toString() {
         return "Note{" +
