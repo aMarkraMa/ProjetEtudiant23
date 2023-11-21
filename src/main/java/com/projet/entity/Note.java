@@ -10,7 +10,7 @@ public class Note {
     public Note() {
     }
     
-    public Note(Binome binome, Etudiant etudiant, Double noteSoutenance, Projet projet) {
+    public Note(Binome binome, Etudiant etudiant, Double noteSoutenance) {
         this.binome = binome;
         this.etudiant = etudiant;
         this.noteSoutenance = noteSoutenance;
@@ -55,12 +55,50 @@ public class Note {
         binome.setIdBinome(idBinome);
     }
 
+    public Projet getProjet(){
+        return binome.getProjet();
+    }
+    public void setProjet(Projet projet){
+        binome.setProjet(projet);
+    }
     public Integer getIdEtudiant(){
         return etudiant.getIdEtudiant();
     }
     public void setIdEtudiant(Integer idEtudiant){
         etudiant.setIdEtudiant(idEtudiant);
     }
+
+    public String getNomMatiere(){
+        return binome.getProjet().getNomMatiere();
+    }
+    public void setNomMatiere(String nomMatiere){
+        binome.getProjet().setNomMatiere(nomMatiere);
+    }
+    public String getSujet(){
+        return binome.getProjet().getSujet();
+    }
+    public void setSujet(String sujet){
+        binome.getProjet().setSujet(sujet);
+    }
+    public String getNomEtudiant(){
+        return etudiant.getNomEtudiant();
+    }
+    public void setNomEtudiant(String nomEtudiant){
+        etudiant.setNomEtudiant(nomEtudiant);
+    }
+    public String getPrenomEtudiant(){
+        return etudiant.getPrenomEtudiant();
+    }
+    public void setPrenomEtudiant(String prenomEtudiant){
+        etudiant.setPrenomEtudiant(prenomEtudiant);
+    }
+    public Double getNoteRapport(){
+        return binome.getNoteRapport();
+    }
+    public void setNoteRapport(Double noteRapport){
+        binome.setNoteRapport(noteRapport);
+    }
+
     @Override
     public String toString() {
         return "Note{" +

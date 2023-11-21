@@ -53,7 +53,7 @@
 	           p.sujet,
 	           p.date_prevue_remise
 	    FROM etudiants e,
-	         appartenir a,
+	         notes a,
 	         binomes b,
 	         formations f,
 	         projets p
@@ -80,7 +80,7 @@
                p.sujet,
                p.date_prevue_remise
         FROM etudiants e,
-             appartenir a,
+             notes a,
              binomes b,
              formations f,
              projets p
@@ -96,7 +96,7 @@
  
     <select id="getBinomeByIdProjetAndIdEtudiant" resultMap="resultMapBinome" resultType="com.projet.entity.Binome">
         SELECT id_binome
-        FROM appartenir a
+        FROM notes a
         WHERE a.id_projet = #{idProjet} AND a.id_etudiant = #{idEtudiant}
     </select>
 	
@@ -110,7 +110,7 @@
 		p.sujet,
 		p.date_prevue_remise
 		FROM etudiants e,
-		appartenir a,
+		notes a,
 		binomes b,
 		formations f,
 		projets p
@@ -156,7 +156,7 @@
 		       p.sujet,
 		       p.date_prevue_remise
 		FROM etudiants e,
-		     appartenir a,
+		     notes a,
 		     binomes b,
 		     formations f,
 		     projets p
@@ -175,13 +175,13 @@
     </insert>
 	
     <insert id="insertOrUpdateBinomeStep2">
-	    INSERT INTO appartenir (id_binome, id_projet, id_etudiant)
-	    VALUES (#{idBinome}, #{projet.idProjet}, #{etudiants[0].idEtudiant})
+	    INSERT INTO notes (id_binome, id_projet, id_etudiant, note_soutenance)
+	    VALUES (#{idBinome}, #{projet.idProjet}, #{etudiants[0].idEtudiant}, 0.0)
     </insert>
     
     <insert id="insertOrUpdateBinomeStep3">
-	    INSERT INTO appartenir (id_binome, id_projet, id_etudiant)
-	    VALUES (#{idBinome}, #{projet.idProjet}, #{etudiants[1].idEtudiant})
+	    INSERT INTO notes (id_binome, id_projet, id_etudiant, note_soutenance)
+	    VALUES (#{idBinome}, #{projet.idProjet}, #{etudiants[1].idEtudiant}, 0.0)
     </insert>
     
     <delete id="deleteBinome">
@@ -190,7 +190,7 @@
     
     
     <delete id="deleteAppartenir">
-        DELETE FROM appartenir WHERE id_binome = #{idBinome} AND id_projet = #{idProjet}
+        DELETE FROM notesWHERE id_binome = #{idBinome} AND id_projet = #{idProjet}
     </delete>
 	
 	

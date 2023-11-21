@@ -3,7 +3,6 @@ package com.projet.controller;
 import com.projet.entity.Projet;
 import com.projet.mapper.ProjetMapper;
 import com.projet.utils.MyBatisUtils;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -12,7 +11,6 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.apache.ibatis.session.SqlSession;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public class AddProjetController {
@@ -66,7 +64,7 @@ public class AddProjetController {
         }
 
         if(pourcentageSoutenance.getText() != null && !pourcentageSoutenance.getText().isEmpty()){
-            if(Integer.valueOf(pourcentageSoutenance.getText()) >= 0 && Integer.valueOf(pourcentageSoutenance.getText()) <= 20){
+            if(Integer.valueOf(pourcentageSoutenance.getText()) >= 0 && Integer.valueOf(pourcentageSoutenance.getText()) <= 100){
                 projet.setPourcentageSoutenance(Integer.valueOf(pourcentageSoutenance.getText()));
             }else{
                 showErr("taux de note doit etre entre 0 - 100");

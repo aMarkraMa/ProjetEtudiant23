@@ -100,7 +100,7 @@ public class ShowNoteController {
 		nomMatiere.setCellValueFactory(new PropertyValueFactory<>("nomMatiere"));
 		sujet.setCellValueFactory(new PropertyValueFactory<>("sujet"));
 		nomEtudiant.setCellValueFactory(new PropertyValueFactory<>("nomEtudiant"));
-		prenomeEtudiant.setCellValueFactory(new PropertyValueFactory<>("prenomeEtudiant"));
+		prenomeEtudiant.setCellValueFactory(new PropertyValueFactory<>("prenomEtudiant"));
 		noteSoutenance.setCellValueFactory(new PropertyValueFactory<>("noteSoutenance"));
 		noteRapport.setCellValueFactory(new PropertyValueFactory<>("noteRapport"));
 		noteFinale.setCellValueFactory(new PropertyValueFactory<>("noteFinale"));
@@ -141,7 +141,17 @@ public class ShowNoteController {
 		Etudiant etudiant = new Etudiant();
 		etudiant.setNomEtudiant("%" + textFieldNomEtudiant.getText() + "%");
 		etudiant.setPrenomEtudiant("%" + textFieldPrenomEtudiant.getText() + "%");
+
+		Projet projet = new Projet();
+		projet.setSujet("%" + textFieldSujet + "%");
+		projet.setNomMatiere("%" + textFieldNomMatiere + "%");
+
+		Binome binome = new Binome();
+		binome.setProjet(projet);
+
 		note.setEtudiant(etudiant);
+		note.setBinome(binome);
+
 		List<Note> notes = mapper.selectByCondition(note);
 		ObservableList<Note> data = FXCollections.observableArrayList();
 		data.addAll(notes);
@@ -161,6 +171,10 @@ public class ShowNoteController {
 		NoteMapper mapper = sqlSession.getMapper(NoteMapper.class);
 
 		List<Note> notes = mapper.selectAll();
+		for(int i = 0;i < notes.size();i++){
+			System.out.println(notes.get(i).getIdProjet() + " " + notes.get(i).getIdBinome() + " " + notes.get(i).getIdEtudiant());
+			System.out.println(notes.get(i));
+		}
 
 		ObservableList<Note> data = FXCollections.observableArrayList();
 		data.addAll(notes);
@@ -218,16 +232,16 @@ public class ShowNoteController {
 				PdfWriter.getInstance(document, new FileOutputStream(file));
 				document.open();
 				
-				// 创建PDF表格，列数与TableView一致
+
 				PdfPTable pdfTable = new PdfPTable(tableViewNote.getColumns().size() - 1);
 				
-				// 添加表头
+
 				for (int i = 0; i < tableViewNote.getColumns().size() - 1; i++) {
 					TableColumn<?, ?> col = (TableColumn<?, ?>) tableViewNote.getColumns().get(i);
 					pdfTable.addCell(col.getText());
 				}
 				
-				// 添加行数据
+
 				for (int i = 0; i < tableViewNote.getItems().size(); i++) {
 					for (int j = 0; j < tableViewNote.getColumns().size() - 1; j++) {
 						Object cellData = tableViewNote.getColumns().get(j).getCellData(tableViewNote.getItems().get(i));
@@ -239,10 +253,10 @@ public class ShowNoteController {
 					}
 				}
 				
-				// 将表格添加到文档中
+
 				document.add(pdfTable);
 				
-				document.close(); // 关闭文档
+				document.close();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -250,7 +264,7 @@ public class ShowNoteController {
 	}
 	
 	public void toExcel(ActionEvent actionEvent) {
-		Stage stage = (Stage) tableViewNote.getScene().getWindow(); // 获取当前窗口以显示文件选择器
+		Stage stage = (Stage) tableViewNote.getScene().getWindow();
 		
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Save as Excel");
@@ -262,34 +276,34 @@ public class ShowNoteController {
 				Sheet sheet = workbook.createSheet("Data");
 				
 				Row headerRow = sheet.createRow(0);
-				// 表头
+
 				for (int i = 0; i < tableViewNote.getColumns().size() - 1; i++) {
 					org.apache.poi.ss.usermodel.Cell headerCell = headerRow.createCell(i);
 					headerCell.setCellValue(tableViewNote.getColumns().get(i).getText());
 				}
 				
-				// 行数据
+
 				for (int rowIndex = 0; rowIndex < tableViewNote.getItems().size(); rowIndex++) {
 					Row dataRow = sheet.createRow(rowIndex + 1);
 					for (int colIndex = 0; colIndex < tableViewNote.getColumns().size() - 1; colIndex++) {
 						Cell cell = dataRow.createCell(colIndex);
 						Object cellValue = ((TableColumn<?, ?>) tableViewNote.getColumns().get(colIndex)).getCellData(rowIndex);
 						if (cellValue != null) {
-							cell.setCellValue(cellValue.toString()); // 适当转换数据类型
+							cell.setCellValue(cellValue.toString());
 						}
 					}
 				}
 				
-				// 自动调整所有列的宽度
+
 				for (int i = 0; i < tableViewNote.getColumns().size() - 1; i++) {
 					sheet.autoSizeColumn(i);
 				}
 				
-				// 写入文件
+
 				workbook.write(fileOut);
 			} catch (Exception e) {
 				e.printStackTrace();
-				// 显示错误消息或日志
+
 			}
 		}
 	}
