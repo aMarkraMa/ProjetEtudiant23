@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.projet.controller.LogInController">
+	<children>
+		<Pane fx:id="paneB" layoutY="4.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0"
+		      AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+		<Button fx:id="connecter" mnemonicParsing="false" text="Se connecter" AnchorPane.bottomAnchor="50.0"
+		        AnchorPane.leftAnchor="250.0" onAction="#connecter"/>
+		<Pane fx:id="paneL" layoutX="103.0" layoutY="65.0" prefHeight="98.0" prefWidth="394.0"
+		      AnchorPane.topAnchor="60.0"/>
+		<Label layoutX="106.0" layoutY="222.0" prefHeight="24.0" prefWidth="134.0" text="Identifiant"
+		       AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="106.0" style="-fx-font-weight: bold;"/>
+		<Label layoutX="107.0" layoutY="264.0" prefHeight="24.0" prefWidth="134.0" text="Mot de passe"
+		       AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="106.0" style="-fx-font-weight: bold;"/>
+		<TextField fx:id="idEn" layoutX="258.0" layoutY="216.0" prefHeight="9.0" prefWidth="242.0"
+		           AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="258.0" promptText="Numero d'enseignant"/>
+		<PasswordField fx:id="idMot" prefHeight="9.0" prefWidth="242.0" AnchorPane.bottomAnchor="150.0"
+		               AnchorPane.leftAnchor="258.0"/>
+		<Hyperlink fx:id="reset" layoutX="140.0" layoutY="274.0" prefHeight="24.0" text="Mot de passe oublie"
+		       AnchorPane.bottomAnchor="110.0" underline="true" style="-fx-font-weight: bold;" onAction="#resetPassword"/>
+		<Hyperlink fx:id="inscrire" layoutX="260.0" layoutY="284.0" prefHeight="24.0" prefWidth="134.0" text="S'inscrire"
+		       AnchorPane.bottomAnchor="110.0" AnchorPane.rightAnchor="80.0" underline="true"
+		       style="-fx-font-weight: bold;" onAction="#inscrire"/>
+	</children>
+</AnchorPane>

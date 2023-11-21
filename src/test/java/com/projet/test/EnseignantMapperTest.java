@@ -3,14 +3,9 @@ package com.projet.test;
 import com.projet.entity.Enseigant;
 import com.projet.mapper.EnseignantMapper;
 import com.projet.utils.MyBatisUtils;
-import com.projet.utils.PasswordUtils;
+import com.projet.utils.ProjetStringUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Test;
-
-import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 public class EnseignantMapperTest {
 	@Test
@@ -22,7 +17,7 @@ public class EnseignantMapperTest {
 			Enseigant enseigant = new Enseigant();
 			enseigant.setNumeroEnseignant(numero);
 			enseigant.setMotDePasseEnseignant(motDePasseSaisie);
-			motDePasseSaisie = PasswordUtils.sha256(motDePasseSaisie);
+			motDePasseSaisie = ProjetStringUtils.sha256(motDePasseSaisie);
 			sqlSession = MyBatisUtils.getSqlSession();
 			EnseignantMapper enseignantMapper = sqlSession.getMapper(EnseignantMapper.class);
 			Enseigant enseignant = enseignantMapper.getEnseignant(enseigant);
@@ -48,7 +43,7 @@ public class EnseignantMapperTest {
 			Integer numero = 12345678;
 			String motDePasseOriginal = "Ab-12345";
 			String email = "1321913193@qq.com";
-			String motDePasse = PasswordUtils.sha256(motDePasseOriginal);
+			String motDePasse = ProjetStringUtils.sha256(motDePasseOriginal);
 			Enseigant enseigant = new Enseigant();
 			enseigant.setNumeroEnseignant(numero);
 			enseigant.setMotDePasseEnseignant(motDePasse);

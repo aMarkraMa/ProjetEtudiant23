@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.projet.mapper.EnseignantMapper">
 	
 	<resultMap id="EnseigantResultMap" type="enseigant">
@@ -8,16 +8,46 @@
 		<result column="numero_enseignant" property="numeroEnseignant"/>
 		<result column="mot_de_passe_enseignant" property="motDePasseEnseignant"/>
 		<result column="email_enseignant" property="emailEnseignant"/>
+		<result column="question" property="question"/>
+		<result column="reponse" property="reponse"/>
 	</resultMap>
 	
 	<insert id="insertEnseignant">
-		INSERT INTO enseignants(numero_enseignant, mot_de_passe_enseignant, email_enseignant)
-		VALUES (#{numeroEnseignant}, #{motDePasseEnseignant}, #{emailEnseignant})
+		INSERT INTO enseignants(numero_enseignant, mot_de_passe_enseignant, email_enseignant, question, reponse)
+		VALUES (#{numeroEnseignant}, #{motDePasseEnseignant}, #{emailEnseignant}, #{question}, #{reponse})
 	</insert>
 	
+	<update id="updateMotDePasseByNumeroEnseignant">
+		UPDATE enseignants
+		SET mot_de_passe_enseignant = #{motDePasse}
+		WHERE numero_enseignant = #{numEnseignant}
+	</update>
+	
 	<select id="getEnseignant" resultType="enseigant" resultMap="EnseigantResultMap">
-		SELECT id_enseignant, numero_enseignant, mot_de_passe_enseignant, email_enseignant
+		SELECT id_enseignant, numero_enseignant, mot_de_passe_enseignant, email_enseignant, question, reponse
 		FROM enseignants
 		WHERE numero_enseignant = #{numeroEnseignant}
+	</select>
+	
+	<select id="getNumerosEnseignant" resultType="java.lang.Integer">
+		SELECT numero_enseignant
+		FROM enseignants
+	</select>
+	
+	<select id="getQuestions" resultType="java.lang.String">
+		SELECT question
+		FROM questions
+	</select>
+	
+	<select id="getQuestionByNumEnseignant" resultType="java.lang.String">
+		SELECT question
+		FROM enseignants
+		WHERE numero_enseignant = #{numEnseignant}
+	</select>
+	
+	<select id="getReponseByNumeroEnseignant" resultType="java.lang.String">
+		SELECT reponse
+		FROM enseignants
+		WHERE numero_enseignant = #{numEnseignant}
 	</select>
 </mapper>
