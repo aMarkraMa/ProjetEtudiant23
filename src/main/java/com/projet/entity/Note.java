@@ -3,113 +3,79 @@ package com.projet.entity;
 import java.util.Objects;
 
 public class Note {
-    private Binome binome;
+    
+    
+    private Projet projet;
     private Etudiant etudiant;
+    
+    private Double noteRapport;
     private Double noteSoutenance;
     
     public Note() {
     }
     
-    public Note(Binome binome, Etudiant etudiant, Double noteSoutenance) {
-        this.binome = binome;
+    public Note(Projet projet, Etudiant etudiant, Double noteRapport, Double noteSoutenance) {
+        this.projet = projet;
         this.etudiant = etudiant;
+        this.noteRapport = noteRapport;
         this.noteSoutenance = noteSoutenance;
     }
-
-    public Binome getBinome() {
-        return binome;
+    
+    public Double getNoteRapport() {
+        return noteRapport;
     }
-
-    public void setBinome(Binome binome) {
-        this.binome = binome;
+    
+    public void setNoteRapport(Double noteRapport) {
+        this.noteRapport = noteRapport;
     }
-
+    
+    public Projet getProjet() {
+        return projet;
+    }
+    
+    public void setProjet(Projet projet) {
+        this.projet = projet;
+    }
+    
     public Etudiant getEtudiant() {
         return etudiant;
     }
-
+    
     public void setEtudiant(Etudiant etudiant) {
         this.etudiant = etudiant;
     }
-
+    
     public Double getNoteSoutenance() {
         return noteSoutenance;
     }
-
+    
     public void setNoteSoutenance(Double noteSoutenance) {
         this.noteSoutenance = noteSoutenance;
     }
-
-    public Integer getIdProjet(){
-        return binome.getIdProjet();
-    }
-    public void setIdProjet(Integer idProjet){
-        binome.setIdProjet(idProjet);
-    }
-
-    public Integer getIdBinome(){
-        return binome.getIdBinome();
-    }
-
-    public void setIdBinome(Integer idBinome){
-        binome.setIdBinome(idBinome);
-    }
-
-    public Projet getProjet(){
-        return binome.getProjet();
-    }
-    public void setProjet(Projet projet){
-        binome.setProjet(projet);
-    }
-    public Integer getIdEtudiant(){
-        return etudiant.getIdEtudiant();
-    }
-    public void setIdEtudiant(Integer idEtudiant){
-        etudiant.setIdEtudiant(idEtudiant);
-    }
-
-    public String getNomMatiere(){
-        return binome.getProjet().getNomMatiere();
-    }
-    public void setNomMatiere(String nomMatiere){
-        binome.getProjet().setNomMatiere(nomMatiere);
-    }
-    public String getSujet(){
-        return binome.getProjet().getSujet();
-    }
-    public void setSujet(String sujet){
-        binome.getProjet().setSujet(sujet);
-    }
-    public String getNomEtudiant(){
-        return etudiant.getNomEtudiant();
-    }
-    public void setNomEtudiant(String nomEtudiant){
-        etudiant.setNomEtudiant(nomEtudiant);
-    }
-    public String getPrenomEtudiant(){
-        return etudiant.getPrenomEtudiant();
-    }
-    public void setPrenomEtudiant(String prenomEtudiant){
-        etudiant.setPrenomEtudiant(prenomEtudiant);
-    }
-    public Double getNoteRapport(){
-        return binome.getNoteRapport();
-    }
-    public void setNoteRapport(Double noteRapport){
-        binome.setNoteRapport(noteRapport);
-    }
-
+    
+    
     @Override
     public String toString() {
         return "Note{" +
-                "binome=" + binome +
+                "projet=" + projet +
                 ", etudiant=" + etudiant +
+                ", noteRapport=" + noteRapport +
                 ", noteSoutenance=" + noteSoutenance +
                 '}';
     }
-
-
-
+    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Note)) return false;
+        Note note = (Note) o;
+        return Objects.equals(getProjet(), note.getProjet()) && Objects.equals(getEtudiant(), note.getEtudiant());
+    }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(getProjet(), getEtudiant());
+    }
 }
     
 

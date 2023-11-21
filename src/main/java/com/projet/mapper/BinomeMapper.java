@@ -8,11 +8,15 @@ import java.util.List;
 
 public interface BinomeMapper {
 	
-	List<Binome> selectAll();
+	
 	
 	int insertBinomeStep1(Binome binome);
 	int insertOrUpdateBinomeStep2(Binome binome);
 	int insertOrUpdateBinomeStep3(Binome binome);
+	
+	int insertOrUpdateBinomeStep4(Binome binome);
+	
+	int insertOrUpdateBinomeStep5(Binome binome);
 	
 	int deleteBinome(@Param("idBinome") Integer idBinome, @Param("idProjet") Integer idProjet);
 	int deleteAppartenir(@Param("idBinome") Integer idBinome, @Param("idProjet") Integer idProjet);
@@ -21,7 +25,7 @@ public interface BinomeMapper {
 	
 	List<Binome> selectByCondition(Binome binome);
 	Binome selectByIdBinomeAndIdProjet(Binome binome);
-
+	
 	List<Binome> selectByIdProjet(Binome binome);
 	
 	Binome getBinomeByIdProjetAndIdEtudiant(@Param("idEtudiant") Integer idEtudiant, @Param("idProjet") Integer idProjet);

@@ -61,13 +61,13 @@ public class AddNoteController {
             infoProjets.add(idProjet + " " + nomMatiere + " " + sujet);
         }
 
-        List<Binome> binomes = binomeMapper.selectAll();
-        List<Integer> infoBinomes = new ArrayList<>();
-
-        for (int i = 0; i < binomes.size(); i++) {
-            Integer idBinome = binomes.get(i).getIdBinome();
-            infoBinomes.add(idBinome);
-        }
+        // List<Binome> binomes = binomeMapper.selectAll();
+        // List<Integer> infoBinomes = new ArrayList<>();
+        //
+        // for (int i = 0; i < binomes.size(); i++) {
+        //     Integer idBinome = binomes.get(i).getIdBinome();
+        //     infoBinomes.add(idBinome);
+        // }
 
 
         List<Integer> idsEtudiant = etudiantMapper.getIdsEtudiant();
@@ -81,38 +81,38 @@ public class AddNoteController {
         }
 
         projetChoiceBox.getItems().addAll(infoProjets);
-        binomeChoiceBox.getItems().addAll(infoBinomes);
+        // binomeChoiceBox.getItems().addAll(infoBinomes);
         etudiantChoiceBox.getItems().addAll(infoEtudiants);
 
         sqlSession.close();
     }
 
 
-    public void addNote(ActionEvent actionEvent){
-        SqlSession sqlSession = MyBatisUtils.getSqlSession();
-        NoteMapper noteMapper = sqlSession.getMapper(NoteMapper.class);
-
-        String[] infoProjet = projetChoiceBox.getValue().split(" ");
-        Projet projet = new Projet();
-        projet.setIdProjet(Integer.parseInt(infoProjet[0]));
-
-        Integer idBinome = binomeChoiceBox.getValue();
-        Binome binome = new Binome();
-        binome.setIdBinome(idBinome);
-        binome.setProjet(projet);
-
-        String[] infoEtudiant = etudiantChoiceBox.getValue().split(" ");
-        Etudiant etudiant = new Etudiant();
-        etudiant.setIdEtudiant(Integer.parseInt(infoEtudiant[0]));
-
-        Note note = new Note();
-        note.setBinome(binome);
-        note.setEtudiant(etudiant);
-        note.setNoteSoutenance(Double.valueOf(noteSoutenance.getText()));
-
-
-        noteMapper.insertNote(note);
-    }
+    // public void addNote(ActionEvent actionEvent){
+    //     SqlSession sqlSession = MyBatisUtils.getSqlSession();
+    //     NoteMapper noteMapper = sqlSession.getMapper(NoteMapper.class);
+    //
+    //     String[] infoProjet = projetChoiceBox.getValue().split(" ");
+    //     Projet projet = new Projet();
+    //     projet.setIdProjet(Integer.parseInt(infoProjet[0]));
+    //
+    //     Integer idBinome = binomeChoiceBox.getValue();
+    //     Binome binome = new Binome();
+    //     binome.setIdBinome(idBinome);
+    //     binome.setProjet(projet);
+    //
+    //     String[] infoEtudiant = etudiantChoiceBox.getValue().split(" ");
+    //     Etudiant etudiant = new Etudiant();
+    //     etudiant.setIdEtudiant(Integer.parseInt(infoEtudiant[0]));
+    //
+    //     Note note = new Note();
+    //     // note.setBinome(binome);
+    //     note.setEtudiant(etudiant);
+    //     note.setNoteSoutenance(Double.valueOf(noteSoutenance.getText()));
+    //
+    //
+    //     noteMapper.insertNote(note);
+    // }
 
     public void showErr(String msg){
         Alert alert = new Alert(Alert.AlertType.ERROR);

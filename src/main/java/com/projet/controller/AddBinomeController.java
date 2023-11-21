@@ -186,6 +186,10 @@ public class AddBinomeController {
 								if (binome.getEtudiants().size() > 1) {
 									binomeMapper.insertOrUpdateBinomeStep3(binome);
 								}
+								binomeMapper.insertOrUpdateBinomeStep4(binome);
+								if (binome.getEtudiants().size() > 1) {
+									binomeMapper.insertOrUpdateBinomeStep5(binome);
+								}
 								sqlSession.commit();
 								Stage stage = (Stage) ajouterBi.getScene().getWindow();
 								stage.close();

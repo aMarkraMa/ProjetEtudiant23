@@ -10,7 +10,6 @@ public class Etudiant {
     private String prenomEtudiant;
     private Formation formation;
     
-    // private List<Binome> binomes;
 
     public Etudiant() {
     }

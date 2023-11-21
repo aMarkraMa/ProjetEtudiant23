@@ -1,104 +1,81 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.projet.mapper.BinomeMapper">
-    
-    
-    
-    <resultMap id="resultMapBinome" type="binome">
-	    <id property="idBinome" column="id_binome"/>
-	    <result property="noteRapport" column="note_rapport"/>
-	    <result column="date_reelle_remise" property="dateReelleRemise"/>
-	    <association property="projet" javaType="projet">
-            <id column="id_projet" property="idProjet"/>
-            <result column="nom_matiere" property="nomMatiere"/>
-            <result column="sujet" property="sujet"/>
-            <result column="date_prevue_remise" property="datePrevueRemise"/>
-        </association>
-        <collection property="etudiants" ofType="etudiant">
-            <id column="id_etudiant" property="idEtudiant"/>
-            <result column="nom_etudiant" property="nomEtudiant"/>
-            <result column="prenom_etudiant" property="prenomEtudiant"/>
-        </collection>
-    </resultMap>
-    
-    <update id="updateBinomeStep1">
-        UPDATE binomes
-        <set>
-            <if test="noteRapport != null">
-                note_rapport = #{noteRapport},
-            </if>
-            
-            <if test="dateReelleRemise != null">
-                date_reelle_remise = #{dateReelleRemise}
-            </if>
-        </set>
-        <where>
-            <if test="noteRapport != null or dateReelleRemise != null">
-                id_binome = #{idBinome} AND id_projet = #{idProjet}
-            </if>
-        </where>
-    
-    </update>
-    
-    <select id="selectAll" resultMap="resultMapBinome" resultType="binome">
-	    SELECT b.id_binome,
-	           p.id_projet,
-	           b.note_rapport,
-	           b.date_reelle_remise,
-	           e.id_etudiant,
-	           e.nom_etudiant,
-	           e.prenom_etudiant,
-	           p.nom_matiere,
-	           p.sujet,
-	           p.date_prevue_remise
-	    FROM etudiants e,
-	         notes a,
-	         binomes b,
-	         formations f,
-	         projets p
-	    WHERE e.id_formation = f.id_formation
+	
+	
+	
+	<resultMap id="resultMapBinome" type="binome">
+		<id property="idBinome" column="id_binome"/>
+		<result property="noteRapport" column="note_rapport"/>
+		<result column="date_reelle_remise" property="dateReelleRemise"/>
+		<association property="projet" javaType="projet">
+			<id column="id_projet" property="idProjet"/>
+			<result column="nom_matiere" property="nomMatiere"/>
+			<result column="sujet" property="sujet"/>
+			<result column="date_prevue_remise" property="datePrevueRemise"/>
+		</association>
+		<collection property="etudiants" ofType="etudiant">
+			<id column="id_etudiant" property="idEtudiant"/>
+			<result column="nom_etudiant" property="nomEtudiant"/>
+			<result column="prenom_etudiant" property="prenomEtudiant"/>
+		</collection>
+	</resultMap>
+	
+	<update id="updateBinomeStep1">
+		UPDATE binomes
+		<set>
+			<if test="noteRapport != null">
+				note_rapport = #{noteRapport},
+			</if>
+			
+			<if test="dateReelleRemise != null">
+				date_reelle_remise = #{dateReelleRemise}
+			</if>
+		</set>
+		<where>
+			<if test="noteRapport != null or dateReelleRemise != null">
+				id_binome = #{idBinome} AND id_projet = #{idProjet}
+			</if>
+		</where>
+	
+	</update>
+	
+	
+	<select id="selectByIdBinomeAndIdProjet" resultType="binome" resultMap="resultMapBinome">
+		SELECT b.id_binome,
+		       b.id_projet,
+		       b.note_rapport,
+		       b.date_reelle_remise,
+		       e.id_etudiant,
+		       e.nom_etudiant,
+		       e.prenom_etudiant,
+		       f.id_formation,
+		       f.nom_formation,
+		       f.promotion,
+		       p.nom_matiere,
+		       p.sujet,
+		       p.date_prevue_remise
+		FROM etudiants e,
+		     appartenir a,
+		     binomes b,
+		     formations f,
+		     projets p
+		WHERE e.id_formation = f.id_formation
 		  AND e.id_etudiant = a.id_etudiant
 		  AND a.id_binome = b.id_binome
 		  AND a.id_projet = b.id_projet
 		  AND b.id_projet = p.id_projet
+		  AND b.id_binome = #{idBinome}
+		  AND b.id_projet = #{projet.idProjet}
+	</select>
 	
-    </select>
-
-    <select id="selectByIdBinomeAndIdProjet" resultType="binome" resultMap="resultMapBinome">
-        SELECT b.id_binome,
-               b.id_projet,
-               b.note_rapport,
-               b.date_reelle_remise,
-               e.id_etudiant,
-               e.nom_etudiant,
-               e.prenom_etudiant,
-               f.id_formation,
-               f.nom_formation,
-               f.promotion,
-               p.nom_matiere,
-               p.sujet,
-               p.date_prevue_remise
-        FROM etudiants e,
-             notes a,
-             binomes b,
-             formations f,
-             projets p
-        WHERE e.id_formation = f.id_formation
-          AND e.id_etudiant = a.id_etudiant
-          AND a.id_binome = b.id_binome
-          AND a.id_projet = b.id_projet
-          AND b.id_projet = p.id_projet
-          AND b.id_binome = #{idBinome}
-          AND b.id_projet = #{projet.idProjet}
-    </select>
-    
- 
-    <select id="getBinomeByIdProjetAndIdEtudiant" resultMap="resultMapBinome" resultType="com.projet.entity.Binome">
-        SELECT id_binome
-        FROM notes a
-        WHERE a.id_projet = #{idProjet} AND a.id_etudiant = #{idEtudiant}
-    </select>
+	
+	<select id="getBinomeByIdProjetAndIdEtudiant" resultMap="resultMapBinome" resultType="com.projet.entity.Binome">
+		SELECT id_binome
+		FROM appartenir a
+		WHERE a.id_projet = #{idProjet} AND a.id_etudiant = #{idEtudiant}
+	</select>
 	
 	<select id="selectByCondition" resultMap="resultMapBinome" resultType="com.projet.entity.Binome">
 		SELECT b.id_binome,
@@ -110,7 +87,7 @@
 		p.sujet,
 		p.date_prevue_remise
 		FROM etudiants e,
-		notes a,
+		appartenir a,
 		binomes b,
 		formations f,
 		projets p
@@ -156,7 +133,7 @@
 		       p.sujet,
 		       p.date_prevue_remise
 		FROM etudiants e,
-		     notes a,
+		     appartenir a,
 		     binomes b,
 		     formations f,
 		     projets p
@@ -170,28 +147,37 @@
 	
 	
 	<insert id="insertBinomeStep1">
-        INSERT INTO binomes (id_binome, id_projet, note_rapport, date_reelle_remise)
-        VALUES (#{idBinome}, #{projet.idProjet}, 0, '1111-11-11');
-    </insert>
+		INSERT INTO binomes (id_binome, id_projet, note_rapport, date_reelle_remise)
+		VALUES (#{idBinome}, #{projet.idProjet}, 0, '1111-11-11');
+	</insert>
 	
-    <insert id="insertOrUpdateBinomeStep2">
-	    INSERT INTO notes (id_binome, id_projet, id_etudiant, note_soutenance)
-	    VALUES (#{idBinome}, #{projet.idProjet}, #{etudiants[0].idEtudiant}, 0.0)
-    </insert>
-    
-    <insert id="insertOrUpdateBinomeStep3">
-	    INSERT INTO notes (id_binome, id_projet, id_etudiant, note_soutenance)
-	    VALUES (#{idBinome}, #{projet.idProjet}, #{etudiants[1].idEtudiant}, 0.0)
-    </insert>
-    
-    <delete id="deleteBinome">
-        DELETE FROM binomes WHERE id_binome = #{idBinome} AND id_projet = #{idProjet}
-    </delete>
-    
-    
-    <delete id="deleteAppartenir">
-        DELETE FROM notesWHERE id_binome = #{idBinome} AND id_projet = #{idProjet}
-    </delete>
+	<insert id="insertOrUpdateBinomeStep2">
+		INSERT INTO appartenir (id_binome, id_projet, id_etudiant)
+		VALUES (#{idBinome}, #{projet.idProjet}, #{etudiants[0].idEtudiant})
+	</insert>
+	
+	<insert id="insertOrUpdateBinomeStep3">
+		INSERT INTO appartenir (id_binome, id_projet, id_etudiant)
+		VALUES (#{idBinome}, #{projet.idProjet}, #{etudiants[1].idEtudiant})
+	</insert>
+	<insert id="insertOrUpdateBinomeStep4">
+		INSERT INTO notes_soutenance(id_projet, id_etudiant, note_soutenance)
+		VALUES (#{projet.idProjet}, #{etudiants[0].idEtudiant}, 0)
+	</insert>
+	<insert id="insertOrUpdateBinomeStep5">
+		INSERT INTO notes_soutenance(id_projet, id_etudiant, note_soutenance)
+		VALUES (#{projet.idProjet}, #{etudiants[1].idEtudiant}, 0)
+	</insert>
 	
 	
+	<delete id="deleteBinome">
+		DELETE FROM binomes WHERE id_binome = #{idBinome} AND id_projet = #{idProjet}
+	</delete>
+	
+	
+	<delete id="deleteAppartenir">
+		DELETE FROM appartenir WHERE id_binome = #{idBinome} AND id_projet = #{idProjet}
+	</delete>
+
+
 </mapper>
