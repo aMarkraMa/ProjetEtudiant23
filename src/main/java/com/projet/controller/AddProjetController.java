@@ -36,66 +36,75 @@ public class AddProjetController {
 
 
     public void addProjet(){
-        SqlSession sqlSession = MyBatisUtils.getSqlSession();
-        ProjetMapper projetMapper = sqlSession.getMapper(ProjetMapper.class);
-
-        Projet projet = new Projet();
-
-
-        if(nomMatiere.getText() != null && !nomMatiere.getText().isEmpty()){
-            System.out.println("set Matiere");
-            projet.setNomMatiere(nomMatiere.getText());
-        }else{
-            showErr("Nom Matière ne peux pas être vide");
-            return;
-        }
-        if(sujet.getText() != null && !sujet.getText().isEmpty()){
-            System.out.println("set sujet!");
-            projet.setSujet(sujet.getText());
-        }else{
-            showErr("Sujet ne peux pas être vide");
-            return;
-        }
-        if(datePicker.getValue() != null){
-            projet.setDatePrevueRemise(datePicker.getValue());
-        }else{
-            showErr("DatePrevueRemise ne peux pas être vide");
-            return;
-        }
-
-        if(pourcentageSoutenance.getText() != null && !pourcentageSoutenance.getText().isEmpty()){
-            if(Integer.valueOf(pourcentageSoutenance.getText()) >= 0 && Integer.valueOf(pourcentageSoutenance.getText()) <= 100){
-                projet.setPourcentageSoutenance(Integer.valueOf(pourcentageSoutenance.getText()));
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtils.getSqlSession();
+            ProjetMapper projetMapper = sqlSession.getMapper(ProjetMapper.class);
+            
+            Projet projet = new Projet();
+            
+            
+            if(nomMatiere.getText() != null && !nomMatiere.getText().isEmpty()){
+                System.out.println("set Matiere");
+                projet.setNomMatiere(nomMatiere.getText());
             }else{
-                showErr("taux de note doit etre entre 0 - 100");
+                showErr("Nom Matière ne peux pas être vide");
                 return;
             }
-
-        }else{
-            showErr("pourcentageSoutenance ne peux pas être vide");
-            return;
+            if(sujet.getText() != null && !sujet.getText().isEmpty()){
+                System.out.println("set sujet!");
+                projet.setSujet(sujet.getText());
+            }else{
+                showErr("Sujet ne peux pas être vide");
+                return;
+            }
+            if(datePicker.getValue() != null){
+                projet.setDatePrevueRemise(datePicker.getValue());
+            }else{
+                showErr("DatePrevueRemise ne peux pas être vide");
+                return;
+            }
+            
+            if(pourcentageSoutenance.getText() != null && !pourcentageSoutenance.getText().isEmpty()){
+                if(Integer.valueOf(pourcentageSoutenance.getText()) >= 0 && Integer.valueOf(pourcentageSoutenance.getText()) <= 100){
+                    projet.setPourcentageSoutenance(Integer.valueOf(pourcentageSoutenance.getText()));
+                }else{
+                    showErr("taux de note doit etre entre 0 - 100");
+                    return;
+                }
+    
+            }else{
+                showErr("pourcentageSoutenance ne peux pas être vide");
+                return;
+            }
+            System.out.println("sujet " + sujet.getText());
+            System.out.println("nomMa " + nomMatiere.getText());
+            
+            Projet p = new Projet();
+            p.setNomMatiere(projet.getNomMatiere());
+            p.setSujet(projet.getSujet());
+            List<Projet> ps = projetMapper.selectByCondition(p);
+            if(ps.isEmpty()){
+                projetMapper.addProjet(projet);
+            }else {
+                showErr("Projet : " + nomMatiere.getText() + "-" + sujet.getText() + " existe déjà");
+                return;
+            }
+            
+            Stage stage = (Stage)addProjet.getScene().getWindow();
+            stage.close();
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        } finally {
+            if (sqlSession != null) {
+                sqlSession.close();
+            }
         }
-        System.out.println("sujet " + sujet.getText());
-        System.out.println("nomMa " + nomMatiere.getText());
+        
+        
+        
 
-        Projet p = new Projet();
-        p.setNomMatiere(projet.getNomMatiere());
-        p.setSujet(projet.getSujet());
-        List<Projet> ps = projetMapper.selectByCondition(p);
-        if(ps.isEmpty()){
-            projetMapper.addProjet(projet);
-        }else {
-            showErr("Projet : " + nomMatiere.getText() + "-" + sujet.getText() + " existe déjà");
-            return;
-        }
-
-
-
-        sqlSession.commit();
-        sqlSession.close();
-
-        Stage stage = (Stage)addProjet.getScene().getWindow();
-        stage.close();
+        
 
 
     }

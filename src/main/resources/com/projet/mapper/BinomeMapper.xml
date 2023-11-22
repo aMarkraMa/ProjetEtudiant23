@@ -148,7 +148,7 @@
 	
 	<insert id="insertBinomeStep1">
 		INSERT INTO binomes (id_binome, id_projet, note_rapport, date_reelle_remise)
-		VALUES (#{idBinome}, #{projet.idProjet}, 0, '1111-11-11');
+		VALUES (#{idBinome}, #{projet.idProjet}, -1, '1111-11-11');
 	</insert>
 	
 	<insert id="insertOrUpdateBinomeStep2">
@@ -162,11 +162,11 @@
 	</insert>
 	<insert id="insertOrUpdateBinomeStep4">
 		INSERT INTO notes_soutenance(id_projet, id_etudiant, note_soutenance)
-		VALUES (#{projet.idProjet}, #{etudiants[0].idEtudiant}, 0)
+		VALUES (#{projet.idProjet}, #{etudiants[0].idEtudiant}, -1)
 	</insert>
 	<insert id="insertOrUpdateBinomeStep5">
 		INSERT INTO notes_soutenance(id_projet, id_etudiant, note_soutenance)
-		VALUES (#{projet.idProjet}, #{etudiants[1].idEtudiant}, 0)
+		VALUES (#{projet.idProjet}, #{etudiants[1].idEtudiant}, -1)
 	</insert>
 	
 	

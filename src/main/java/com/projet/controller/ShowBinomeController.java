@@ -104,17 +104,26 @@ public class ShowBinomeController {
 	
 	@FXML
 	public void initialize() {
-		SqlSession sqlSession = MyBatisUtils.getSqlSession();
-		BinomeMapper binomeMapper = sqlSession.getMapper(BinomeMapper.class);
-		ProjetMapper projetMapper = sqlSession.getMapper(ProjetMapper.class);
-		List<Integer> idsProjet = projetMapper.getIdsProjet();
-		ObservableList<Binome> data = FXCollections.observableArrayList();
-		for (Integer idProjet : idsProjet) {
-			List<Binome> binomes = binomeMapper.getBinomesByIdProjet(idProjet);
-			binomes.forEach(System.out::println);
-			data.addAll(binomes);
+		SqlSession sqlSession = null;
+		try {
+			sqlSession = MyBatisUtils.getSqlSession();
+			BinomeMapper binomeMapper = sqlSession.getMapper(BinomeMapper.class);
+			ProjetMapper projetMapper = sqlSession.getMapper(ProjetMapper.class);
+			List<Integer> idsProjet = projetMapper.getIdsProjet();
+			ObservableList<Binome> data = FXCollections.observableArrayList();
+			for (Integer idProjet : idsProjet) {
+				List<Binome> binomes = binomeMapper.getBinomesByIdProjet(idProjet);
+				binomes.forEach(System.out::println);
+				data.addAll(binomes);
+			}
+			tableviewBinome.setItems(data);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (sqlSession != null) {
+				sqlSession.close();
+			}
 		}
-		tableviewBinome.setItems(data);
 		
 		idBinomes = new TableColumn<>("id");
 		idBinomes.setCellValueFactory(new PropertyValueFactory<>("idBinome"));
@@ -161,7 +170,7 @@ public class ShowBinomeController {
 		noteRapport.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Binome, String>, ObservableValue<String>>() {
 			@Override
 			public ObservableValue<String> call(TableColumn.CellDataFeatures<Binome, String> binome) {
-				if (binome.getValue().getNoteRapport() == 0.0) {
+				if (binome.getValue().getNoteRapport() == -1.0) {
 					return new SimpleStringProperty("");
 				} else {
 					return new SimpleStringProperty(binome.getValue().getNoteRapport().toString());
@@ -192,11 +201,20 @@ public class ShowBinomeController {
 					
 					{
 						modifier.setOnAction((ActionEvent event) -> {
-							Binome binome = getTableView().getItems().get(getIndex());
-							SqlSession sqlSession = MyBatisUtils.getSqlSession();
-							BinomeMapper binomeMapper = sqlSession.getMapper(BinomeMapper.class);
-							UpdateBinomeServiceImpl.binomeToUpdate = binomeMapper.selectByIdBinomeAndIdProjet(binome);
-							Main.addView("/com/projet/view/UpdateBinome.fxml");
+							SqlSession sqlSession = null;
+							try {
+								Binome binome = getTableView().getItems().get(getIndex());
+								sqlSession = MyBatisUtils.getSqlSession();
+								BinomeMapper binomeMapper = sqlSession.getMapper(BinomeMapper.class);
+								UpdateBinomeServiceImpl.binomeToUpdate = binomeMapper.selectByIdBinomeAndIdProjet(binome);
+								Main.addView("/com/projet/view/UpdateBinome.fxml");
+							} catch (Exception e) {
+								e.printStackTrace();
+							} finally {
+								if (sqlSession != null) {
+									sqlSession.close();
+								}
+							}
 						});
 						
 						supprimer.setOnAction((ActionEvent event) -> {
@@ -377,16 +395,13 @@ public class ShowBinomeController {
 				PdfWriter.getInstance(document, new FileOutputStream(file));
 				document.open();
 				
-				// 创建PDF表格，列数与TableView一致
 				PdfPTable pdfTable = new PdfPTable(tableviewBinome.getColumns().size() - 1);
 				
-				// 添加表头
 				for (int i = 0; i < tableviewBinome.getColumns().size() - 1; i++) {
 					TableColumn<?, ?> col = (TableColumn<?, ?>) tableviewBinome.getColumns().get(i);
 					pdfTable.addCell(col.getText());
 				}
 				
-				// 添加行数据
 				for (int i = 0; i < tableviewBinome.getItems().size(); i++) {
 					for (int j = 0; j < tableviewBinome.getColumns().size() - 1; j++) {
 						Object cellData = tableviewBinome.getColumns().get(j).getCellData(tableviewBinome.getItems().get(i));
@@ -398,10 +413,9 @@ public class ShowBinomeController {
 					}
 				}
 				
-				// 将表格添加到文档中
 				document.add(pdfTable);
 				
-				document.close(); // 关闭文档
+				document.close();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -409,7 +423,7 @@ public class ShowBinomeController {
 	}
 	
 	public void toExcel(ActionEvent actionEvent) {
-		Stage stage = (Stage) tableviewBinome.getScene().getWindow(); // 获取当前窗口以显示文件选择器
+		Stage stage = (Stage) tableviewBinome.getScene().getWindow();
 		
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Save as Excel");
@@ -421,34 +435,29 @@ public class ShowBinomeController {
 				Sheet sheet = workbook.createSheet("Data");
 				
 				Row headerRow = sheet.createRow(0);
-				// 表头
 				for (int i = 0; i < tableviewBinome.getColumns().size() - 1; i++) {
 					org.apache.poi.ss.usermodel.Cell headerCell = headerRow.createCell(i);
 					headerCell.setCellValue(tableviewBinome.getColumns().get(i).getText());
 				}
 				
-				// 行数据
 				for (int rowIndex = 0; rowIndex < tableviewBinome.getItems().size(); rowIndex++) {
 					Row dataRow = sheet.createRow(rowIndex + 1);
 					for (int colIndex = 0; colIndex < tableviewBinome.getColumns().size() - 1; colIndex++) {
 						Cell cell = dataRow.createCell(colIndex);
 						Object cellValue = ((TableColumn<?, ?>) tableviewBinome.getColumns().get(colIndex)).getCellData(rowIndex);
 						if (cellValue != null) {
-							cell.setCellValue(cellValue.toString()); // 适当转换数据类型
+							cell.setCellValue(cellValue.toString());
 						}
 					}
 				}
 				
-				// 自动调整所有列的宽度
 				for (int i = 0; i < tableviewBinome.getColumns().size() - 1; i++) {
 					sheet.autoSizeColumn(i);
 				}
 				
-				// 写入文件
 				workbook.write(fileOut);
 			} catch (Exception e) {
 				e.printStackTrace();
-				// 显示错误消息或日志
 			}
 		}
 		

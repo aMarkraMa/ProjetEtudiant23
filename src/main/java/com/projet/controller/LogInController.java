@@ -65,35 +65,11 @@ public class LogInController {
 	
 	public void resetPassword(ActionEvent actionEvent) {
 		Main.addView("/com/projet/view/ResetPassword.fxml");
-		// Properties properties = new Properties();
-		// properties.put("mail.smtp.host", "smtp.126.com");
-		// properties.put("mail.smtp.port", 465);
-		// properties.put("mail.smtp.auth", true);
-		// properties.put("mail.smtp.ssl.enable", true);
-		//
-		// Session session = Session.getInstance(properties, new Authenticator() {
-		// 	@Override
-		// 	protected PasswordAuthentication getPasswordAuthentication() {
-		// 		return new PasswordAuthentication("yli08666@gmail.com","Liyingxuan2001.");
-		// 	}
-		// });
-		//
-		// try {
-		// 	MimeMessage message = new MimeMessage(session);
-		// 	message.setFrom(new InternetAddress("yli08666@gmail.com"));
-		// 	message.addRecipient(Message.RecipientType.TO, new InternetAddress("liyingxuanfr@126.com"));
-		// 	message.setSubject("Votre nouveau mot de passe");
-		// 	message.setText("Votre nouveau mot de passe est Asd123..");
-		// 	Transport.send(message);
-		// } catch (MessagingException e) {
-		// 	e.printStackTrace();
-		// }
 		
 	}
 	
 	public void inscrire(ActionEvent actionEvent) {
 		Main.addView("/com/projet/view/Inscrire.fxml");
-		
 	}
 	
 	public void connecter(ActionEvent actionEvent) {

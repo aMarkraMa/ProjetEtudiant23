@@ -9,6 +9,8 @@ import com.projet.mapper.ProjetMapper;
 import com.projet.service.UpdateBinomeService;
 import com.projet.service.impl.UpdateBinomeServiceImpl;
 import com.projet.utils.MyBatisUtils;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -17,6 +19,7 @@ import javafx.stage.Stage;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.ibatis.session.SqlSession;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,11 +109,53 @@ public class UpdateBinomeController {
 		projet.setValue(binomeToUpdate.getProjet().getIdProjet() + " " + binomeToUpdate.getProjet().getNomMatiere() + " " + binomeToUpdate.getProjet().getSujet());
 		
 		etudiant1.setValue(binomeToUpdate.getEtudiants().get(0).getIdEtudiant().toString() + " " + binomeToUpdate.getEtudiants().get(0).getNomEtudiant() + " " + binomeToUpdate.getEtudiants().get(0).getPrenomEtudiant());
+		
 		if (binomeToUpdate.getEtudiants().size() > 1) {
 			etudiant2.setValue(binomeToUpdate.getEtudiants().get(1).getIdEtudiant().toString() + " " + binomeToUpdate.getEtudiants().get(1).getNomEtudiant() + " " + binomeToUpdate.getEtudiants().get(1).getPrenomEtudiant());
 		}
 		noteRapport.setText(binomeToUpdate.getNoteRapport().toString());
 		dateRelleRemise.setValue(binomeToUpdate.getDateReelleRemise());
+		
+		etudiant1.valueProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				noteRapport.setDisable(true);
+				noteRapport.setText(String.valueOf(-1.0));
+				dateRelleRemise.setDisable(true);
+				dateRelleRemise.setValue(LocalDate.of(1111, 11, 11));
+			}
+		});
+		
+		etudiant2.valueProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				noteRapport.setDisable(true);
+				noteRapport.setText(String.valueOf(-1.0));
+				dateRelleRemise.setDisable(true);
+				dateRelleRemise.setValue(LocalDate.of(1111, 11, 11));
+			}
+		});
+		
+		noteRapport.textProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				if (!newValue.equals("-1.0")) {
+					etudiant1.setDisable(true);
+					etudiant2.setDisable(true);
+				}
+			}
+		});
+		
+		dateRelleRemise.valueProperty().addListener(new ChangeListener<LocalDate>() {
+			@Override
+			public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
+				if (!newValue.equals(LocalDate.of(1111, 11, 11))){
+					etudiant1.setDisable(true);
+					etudiant2.setDisable(true);
+				}
+				
+			}
+		});
 	}
 	
 	
@@ -164,7 +209,7 @@ public class UpdateBinomeController {
 		binome.setEtudiants(etudiants);
 		
 		if (noteRapport.getText() != null && !"".equals(noteRapport.getText())) {
-			if (!NumberUtils.isParsable(noteRapport.getText()) || Double.parseDouble(noteRapport.getText()) > 20 || Double.parseDouble(noteRapport.getText()) < 0) {
+			if (!NumberUtils.isParsable(noteRapport.getText()) || Double.parseDouble(noteRapport.getText()) > 20 || Double.parseDouble(noteRapport.getText()) < -1) {
 				Alert alert = new Alert(Alert.AlertType.ERROR);
 				alert.setTitle("ERREUR: La note de rapport saisie n'est pas valide!");
 				alert.setHeaderText("La note de rapport saisie n'est pas valide!");

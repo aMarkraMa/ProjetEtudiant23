@@ -36,13 +36,13 @@ import java.util.Optional;
 
 public class ShowFormationController {
 	@FXML
-	private TableColumn<Formation, String> nom_formation;
+	private TableColumn<Formation, String> nomFormation;
 	
 	@FXML
 	private TableColumn<Formation, String> promotion;
 	
 	@FXML
-	private TableColumn<Formation, String> id_formation;
+	private TableColumn<Formation, String> idFormation;
 	
 	@FXML
 	private TableColumn<Formation, Void> boutons;
@@ -80,11 +80,11 @@ public class ShowFormationController {
 	@FXML
 	public void initialize() {
 		
-		id_formation = new TableColumn<>("id");
-		id_formation.setCellValueFactory(new PropertyValueFactory<>("idFormation"));
-		id_formation.setPrefWidth(40);
-		nom_formation = new TableColumn<>("Formation");
-		nom_formation.setCellValueFactory(new PropertyValueFactory<>("nomFormation"));
+		idFormation = new TableColumn<>("id");
+		idFormation.setCellValueFactory(new PropertyValueFactory<>("idFormation"));
+		idFormation.setPrefWidth(40);
+		nomFormation = new TableColumn<>("Formation");
+		nomFormation.setCellValueFactory(new PropertyValueFactory<>("nomFormation"));
 		promotion = new TableColumn<>("Promotion");
 		promotion.setCellValueFactory(new PropertyValueFactory<>("promotion"));
 		
@@ -158,14 +158,14 @@ public class ShowFormationController {
 		});
 		
 		
-		tableviewFormation.getColumns().add(id_formation);
-		tableviewFormation.getColumns().add(nom_formation);
+		tableviewFormation.getColumns().add(idFormation);
+		tableviewFormation.getColumns().add(nomFormation);
 		tableviewFormation.getColumns().add(promotion);
 		tableviewFormation.getColumns().add(boutons);
 		
 		tableviewFormation.widthProperty().addListener((observable, oldValue, newValue) -> {
 			double tableWidth = newValue.doubleValue();
-			nom_formation.setPrefWidth((tableWidth-40) / 3);
+			nomFormation.setPrefWidth((tableWidth-40) / 3);
 			promotion.setPrefWidth((tableWidth-40) / 3);
 			boutons.setPrefWidth((tableWidth-40) / 3);
 		});
@@ -262,16 +262,13 @@ public class ShowFormationController {
 				PdfWriter.getInstance(document, new FileOutputStream(file));
 				document.open();
 				
-				// 创建PDF表格，列数与TableView一致
 				PdfPTable pdfTable = new PdfPTable(tableviewFormation.getColumns().size() - 1);
 				
-				// 添加表头
 				for (int i = 0; i < tableviewFormation.getColumns().size() - 1; i++) {
 					TableColumn<?, ?> col = (TableColumn<?, ?>) tableviewFormation.getColumns().get(i);
 					pdfTable.addCell(col.getText());
 				}
 				
-				// 添加行数据
 				for (int i = 0; i < tableviewFormation.getItems().size(); i++) {
 					for (int j = 0; j < tableviewFormation.getColumns().size() - 1; j++) {
 						Object cellData = tableviewFormation.getColumns().get(j).getCellData(tableviewFormation.getItems().get(i));
@@ -283,10 +280,9 @@ public class ShowFormationController {
 					}
 				}
 				
-				// 将表格添加到文档中
 				document.add(pdfTable);
 				
-				document.close(); // 关闭文档
+				document.close();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -294,7 +290,7 @@ public class ShowFormationController {
 	}
 	
 	public void toExcel(ActionEvent actionEvent) {
-		Stage stage = (Stage) tableviewFormation.getScene().getWindow(); // 获取当前窗口以显示文件选择器
+		Stage stage = (Stage) tableviewFormation.getScene().getWindow();
 		
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Save as Excel");
@@ -306,34 +302,30 @@ public class ShowFormationController {
 				Sheet sheet = workbook.createSheet("Data");
 				
 				Row headerRow = sheet.createRow(0);
-				// 表头
+				
 				for (int i = 0; i < tableviewFormation.getColumns().size() - 1; i++) {
 					org.apache.poi.ss.usermodel.Cell headerCell = headerRow.createCell(i);
 					headerCell.setCellValue(tableviewFormation.getColumns().get(i).getText());
 				}
 				
-				// 行数据
 				for (int rowIndex = 0; rowIndex < tableviewFormation.getItems().size(); rowIndex++) {
 					Row dataRow = sheet.createRow(rowIndex + 1);
 					for (int colIndex = 0; colIndex < tableviewFormation.getColumns().size() - 1; colIndex++) {
 						Cell cell = dataRow.createCell(colIndex);
 						Object cellValue = ((TableColumn<?, ?>) tableviewFormation.getColumns().get(colIndex)).getCellData(rowIndex);
 						if (cellValue != null) {
-							cell.setCellValue(cellValue.toString()); // 适当转换数据类型
+							cell.setCellValue(cellValue.toString());
 						}
 					}
 				}
 				
-				// 自动调整所有列的宽度
 				for (int i = 0; i < tableviewFormation.getColumns().size() - 1; i++) {
 					sheet.autoSizeColumn(i);
 				}
 				
-				// 写入文件
 				workbook.write(fileOut);
 			} catch (Exception e) {
 				e.printStackTrace();
-				// 显示错误消息或日志
 			}
 		}
 		

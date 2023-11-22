@@ -38,16 +38,25 @@ public class AddFormationController {
 	
 	@FXML
 	void ajouterFormation(ActionEvent event) {
-		Formation formation = new Formation();
-		String nomFormation = this.nomFormation.getText();
-		String promotion = this.promotion.getText();
-		formation.setNomFormation(nomFormation);
-		formation.setPromotion(promotion);
-		SqlSession sqlSession = MyBatisUtils.getSqlSession();
-		FormationMapper mapper = sqlSession.getMapper(FormationMapper.class);
-		mapper.addFormation(formation);
-		Stage stage = (Stage) ajouterFor.getScene().getWindow();
-		stage.close();
+		SqlSession sqlSession = null;
+		try {
+			sqlSession = MyBatisUtils.getSqlSession();
+			Formation formation = new Formation();
+			String nomFormation = this.nomFormation.getText();
+			String promotion = this.promotion.getText();
+			formation.setNomFormation(nomFormation);
+			formation.setPromotion(promotion);
+			FormationMapper mapper = sqlSession.getMapper(FormationMapper.class);
+			mapper.addFormation(formation);
+			Stage stage = (Stage) ajouterFor.getScene().getWindow();
+			stage.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (sqlSession != null) {
+				sqlSession.close();
+			}
+		}
 	}
 	
 }
