@@ -178,6 +178,12 @@
 	<delete id="deleteAppartenir">
 		DELETE FROM appartenir WHERE id_binome = #{idBinome} AND id_projet = #{idProjet}
 	</delete>
+	<delete id="deleteNotesSoutenanceStep1">
+		DELETE FROM notes_soutenance WHERE id_etudiant = #{idEtudiant} AND id_projet = #{idProjet}
+	</delete>
+	<delete id="deleteNotesSoutenanceStep2">
+		DELETE FROM notes_soutenance WHERE id_etudiant = #{idEtudiant} AND id_projet = #{idProjet}
+	</delete>
 
 
 </mapper>

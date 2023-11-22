@@ -214,9 +214,17 @@ public class UpdateBinomeController {
 				binomeMapper.updateBinomeStep1(binome.getNoteRapport(), binome.getDateReelleRemise(), binome.getIdBinome(), binome.getProjet().getIdProjet());
 			}
 			binomeMapper.deleteAppartenir(binome.getIdBinome(), binome.getProjet().getIdProjet());
+			binomeMapper.deleteNotesSoutenanceStep1(binome.getEtudiants().get(0).getIdEtudiant(), binome.getProjet().getIdProjet());
+			if (binome.getEtudiants().size() > 1) {
+				binomeMapper.deleteNotesSoutenanceStep2(binome.getEtudiants().get(1).getIdEtudiant(), binome.getProjet().getIdProjet());
+			}
 			binomeMapper.insertOrUpdateBinomeStep2(binome);
 			if (binome.getEtudiants().size() > 1) {
 				binomeMapper.insertOrUpdateBinomeStep3(binome);
+			}
+			binomeMapper.insertOrUpdateBinomeStep4(binome);
+			if (binome.getEtudiants().size() > 1) {
+				binomeMapper.insertOrUpdateBinomeStep5(binome);
 			}
 			sqlSession.commit();
 			Stage stage = (Stage) updateBinome.getScene().getWindow();

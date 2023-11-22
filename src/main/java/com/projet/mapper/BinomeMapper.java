@@ -20,7 +20,8 @@ public interface BinomeMapper {
 	
 	int deleteBinome(@Param("idBinome") Integer idBinome, @Param("idProjet") Integer idProjet);
 	int deleteAppartenir(@Param("idBinome") Integer idBinome, @Param("idProjet") Integer idProjet);
-	
+	int deleteNotesSoutenanceStep1(@Param("idEtudiant") Integer idEtudiant, @Param("idProjet") Integer idProjet);
+	int deleteNotesSoutenanceStep2(@Param("idEtudiant") Integer idEtudiant, @Param("idProjet") Integer idProjet);
 	int updateBinomeStep1(@Param("noteRapport") Double noteRapport, @Param("dateReelleRemise") LocalDate dateReelleRemise, @Param("idBinome") Integer idBinome, @Param("idProjet") Integer idProjet);
 	
 	List<Binome> selectByCondition(Binome binome);
