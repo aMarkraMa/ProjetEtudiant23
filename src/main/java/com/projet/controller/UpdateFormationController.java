@@ -49,10 +49,19 @@ public class UpdateFormationController {
 		formation.setNomFormation(nomFormationAndPromotion[0]);
 		formation.setPromotion(nomFormationAndPromotion[1]);
 		formation.setIdFormation(UpdateFormationServiceImpl.formationToUpdate.getIdFormation());
-		SqlSession sqlSession = MyBatisUtils.getSqlSession();
-		FormationMapper mapper = sqlSession.getMapper(FormationMapper.class);
-		mapper.updateFormation(formation);
-		Stage stage = (Stage) updateFormation.getScene().getWindow();
-		stage.close();
+		SqlSession sqlSession = null;
+		try {
+			sqlSession = MyBatisUtils.getSqlSession();
+			FormationMapper mapper = sqlSession.getMapper(FormationMapper.class);
+			mapper.updateFormation(formation);
+			Stage stage = (Stage) updateFormation.getScene().getWindow();
+			stage.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(sqlSession != null){
+				sqlSession.close();
+			}
+		}
 	}
 }

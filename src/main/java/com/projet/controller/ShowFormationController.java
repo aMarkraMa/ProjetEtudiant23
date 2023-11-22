@@ -113,27 +113,36 @@ public class ShowFormationController {
 							alert1.setContentText("Vous allez supprimer cette formation. Etes-vous sur?");
 							Optional<ButtonType> resultat = alert1.showAndWait();
 							if (resultat.isPresent() && resultat.get() == ButtonType.OK) {
-								SqlSession sqlSession = MyBatisUtils.getSqlSession();
-								EtudiantMapper etudiantMapper = sqlSession.getMapper(EtudiantMapper.class);
-								FormationMapper formationMapper = sqlSession.getMapper(FormationMapper.class);
-								Formation formation = getTableView().getItems().get(getIndex());
-								Etudiant etudiant = new Etudiant();
-								etudiant.setFormation(formation);
-								List<Etudiant> etudiants = etudiantMapper.getEtudiantsByIdFormation(etudiant);
-								if (etudiants != null && etudiants.size() != 0) {
-									Alert alert2 = new Alert(Alert.AlertType.ERROR);
-									alert2.setTitle("ERREUR: Il y a encore des etudiants dans cette formation!");
-									alert2.setHeaderText("Il y a encore des etudiants dans cette formation!");
-									alert2.setContentText("Il y a encore des etudiants dans cette formation, vous ne pouvez pas la supprimer.");
-									alert2.getDialogPane().setPrefWidth(800);
-									alert2.show();
-								} else {
-									Integer idFormation = formation.getIdFormation();
-									formationMapper.deleteById(idFormation);
-									ObservableList<Formation> data = FXCollections.observableArrayList();
-									List<Formation> formations = formationMapper.selectAll();
-									data.addAll(formations);
-									tableviewFormation.setItems(data);
+								SqlSession sqlSession = null;
+								try {
+									sqlSession = MyBatisUtils.getSqlSession();
+									EtudiantMapper etudiantMapper = sqlSession.getMapper(EtudiantMapper.class);
+									FormationMapper formationMapper = sqlSession.getMapper(FormationMapper.class);
+									Formation formation = getTableView().getItems().get(getIndex());
+									Etudiant etudiant = new Etudiant();
+									etudiant.setFormation(formation);
+									List<Etudiant> etudiants = etudiantMapper.getEtudiantsByIdFormation(etudiant);
+									if (etudiants != null && etudiants.size() != 0) {
+										Alert alert2 = new Alert(Alert.AlertType.ERROR);
+										alert2.setTitle("ERREUR: Il y a encore des etudiants dans cette formation!");
+										alert2.setHeaderText("Il y a encore des etudiants dans cette formation!");
+										alert2.setContentText("Il y a encore des etudiants dans cette formation, vous ne pouvez pas la supprimer.");
+										alert2.getDialogPane().setPrefWidth(800);
+										alert2.show();
+									} else {
+										Integer idFormation = formation.getIdFormation();
+										formationMapper.deleteById(idFormation);
+										ObservableList<Formation> data = FXCollections.observableArrayList();
+										List<Formation> formations = formationMapper.selectAll();
+										data.addAll(formations);
+										tableviewFormation.setItems(data);
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+								} finally {
+									if (sqlSession != null){
+										sqlSession.close();
+									}
 								}
 							}
 							
@@ -170,11 +179,19 @@ public class ShowFormationController {
 			boutons.setPrefWidth((tableWidth-40) / 3);
 		});
 		
-		
-		SqlSession sqlSession = MyBatisUtils.getSqlSession();
-		FormationMapper mapper = sqlSession.getMapper(FormationMapper.class);
-		List<Formation> formations = mapper.selectAll();
-		refreshTable(formations);
+		SqlSession sqlSession = null;
+		try {
+			sqlSession = MyBatisUtils.getSqlSession();
+			FormationMapper mapper = sqlSession.getMapper(FormationMapper.class);
+			List<Formation> formations = mapper.selectAll();
+			refreshTable(formations);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(sqlSession != null){
+				sqlSession.close();
+			}
+		}
 		
 		Image refresh = new Image("com/projet/img/refresh.png");
 		ImageView refreshImageView = new ImageView(refresh);
@@ -210,24 +227,42 @@ public class ShowFormationController {
 	}
 	
 	public void searchFormation(ActionEvent actionEvent) {
-		SqlSession sqlSession = MyBatisUtils.getSqlSession();
-		FormationMapper mapper = sqlSession.getMapper(FormationMapper.class);
-		Formation formation = new Formation();
-		formation.setNomFormation("%" + textfieldNomFormation.getText() + "%");
-		formation.setPromotion("%" + textfieldPromotion.getText() + "%");
-		List<Formation> formations = mapper.selectByCondition(formation);
-		ObservableList<Formation> data = FXCollections.observableArrayList();
-		data.addAll(formations);
-		tableviewFormation.setItems(data);
+		SqlSession sqlSession = null;
+		try {
+			sqlSession = MyBatisUtils.getSqlSession();
+			FormationMapper mapper = sqlSession.getMapper(FormationMapper.class);
+			Formation formation = new Formation();
+			formation.setNomFormation("%" + textfieldNomFormation.getText() + "%");
+			formation.setPromotion("%" + textfieldPromotion.getText() + "%");
+			List<Formation> formations = mapper.selectByCondition(formation);
+			ObservableList<Formation> data = FXCollections.observableArrayList();
+			data.addAll(formations);
+			tableviewFormation.setItems(data);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (sqlSession != null){
+				sqlSession.close();
+			}
+		}
 	}
 	
 	public void refreshTable(ActionEvent actionEvent) {
-		SqlSession sqlSession = MyBatisUtils.getSqlSession();
-		FormationMapper mapper = sqlSession.getMapper(FormationMapper.class);
-		List<Formation> formations = mapper.selectAll();
-		ObservableList<Formation> data = FXCollections.observableArrayList();
-		data.addAll(formations);
-		tableviewFormation.setItems(data);
+		SqlSession sqlSession = null;
+		try {
+			sqlSession = MyBatisUtils.getSqlSession();
+			FormationMapper mapper = sqlSession.getMapper(FormationMapper.class);
+			List<Formation> formations = mapper.selectAll();
+			ObservableList<Formation> data = FXCollections.observableArrayList();
+			data.addAll(formations);
+			tableviewFormation.setItems(data);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (sqlSession != null){
+				sqlSession.close();
+			}
+		}
 		
 		textfieldNomFormation.setText("");
 		textfieldPromotion.setText("");

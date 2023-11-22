@@ -331,34 +331,49 @@ public class ShowBinomeController {
 	}
 	
 	public void searchBinome(ActionEvent actionEvent) {
-		SqlSession sqlSession = MyBatisUtils.getSqlSession();
-		BinomeMapper mapper = sqlSession.getMapper(BinomeMapper.class);
-		Binome binome = new Binome();
-		Projet projet = new Projet();
-		projet.setNomMatiere("%" + textfieldNomMatiere.getText() + "%");
-		projet.setSujet("%" + textfieldSujet.getText() + "%");
-		binome.setProjet(projet);
-		List<Binome> binomeDB = mapper.selectByCondition(binome);
-		ObservableList<Binome> data = FXCollections.observableArrayList();
-		data.addAll(binomeDB);
-		tableviewBinome.setItems(data);
+		SqlSession sqlSession = null;
+		try {
+			sqlSession = MyBatisUtils.getSqlSession();
+			BinomeMapper mapper = sqlSession.getMapper(BinomeMapper.class);
+			Binome binome = new Binome();
+			Projet projet = new Projet();
+			projet.setNomMatiere("%" + textfieldNomMatiere.getText() + "%");
+			projet.setSujet("%" + textfieldSujet.getText() + "%");
+			binome.setProjet(projet);
+			List<Binome> binomeDB = mapper.selectByCondition(binome);
+			ObservableList<Binome> data = FXCollections.observableArrayList();
+			data.addAll(binomeDB);
+			tableviewBinome.setItems(data);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (sqlSession != null) {
+				sqlSession.close();
+			}
+		}
 	}
 	
 	public void refreshTable(ActionEvent actionEvent) {
-		SqlSession sqlSession = MyBatisUtils.getSqlSession();
-		BinomeMapper binomeMapper = sqlSession.getMapper(BinomeMapper.class);
-		ProjetMapper projetMapper = sqlSession.getMapper(ProjetMapper.class);
-		List<Integer> idsProjet = projetMapper.getIdsProjet();
-		ObservableList<Binome> data = FXCollections.observableArrayList();
-		for (Integer idProjet : idsProjet) {
-			List<Binome> binomes = binomeMapper.getBinomesByIdProjet(idProjet);
-			// for (int i = 0; i < binomes.size(); i++) {
-			// 	binomes.get(i).setIdBinome(i + 1);
-			// }
-			binomes.forEach(System.out::println);
-			data.addAll(binomes);
+		SqlSession sqlSession = null;
+		try {
+			sqlSession = MyBatisUtils.getSqlSession();
+			BinomeMapper binomeMapper = sqlSession.getMapper(BinomeMapper.class);
+			ProjetMapper projetMapper = sqlSession.getMapper(ProjetMapper.class);
+			List<Integer> idsProjet = projetMapper.getIdsProjet();
+			ObservableList<Binome> data = FXCollections.observableArrayList();
+			for (Integer idProjet : idsProjet) {
+				List<Binome> binomes = binomeMapper.getBinomesByIdProjet(idProjet);
+				binomes.forEach(System.out::println);
+				data.addAll(binomes);
+			}
+			tableviewBinome.setItems(data);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (sqlSession != null) {
+				sqlSession.close();
+			}
 		}
-		tableviewBinome.setItems(data);
 		
 		textfieldNomMatiere.setText("");
 		textfieldNomMatiere.setPromptText("Nom Matiere");

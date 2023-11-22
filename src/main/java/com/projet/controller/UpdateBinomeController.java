@@ -71,34 +71,43 @@ public class UpdateBinomeController {
 		projet.getItems().clear();
 		etudiant1.getItems().clear();
 		etudiant2.getItems().clear();
-		SqlSession sqlSession = MyBatisUtils.getSqlSession();
-		ProjetMapper projetMapper = sqlSession.getMapper(ProjetMapper.class);
-		EtudiantMapper etudiantMapper = sqlSession.getMapper(EtudiantMapper.class);
-		
-		List<Projet> projets = projetMapper.selectAll();
-		List<String> infoProjets = new ArrayList<>();
-		
-		for (int i = 0; i < projets.size(); i++) {
-			Projet infoProjet = projets.get(i);
-			Integer idProjet = infoProjet.getIdProjet();
-			String nomMatiere = infoProjet.getNomMatiere();
-			String sujet = infoProjet.getSujet();
-			infoProjets.add(idProjet + " " + nomMatiere + " " + sujet);
+		SqlSession sqlSession = null;
+		try {
+			sqlSession = MyBatisUtils.getSqlSession();
+			ProjetMapper projetMapper = sqlSession.getMapper(ProjetMapper.class);
+			EtudiantMapper etudiantMapper = sqlSession.getMapper(EtudiantMapper.class);
+			
+			List<Projet> projets = projetMapper.selectAll();
+			List<String> infoProjets = new ArrayList<>();
+			
+			for (int i = 0; i < projets.size(); i++) {
+				Projet infoProjet = projets.get(i);
+				Integer idProjet = infoProjet.getIdProjet();
+				String nomMatiere = infoProjet.getNomMatiere();
+				String sujet = infoProjet.getSujet();
+				infoProjets.add(idProjet + " " + nomMatiere + " " + sujet);
+			}
+			
+			List<Integer> idsEtudiant = etudiantMapper.getIdsEtudiant();
+			List<String> nomsEtudiant = etudiantMapper.getNomsEtudiant();
+			List<String> prenomsEtudiant = etudiantMapper.getPrenomsEtudiant();
+			
+			List<String> infoEtudiants = new ArrayList<>();
+			infoEtudiants.add("");
+			for (int i = 0; i < idsEtudiant.size(); i++) {
+				infoEtudiants.add(idsEtudiant.get(i) + " " + nomsEtudiant.get(i) + " " + prenomsEtudiant.get(i));
+			}
+			
+			projet.getItems().addAll(infoProjets);
+			etudiant1.getItems().addAll(infoEtudiants);
+			etudiant2.getItems().addAll(infoEtudiants);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (sqlSession != null) {
+				sqlSession.close();
+			}
 		}
-		
-		List<Integer> idsEtudiant = etudiantMapper.getIdsEtudiant();
-		List<String> nomsEtudiant = etudiantMapper.getNomsEtudiant();
-		List<String> prenomsEtudiant = etudiantMapper.getPrenomsEtudiant();
-		
-		List<String> infoEtudiants = new ArrayList<>();
-		infoEtudiants.add("");
-		for (int i = 0; i < idsEtudiant.size(); i++) {
-			infoEtudiants.add(idsEtudiant.get(i) + " " + nomsEtudiant.get(i) + " " + prenomsEtudiant.get(i));
-		}
-		
-		projet.getItems().addAll(infoProjets);
-		etudiant1.getItems().addAll(infoEtudiants);
-		etudiant2.getItems().addAll(infoEtudiants);
 		
 		idBinome.setDisable(true);
 		projet.setDisable(true);
