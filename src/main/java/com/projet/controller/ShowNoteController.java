@@ -76,20 +76,12 @@ public class ShowNoteController {
 	private Button refreshNote;
 	
 	@FXML
-	private Button addNote;
-	
-	@FXML
 	private Button searchNote;
-	
-	@FXML
-	private Button deleteNote;
+
 	
 	
 	@FXML
 	public void initialize() {
-		
-		
-		
 		nomMatiere.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Note, String>, ObservableValue<String>>() {
 			@Override
 			public ObservableValue<String> call(TableColumn.CellDataFeatures<Note, String> note) {
@@ -121,11 +113,11 @@ public class ShowNoteController {
 				return new SimpleStringProperty(note.getValue().getNoteRapport().toString());
 			}
 		});
-		// noteFinale.setCellValueFactory(new PropertyValueFactory<>("noteFinale"));
+		noteFinale.setCellValueFactory(new PropertyValueFactory<>("noteFinale"));
 		noteFinale.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Note, String>, ObservableValue<String>>() {
 			@Override
-			public ObservableValue<String> call(TableColumn.CellDataFeatures<Note, String> param) {
-				return new SimpleStringProperty("0");
+			public ObservableValue<String> call(TableColumn.CellDataFeatures<Note, String> note) {
+				return new SimpleStringProperty(note.getValue().getNoteFinale().toString());
 			}
 		});
 		refreshTable();
@@ -139,18 +131,6 @@ public class ShowNoteController {
 		searchImageView.setFitHeight(18);
 		searchNote.setGraphic(searchImageView);
 		
-		Image add = new Image("com/projet/img/add.png");
-		ImageView addImageView = new ImageView(add);
-		addImageView.setFitWidth(18);
-		addImageView.setFitHeight(18);
-		addNote.setGraphic(addImageView);
-		
-		Image delete = new Image("com/projet/img/delete.png");
-		ImageView deleteImageView = new ImageView(delete);
-		deleteImageView.setFitWidth(18);
-		deleteImageView.setFitHeight(18);
-		deleteNote.setGraphic(deleteImageView);
-		
 		Image refresh = new Image("com/projet/img/refresh.png");
 		ImageView refreshImageView = new ImageView(refresh);
 		refreshImageView.setFitWidth(18);
@@ -159,31 +139,44 @@ public class ShowNoteController {
 	}
 	
 	public void searchNote(ActionEvent actionEvent) {
-		SqlSession sqlSession = MyBatisUtils.getSqlSession();
-		NoteMapper mapper = sqlSession.getMapper(NoteMapper.class);
-		Note note = new Note();
-		Etudiant etudiant = new Etudiant();
-		etudiant.setNomEtudiant("%" + textFieldNomEtudiant.getText() + "%");
-		etudiant.setPrenomEtudiant("%" + textFieldPrenomEtudiant.getText() + "%");
-		
-		Projet projet = new Projet();
-		projet.setSujet("%" + textFieldSujet + "%");
-		projet.setNomMatiere("%" + textFieldNomMatiere + "%");
-		
-		Binome binome = new Binome();
-		binome.setProjet(projet);
-		
-		note.setEtudiant(etudiant);
-		
-		List<Note> notes = mapper.selectByCondition(note);
-		ObservableList<Note> data = FXCollections.observableArrayList();
-		data.addAll(notes);
-		tableViewNote.setItems(data);
+
+		String nomEtudiant = "%" + textFieldNomEtudiant.getText() + "%";
+		String prenomEtudiant = "%" + textFieldPrenomEtudiant.getText() + "%";
+		String sujet = "%" + textFieldSujet.getText() + "%";
+		String nomMatiere = "%" + textFieldNomMatiere.getText() + "%";
+
+		System.out.println(nomEtudiant);
+		System.out.println(prenomEtudiant);
+		System.out.println(sujet);
+		System.out.println(nomMatiere);
+
+		SqlSession sqlSession = null;
+		try {
+			sqlSession = MyBatisUtils.getSqlSession();
+			NoteMapper noteMapper = sqlSession.getMapper(NoteMapper.class);
+			ProjetMapper projetMapper = sqlSession.getMapper(ProjetMapper.class);
+			EtudiantMapper etudiantMapper = sqlSession.getMapper(EtudiantMapper.class);
+			List<Integer> idsProjet = projetMapper.getIdsProjet();
+			List<Integer> idsEtudiant = etudiantMapper.getIdsEtudiant();
+			ObservableList<Note> data = FXCollections.observableArrayList();
+			for (Integer idProjet : idsProjet) {
+				for (Integer idEtudiant : idsEtudiant) {
+					List<Note> notes = noteMapper.selectByCondition(idProjet, idEtudiant, nomMatiere, sujet, nomEtudiant, prenomEtudiant);
+					notes.forEach(System.out::println);
+					data.addAll(notes);
+				}
+			}
+			tableViewNote.setItems(data);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (sqlSession != null) {
+				sqlSession.close();
+			}
+		}
+
 	}
-	
-	public void deleteNote(ActionEvent actionEvent) {
-	
-	}
+
 	
 	
 	public void refreshTable() {
@@ -212,6 +205,10 @@ public class ShowNoteController {
 				sqlSession.close();
 			}
 		}
+		textFieldNomEtudiant.setText("");
+		textFieldPrenomEtudiant.setText("");
+		textFieldSujet.setText("");
+		textFieldNomMatiere.setText("");
 	}
 	
 	

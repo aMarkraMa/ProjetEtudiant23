@@ -45,14 +45,12 @@ public class AddProjetController {
             
             
             if(nomMatiere.getText() != null && !nomMatiere.getText().isEmpty()){
-                System.out.println("set Matiere");
                 projet.setNomMatiere(nomMatiere.getText());
             }else{
                 showErr("Nom Matière ne peux pas être vide");
                 return;
             }
             if(sujet.getText() != null && !sujet.getText().isEmpty()){
-                System.out.println("set sujet!");
                 projet.setSujet(sujet.getText());
             }else{
                 showErr("Sujet ne peux pas être vide");
@@ -77,8 +75,6 @@ public class AddProjetController {
                 showErr("pourcentageSoutenance ne peux pas être vide");
                 return;
             }
-            System.out.println("sujet " + sujet.getText());
-            System.out.println("nomMa " + nomMatiere.getText());
             
             Projet p = new Projet();
             p.setNomMatiere(projet.getNomMatiere());
