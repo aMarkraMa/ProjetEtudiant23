@@ -1,8 +1,6 @@
 package com.projet.entity;
 
-import java.sql.Date;
 import java.time.LocalDate;
-import java.util.Objects;
 
 public class Projet {
     private Integer idProjet;
