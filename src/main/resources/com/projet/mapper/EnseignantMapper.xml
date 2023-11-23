@@ -50,4 +50,9 @@
 		FROM enseignants
 		WHERE numero_enseignant = #{numEnseignant}
 	</select>
+	<select id="getEmailEnseignantByNumeroEnseignant" resultType="java.lang.String">
+		SELECT email_enseignant
+		FROM enseignants
+		WHERE numero_enseignant = #{numeroEnseignant}
+	</select>
 </mapper>

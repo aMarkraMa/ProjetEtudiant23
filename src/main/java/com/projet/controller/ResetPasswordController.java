@@ -138,11 +138,12 @@ public class ResetPasswordController {
 					return new PasswordAuthentication("lyingxuan789@gmail.com","ebiq lulx tfsq bovo");
 				}
 			});
-
+			String emailEnseignant = enseignantMapper.getEmailEnseignantByNumeroEnseignant(numEnseignant);
 			try {
+				
 				MimeMessage message = new MimeMessage(session);
 				message.setFrom(new InternetAddress("lyingxuan789@gmail.com"));
-				message.addRecipient(Message.RecipientType.TO, new InternetAddress("liyingxuanfr@126.com"));
+				message.addRecipient(Message.RecipientType.TO, new InternetAddress(emailEnseignant));
 				message.setSubject("Votre nouveau mot de passe");
 				message.setText("Votre nouveau mot de passe est " + newPassword);
 				Transport.send(message);

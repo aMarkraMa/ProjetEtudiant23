@@ -20,4 +20,6 @@ public interface EnseignantMapper {
 	
 	void updateMotDePasseByNumeroEnseignant(@Param("numEnseignant") Integer numEnseignant, @Param("motDePasse") String motDePasse);
 	
+	String getEmailEnseignantByNumeroEnseignant(@Param("numeroEnseignant") Integer numeroEnseignant);
+	
 }
