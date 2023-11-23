@@ -1,5 +1,6 @@
 package com.projet.entity;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class Note {
@@ -8,7 +9,9 @@ public class Note {
     private Projet projet;
     private Etudiant etudiant;
     private Double noteRapport;
+    private LocalDate dateReeleRemise;
     private Double noteSoutenance;
+    private Double noteFinale;
 
     public Note() {
         this.projet = new Projet();
@@ -21,23 +24,40 @@ public class Note {
         this.noteRapport = noteRapport;
         this.noteSoutenance = noteSoutenance;
     }
+
     public Double getNoteFinale(){
+        return noteFinale;
+    }
+    public void setNoteFinale(int dateDelay){
         if(noteRapport < 0 && noteSoutenance >= 0){
-            return noteSoutenance;
+            this.noteFinale = noteSoutenance;
         } else if (noteRapport >= 0 && noteSoutenance < 0) {
-            return noteRapport;
+            this.noteFinale = noteRapport;
         } else if (noteRapport < 0 && noteSoutenance < 0) {
-            return noteRapport;
+            this.noteFinale = noteRapport;
         } else {
-          return calculerNote(noteRapport,noteSoutenance, projet.getPourcentageSoutenance());
+            System.out.println("flag");
+            this.noteFinale = calculerNote(dateDelay);
         }
+        System.out.println("noteFinal: " + getNoteFinale());
     }
 
-    public Double calculerNote(Double noteRapport, Double noteSoutenance, Integer tauxSoutenance){
-        double taux = tauxSoutenance / 100;
-        return noteRapport * (1 - taux) + noteSoutenance * taux;
+    public Double calculerNote(int dateDalay){
+        double taux = (double)projet.getPourcentageSoutenance() / 100.0;
+        System.out.println("tS:" + (double)projet.getPourcentageSoutenance());
+        System.out.println("calculer : " + dateDalay * 0.1);
+        System.out.println("taux: " + taux);
+        return noteRapport * (1 - taux) + noteSoutenance * taux - dateDalay * 0.1;
     }
-    
+
+    public LocalDate getDateReeleRemise() {
+        return dateReeleRemise;
+    }
+
+    public void setDateReeleRemise(LocalDate dateReeleRemise) {
+        this.dateReeleRemise = dateReeleRemise;
+    }
+
     public Double getNoteRapport() {
         return noteRapport;
     }

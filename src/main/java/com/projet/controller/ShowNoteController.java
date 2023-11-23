@@ -34,6 +34,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 public class ShowNoteController {
@@ -182,6 +184,12 @@ public class ShowNoteController {
 		noteFinale.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Note, String>, ObservableValue<String>>() {
 			@Override
 			public ObservableValue<String> call(TableColumn.CellDataFeatures<Note, String> note) {
+				long dateDelay = ChronoUnit.DAYS.between(note.getValue().getDateReeleRemise(), note.getValue().getProjet().getDatePrevueRemise());
+				Integer ip = note.getValue().getProjet().getIdProjet();
+				Integer ie = note.getValue().getEtudiant().getIdEtudiant();
+				Integer pctg = note.getValue().getProjet().getPourcentageSoutenance();
+				System.out.println("pctg:" + pctg);
+				System.out.println(ip + "," + ie + "dateDelay : " + dateDelay + "Note: " + note.getValue().getNoteFinale().toString());
 				return new SimpleStringProperty(note.getValue().getNoteFinale().toString());
 			}
 		});
@@ -230,10 +238,14 @@ public class ShowNoteController {
 			for (Integer idProjet : idsProjet) {
 				for (Integer idEtudiant : idsEtudiant) {
 					List<Note> notes = noteMapper.selectByCondition(idProjet, idEtudiant, nomMatiere, sujet, nomEtudiant, prenomEtudiant);
-					notes.forEach(System.out::println);
+					for (Note note : notes) {
+						long dateDelay = ChronoUnit.DAYS.between(note.getDateReeleRemise(), note.getProjet().getDatePrevueRemise());
+						note.setNoteFinale((int)dateDelay);
+					}
 					data.addAll(notes);
 				}
 			}
+
 			tableViewNote.setItems(data);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -279,7 +291,10 @@ public class ShowNoteController {
 			for (Integer idProjet : idsProjet) {
 				for (Integer idEtudiant : idsEtudiant) {
 					List<Note> notes = noteMapper.getNotesByIdProjet(idProjet, idEtudiant);
-					notes.forEach(System.out::println);
+					for (Note note : notes) {
+						long dateDelay = ChronoUnit.DAYS.between(note.getDateReeleRemise(), note.getProjet().getDatePrevueRemise());
+						note.setNoteFinale((int)dateDelay);
+					}
 					data.addAll(notes);
 				}
 			}
