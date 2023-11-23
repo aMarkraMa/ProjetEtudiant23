@@ -14,9 +14,9 @@ public interface BinomeMapper {
 	int insertOrUpdateBinomeStep2(Binome binome);
 	int insertOrUpdateBinomeStep3(Binome binome);
 	
-	int insertOrUpdateBinomeStep4(Binome binome);
+	int insertOrUpdateBinomeStep4(@Param("idProjet") Integer idProjet, @Param("idEtudiant") Integer idEtudiant, @Param("noteSoutenance") Double noteSoutenance);
 	
-	int insertOrUpdateBinomeStep5(Binome binome);
+	int insertOrUpdateBinomeStep5(@Param("idProjet") Integer idProjet, @Param("idEtudiant") Integer idEtudiant, @Param("noteSoutenance") Double noteSoutenance);
 	
 	int deleteBinome(@Param("idBinome") Integer idBinome, @Param("idProjet") Integer idProjet);
 	int deleteAppartenir(@Param("idBinome") Integer idBinome, @Param("idProjet") Integer idProjet);

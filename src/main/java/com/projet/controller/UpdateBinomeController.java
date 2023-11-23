@@ -2,9 +2,11 @@ package com.projet.controller;
 
 import com.projet.entity.Binome;
 import com.projet.entity.Etudiant;
+import com.projet.entity.Note;
 import com.projet.entity.Projet;
 import com.projet.mapper.BinomeMapper;
 import com.projet.mapper.EtudiantMapper;
+import com.projet.mapper.NoteMapper;
 import com.projet.mapper.ProjetMapper;
 import com.projet.service.UpdateBinomeService;
 import com.projet.service.impl.UpdateBinomeServiceImpl;
@@ -162,7 +164,12 @@ public class UpdateBinomeController {
 					etudiant1.setDisable(true);
 					etudiant2.setDisable(true);
 				}
-				
+			}
+		});
+		
+		dateRelleRemise.setOnMouseClicked(event -> {
+			if (dateRelleRemise.getValue() == null || dateRelleRemise.getValue().isEqual(LocalDate.of(1111, 11, 11))) {
+				dateRelleRemise.setValue(LocalDate.now());
 			}
 		});
 	}
@@ -236,6 +243,7 @@ public class UpdateBinomeController {
 		try {
 			sqlSession = MyBatisUtils.getNonAutoCommittingSqlSession();
 			BinomeMapper binomeMapper = sqlSession.getMapper(BinomeMapper.class);
+			NoteMapper noteMapper = sqlSession.getMapper(NoteMapper.class);
 			Binome binomeDB1 = binomeMapper.getBinomeByIdProjetAndIdEtudiant(etudiant1P.getIdEtudiant(), projetP.getIdProjet());
 			Binome binomeDB2 = null;
 			if (etudiant2P != null) {
@@ -264,6 +272,11 @@ public class UpdateBinomeController {
 					return;
 				}
 			}
+			Double noteSoutenanceEtudiant1 = noteMapper.getNotesByIdProjetAndIdEtudiant(binome.getProjet().getIdProjet(), binome.getEtudiants().get(0).getIdEtudiant()).getNoteSoutenance();
+			Double noteSoutenanceEtudiant2 = null;
+			if (binome.getEtudiants().size() > 1) {
+				noteSoutenanceEtudiant2 = noteMapper.getNotesByIdProjetAndIdEtudiant(binome.getProjet().getIdProjet(), binome.getEtudiants().get(1).getIdEtudiant()).getNoteSoutenance();
+			}
 			if (binome.getNoteRapport() != null || binome.getDateReelleRemise() != null) {
 				binomeMapper.updateBinomeStep1(binome.getNoteRapport(), binome.getDateReelleRemise(), binome.getIdBinome(), binome.getProjet().getIdProjet());
 			}
@@ -276,9 +289,13 @@ public class UpdateBinomeController {
 			if (binome.getEtudiants().size() > 1) {
 				binomeMapper.insertOrUpdateBinomeStep3(binome);
 			}
-			binomeMapper.insertOrUpdateBinomeStep4(binome);
+			binomeMapper.insertOrUpdateBinomeStep4(binome.getProjet().getIdProjet(), binome.getEtudiants().get(0).getIdEtudiant(), noteSoutenanceEtudiant1);
 			if (binome.getEtudiants().size() > 1) {
-				binomeMapper.insertOrUpdateBinomeStep5(binome);
+				if (noteSoutenanceEtudiant2 != null) {
+					binomeMapper.insertOrUpdateBinomeStep5(binome.getProjet().getIdProjet(), binome.getEtudiants().get(1).getIdEtudiant(), noteSoutenanceEtudiant2);
+				} else {
+					binomeMapper.insertOrUpdateBinomeStep5(binome.getProjet().getIdProjet(), binome.getEtudiants().get(1).getIdEtudiant(), -1.0);
+				}
 			}
 			sqlSession.commit();
 			Stage stage = (Stage) updateBinome.getScene().getWindow();

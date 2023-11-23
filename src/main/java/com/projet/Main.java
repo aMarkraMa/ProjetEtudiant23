@@ -32,8 +32,8 @@ public class Main extends Application {
         stage.initStyle(StageStyle.DECORATED);
         stage.setMinWidth(600);
         stage.setMinHeight(400);
-        changeView("/com/projet/view/Main.fxml");
-        //startView("/com/projet/view/LogIn.fxml");
+        //changeView("/com/projet/view/Main.fxml");
+        startView("/com/projet/view/LogIn.fxml");
         stage.show();
     }
     

@@ -233,6 +233,10 @@ public class ShowBinomeController {
 									BinomeMapper binomeMapper = sqlSession.getMapper(BinomeMapper.class);
 									binomeMapper.deleteBinome(idBinome, idProjet);
 									binomeMapper.deleteAppartenir(idBinome, idProjet);
+									binomeMapper.deleteNotesSoutenanceStep1(binome.getEtudiants().get(0).getIdEtudiant(), idProjet);
+									if (binome.getEtudiants().size()>1) {
+										binomeMapper.deleteNotesSoutenanceStep2(binome.getEtudiants().get(1).getIdEtudiant(), idProjet);
+									}
 									sqlSession.commit();
 									ProjetMapper projetMapper = sqlSession.getMapper(ProjetMapper.class);
 									List<Integer> idsProjet = projetMapper.getIdsProjet();

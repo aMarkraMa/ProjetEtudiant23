@@ -17,8 +17,12 @@ import javafx.stage.Window;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.ibatis.session.SqlSession;
 
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import java.util.List;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.Random;
 
 public class ResetPasswordController {
@@ -113,14 +117,37 @@ public class ResetPasswordController {
 			String newPassword = generatePassword();
 			enseignantMapper.updateMotDePasseByNumeroEnseignant(numEnseignant, ProjetStringUtils.sha256(newPassword));
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			alert.setTitle("Votre nouveau mot de passe");
-			alert.setHeaderText("Veuillez trouver votre nouveau mot de passe ci-dessous");
-			alert.setContentText(newPassword);
+			alert.setTitle("Votre nouveau mot de passe est dans votre email");
+			alert.setHeaderText("Votre nouveau mot de passe dans votre email");
+			alert.setContentText("Veuillez trouver votre nouveau mot de passe dans votre email");
 			alert.getDialogPane().setPrefWidth(800);
 			Optional<ButtonType> resultat = alert.showAndWait();
 			if (resultat.isPresent() && resultat.get() == ButtonType.OK) {
 				Stage stage = (Stage) reinitialiser.getScene().getWindow();
 				stage.close();
+			}
+			Properties properties = new Properties();
+			properties.put("mail.smtp.host", "smtp.gmail.com");
+			properties.put("mail.smtp.port", 465);
+			properties.put("mail.smtp.auth", true);
+			properties.put("mail.smtp.ssl.enable", true);
+
+			Session session = Session.getInstance(properties, new Authenticator() {
+				@Override
+				protected PasswordAuthentication getPasswordAuthentication() {
+					return new PasswordAuthentication("lyingxuan789@gmail.com","ebiq lulx tfsq bovo");
+				}
+			});
+
+			try {
+				MimeMessage message = new MimeMessage(session);
+				message.setFrom(new InternetAddress("lyingxuan789@gmail.com"));
+				message.addRecipient(Message.RecipientType.TO, new InternetAddress("liyingxuanfr@126.com"));
+				message.setSubject("Votre nouveau mot de passe");
+				message.setText("Votre nouveau mot de passe est " + newPassword);
+				Transport.send(message);
+			} catch (MessagingException e) {
+				e.printStackTrace();
 			}
 			
 		} catch (Exception e) {

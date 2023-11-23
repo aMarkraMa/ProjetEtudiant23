@@ -21,6 +21,6 @@
 		<Label layoutX="20.0" layoutY="360.0" prefHeight="24.0" prefWidth="154.0" text="noteRapport" />
 		<Label layoutX="20.0" layoutY="420.0" prefHeight="24.0" prefWidth="154.0" text="DateReelleRemise" />
 		<TextField fx:id="noteRapport" layoutX="189.0" layoutY="354.0" />
-		<DatePicker fx:id="dateRelleRemise" layoutX="189.0" layoutY="414.0" prefHeight="36.0" prefWidth="242.0" />
+		<DatePicker fx:id="dateRelleRemise" layoutX="189.0" layoutY="414.0" prefHeight="36.0" prefWidth="242.0" editable="false"/>
 	</children>
 </AnchorPane>

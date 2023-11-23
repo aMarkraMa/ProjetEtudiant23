@@ -24,7 +24,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.converter.DoubleStringConverter;
-import javafx.util.converter.IntegerStringConverter;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -34,7 +33,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -44,10 +42,10 @@ public class ShowNoteController {
 	
 	@FXML
 	private TableColumn<Note, String> nomMatiere;
-
+	
 	@FXML
 	private TableColumn<Note, String> sujet;
-
+	
 	@FXML
 	private TableColumn<Note, String> idEtudiant;
 	
@@ -88,17 +86,16 @@ public class ShowNoteController {
 	
 	@FXML
 	private Button searchNote;
-
 	
 	
 	@FXML
 	public void initialize() {
-
+		
 		tableViewNote.setEditable(true);
 //		noteSoutenance.setEditable(true);
 		nomMatiere.setCellValueFactory(note -> new SimpleStringProperty(note.getValue().getProjet().getNomMatiere()));
-		idProjet.setCellValueFactory(new PropertyValueFactory<>("idProjet"));
-		idEtudiant.setCellValueFactory(new PropertyValueFactory<>("idEtudiant"));
+// 		idProjet.setCellValueFactory(new PropertyValueFactory<>("idProjet"));
+// 		idEtudiant.setCellValueFactory(new PropertyValueFactory<>("idEtudiant"));
 		idProjet.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Note, String>, ObservableValue<String>>() {
 			@Override
 			public ObservableValue<String> call(TableColumn.CellDataFeatures<Note, String> note) {
@@ -138,10 +135,19 @@ public class ShowNoteController {
 					// Surcharge la méthode fromString pour qu'elle renvoie null si la conversion échoue.
 					try {
 						double doubleValue = Double.parseDouble(value);
-						return (doubleValue >= 0 && doubleValue <= 20) ? doubleValue : null;
+						if (doubleValue == -1) {
+							return null;
+						} else {
+							return (doubleValue >= 0 && doubleValue <= 20) ? doubleValue : null;
+						}
 					} catch (NumberFormatException e) {
 						return null;
 					}
+				}
+				
+				@Override
+				public String toString(Double value) {
+					return (value == null || value == -1) ? "" : value.toString();
 				}
 			}) {
 				@Override
@@ -177,25 +183,45 @@ public class ShowNoteController {
 		noteRapport.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Note, String>, ObservableValue<String>>() {
 			@Override
 			public ObservableValue<String> call(TableColumn.CellDataFeatures<Note, String> note) {
-				return new SimpleStringProperty(note.getValue().getNoteRapport().toString());
+				if (note.getValue().getNoteRapport() == -1.0) {
+					return new SimpleStringProperty("");
+				} else {
+					return new SimpleStringProperty(note.getValue().getNoteRapport().toString());
+				}
 			}
 		});
-		noteFinale.setCellValueFactory(new PropertyValueFactory<>("noteFinale"));
+		// noteFinale.setCellValueFactory(new PropertyValueFactory<>("noteFinale"));
 		noteFinale.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Note, String>, ObservableValue<String>>() {
 			@Override
 			public ObservableValue<String> call(TableColumn.CellDataFeatures<Note, String> note) {
-				long dateDelay = ChronoUnit.DAYS.between(note.getValue().getDateReeleRemise(), note.getValue().getProjet().getDatePrevueRemise());
-				Integer ip = note.getValue().getProjet().getIdProjet();
-				Integer ie = note.getValue().getEtudiant().getIdEtudiant();
-				Integer pctg = note.getValue().getProjet().getPourcentageSoutenance();
-				System.out.println("pctg:" + pctg);
-				System.out.println(ip + "," + ie + "dateDelay : " + dateDelay + "Note: " + note.getValue().getNoteFinale().toString());
-				return new SimpleStringProperty(note.getValue().getNoteFinale().toString());
+				if (note.getValue().getNoteRapport().doubleValue() == -1.0 || note.getValue().getNoteSoutenance().doubleValue() == -1.0) {
+					return new SimpleStringProperty("");
+				} else {
+					Double noteRapportE = note.getValue().getNoteRapport();
+					Double noteSoutenanceE = note.getValue().getNoteSoutenance();
+					Integer pourcentageSoutenance = note.getValue().getProjet().getPourcentageSoutenance();
+					Integer pourcentageRapport = 100 - pourcentageSoutenance;
+					Double noteFinale = noteRapportE * pourcentageRapport * 0.01 + noteSoutenanceE * pourcentageSoutenance * 0.01;
+					long dateDelay = ChronoUnit.DAYS.between(note.getValue().getDateReeleRemise(), note.getValue().getProjet().getDatePrevueRemise());
+					noteFinale = noteFinale - dateDelay * 0.01;
+					return new SimpleStringProperty(noteFinale.toString());
+				}
+				// Integer ip = note.getValue().getProjet().getIdProjet();
+				// Integer ie = note.getValue().getEtudiant().getIdEtudiant();
+				// Integer pctg = note.getValue().getProjet().getPourcentageSoutenance();
+				// System.out.println("pctg:" + pctg);
+				// System.out.println(ip + "," + ie + "dateDelay : " + dateDelay + "Note: " + note.getValue().getNoteFinale().toString());
+				// if (note.getValue().getNoteSoutenance()==-1 || note.getValue().getNoteRapport()==-1){
+				// 	return new SimpleStringProperty("");
+				// }
+				// else {
+				// 	return new SimpleStringProperty(note.getValue().getNoteFinale().toString());
+				// }
+				
 			}
 		});
-
-
-
+		
+		
 		refreshTable();
 		initializeImg();
 	}
@@ -215,17 +241,17 @@ public class ShowNoteController {
 	}
 	
 	public void searchNote(ActionEvent actionEvent) {
-
+		
 		String nomEtudiant = "%" + textFieldNomEtudiant.getText() + "%";
 		String prenomEtudiant = "%" + textFieldPrenomEtudiant.getText() + "%";
 		String sujet = "%" + textFieldSujet.getText() + "%";
 		String nomMatiere = "%" + textFieldNomMatiere.getText() + "%";
-
+		
 		System.out.println(nomEtudiant);
 		System.out.println(prenomEtudiant);
 		System.out.println(sujet);
 		System.out.println(nomMatiere);
-
+		
 		SqlSession sqlSession = null;
 		try {
 			sqlSession = MyBatisUtils.getSqlSession();
@@ -238,14 +264,14 @@ public class ShowNoteController {
 			for (Integer idProjet : idsProjet) {
 				for (Integer idEtudiant : idsEtudiant) {
 					List<Note> notes = noteMapper.selectByCondition(idProjet, idEtudiant, nomMatiere, sujet, nomEtudiant, prenomEtudiant);
-					for (Note note : notes) {
-						long dateDelay = ChronoUnit.DAYS.between(note.getDateReeleRemise(), note.getProjet().getDatePrevueRemise());
-						note.setNoteFinale((int)dateDelay);
-					}
+					// for (Note note : notes) {
+					// 	long dateDelay = ChronoUnit.DAYS.between(note.getDateReeleRemise(), note.getProjet().getDatePrevueRemise());
+					// 	note.setNoteFinale((int)dateDelay);
+					// }
 					data.addAll(notes);
 				}
 			}
-
+			
 			tableViewNote.setItems(data);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -254,10 +280,10 @@ public class ShowNoteController {
 				sqlSession.close();
 			}
 		}
-
+		
 	}
-
-	public void updateSoutenance(Integer idProjet, Integer idEtudiant, Double noteSoutenance){
+	
+	public void updateSoutenance(Integer idProjet, Integer idEtudiant, Double noteSoutenance) {
 		SqlSession sqlSession = null;
 		try {
 			sqlSession = MyBatisUtils.getSqlSession();
@@ -265,7 +291,7 @@ public class ShowNoteController {
 			int i = noteMapper.updateNoteSoutenance(idProjet, idEtudiant, noteSoutenance);
 			System.out.println("idProjet : " + idProjet + " idEtudiant : " + idEtudiant + " noteSoutenance : " + noteSoutenance);
 			System.out.println("update Note Soutenance nb line: " + i);
-
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -274,7 +300,6 @@ public class ShowNoteController {
 			}
 		}
 	}
-
 	
 	
 	public void refreshTable() {
@@ -290,12 +315,10 @@ public class ShowNoteController {
 			ObservableList<Note> data = FXCollections.observableArrayList();
 			for (Integer idProjet : idsProjet) {
 				for (Integer idEtudiant : idsEtudiant) {
-					List<Note> notes = noteMapper.getNotesByIdProjet(idProjet, idEtudiant);
-					for (Note note : notes) {
-						long dateDelay = ChronoUnit.DAYS.between(note.getDateReeleRemise(), note.getProjet().getDatePrevueRemise());
-						note.setNoteFinale((int)dateDelay);
+					Note note = noteMapper.getNotesByIdProjetAndIdEtudiant(idProjet, idEtudiant);
+					if (note != null) {
+						data.add(note);
 					}
-					data.addAll(notes);
 				}
 			}
 			tableViewNote.setItems(data);

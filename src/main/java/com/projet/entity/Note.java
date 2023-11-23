@@ -11,11 +11,10 @@ public class Note {
     private Double noteRapport;
     private LocalDate dateReeleRemise;
     private Double noteSoutenance;
-    private Double noteFinale;
+    
+ 
 
     public Note() {
-        this.projet = new Projet();
-        this.etudiant = new Etudiant();
     }
     
     public Note(Projet projet, Etudiant etudiant, Double noteRapport, Double noteSoutenance) {
@@ -25,22 +24,7 @@ public class Note {
         this.noteSoutenance = noteSoutenance;
     }
 
-    public Double getNoteFinale(){
-        return noteFinale;
-    }
-    public void setNoteFinale(int dateDelay){
-        if(noteRapport < 0 && noteSoutenance >= 0){
-            this.noteFinale = noteSoutenance;
-        } else if (noteRapport >= 0 && noteSoutenance < 0) {
-            this.noteFinale = noteRapport;
-        } else if (noteRapport < 0 && noteSoutenance < 0) {
-            this.noteFinale = noteRapport;
-        } else {
-            System.out.println("flag");
-            this.noteFinale = calculerNote(dateDelay);
-        }
-        System.out.println("noteFinal: " + getNoteFinale());
-    }
+   
 
     public Double calculerNote(int dateDalay){
         double taux = (double)projet.getPourcentageSoutenance() / 100.0;
