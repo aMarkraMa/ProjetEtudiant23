@@ -8,37 +8,35 @@
 
 <AnchorPane prefHeight="522.0" prefWidth="784.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projet.controller.ShowNoteController">
     <children>
-        <TableView fx:id="tableViewNote" layoutX="28.0" layoutY="127.0" prefHeight="367.0" prefWidth="724.0">
+        <TableView fx:id="tableViewNote" layoutX="28.0" layoutY="127.0" prefHeight="343.0" prefWidth="724.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="32.0" AnchorPane.topAnchor="127.0">
             <columns>
                 <TableColumn fx:id="idProjet" prefWidth="50" text="idProjet" />
                 <TableColumn fx:id="nomMatiere" prefWidth="104.0" text="Matiere" />
                 <TableColumn fx:id="sujet" prefWidth="121.0" text="sujet" />
                 <TableColumn fx:id="idEtudiant" prefWidth="77.0" text="idEtudiant" />
                 <TableColumn fx:id="nomEtudiant" minWidth="20.0" prefWidth="87.0" text="nom" />
-                <TableColumn fx:id="prenomEtudiant" minWidth="20.0" prefWidth="106.0" text="prenome" />
-                <TableColumn fx:id="noteSoutenance" minWidth="20.0" prefWidth="59.0" text="noteSout" />
-                <TableColumn fx:id="noteRapport" minWidth="20.0" prefWidth="65.0" text="noteRapp" />
-                <TableColumn fx:id="noteFinale" minWidth="20.0" prefWidth="54.0" text="noteFin" />
+                <TableColumn fx:id="prenomEtudiant" minWidth="20.0" prefWidth="106.0" text="prenom" />
+                <TableColumn fx:id="noteSoutenance" minWidth="20.0" prefWidth="59.0" text="noteSoutenace" />
+                <TableColumn fx:id="noteRapport" minWidth="20.0" prefWidth="65.0" text="noteRapport" />
+                <TableColumn fx:id="noteFinale" minWidth="20.0" prefWidth="54.0" text="noteFinale" />
             </columns>
         </TableView>
-        <Label alignment="CENTER" layoutX="241.0" layoutY="46.0" prefHeight="33.0" prefWidth="303.0" text="Gestion des notes" />
+        <Label alignment="CENTER" layoutX="241.0" layoutY="46.0" prefHeight="33.0" prefWidth="303.0" text="Gestion des notes" AnchorPane.leftAnchor="241.0" AnchorPane.rightAnchor="240.0" AnchorPane.topAnchor="46.0" />
         <Button fx:id="searchNote" layoutX="632.0" layoutY="86.0" mnemonicParsing="false" onAction="#searchNote" prefHeight="27.0" prefWidth="45.0" AnchorPane.rightAnchor="107.0" AnchorPane.topAnchor="86.0" />
         <Button fx:id="refreshNote" layoutX="707.0" layoutY="86.0" mnemonicParsing="false" onAction="#refreshTable" prefHeight="27.0" prefWidth="45.0" AnchorPane.rightAnchor="32.0" AnchorPane.topAnchor="86.0" />
-        <TextField fx:id="textFieldNomEtudiant" layoutX="291.0" layoutY="86.0" prefHeight="27.0" prefWidth="85.0" promptText="Nom" />
-        <TextField fx:id="textFieldPrenomEtudiant" layoutX="409.0" layoutY="86.0" prefHeight="27.0" prefWidth="103.0" promptText="Prenom" />
-        <TextField fx:id="textFieldNomMatiere" layoutX="28.0" layoutY="86.0" prefHeight="27.0" prefWidth="93.0" promptText="Matiere" />
-        <TextField fx:id="textFieldSujet" layoutX="144.0" layoutY="86.0" prefHeight="27.0" prefWidth="126.0" promptText="Sujet" />
+        <TextField fx:id="textFieldNomEtudiant" layoutX="291.0" layoutY="86.0" prefHeight="27.0" prefWidth="85.0" promptText="Nom" AnchorPane.leftAnchor="291.0" AnchorPane.topAnchor="86.0" />
+        <TextField fx:id="textFieldPrenomEtudiant" layoutX="409.0" layoutY="86.0" prefHeight="27.0" prefWidth="103.0" promptText="Prenom" AnchorPane.leftAnchor="409.0" AnchorPane.topAnchor="86.0" />
+        <TextField fx:id="textFieldNomMatiere" layoutX="28.0" layoutY="86.0" prefHeight="27.0" prefWidth="93.0" promptText="Matiere" AnchorPane.leftAnchor="28.0" AnchorPane.topAnchor="86.0" />
+        <TextField fx:id="textFieldSujet" layoutX="144.0" layoutY="86.0" prefHeight="27.0" prefWidth="126.0" promptText="Sujet" AnchorPane.leftAnchor="144.0" AnchorPane.topAnchor="86.0" />
 
         <MenuBar layoutX="2.0" layoutY="3.0" prefHeight="38.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <menus>
                 <Menu fx:id="menuProjet" mnemonicParsing="false" text="Menu">
                     <items>
-                        <MenuItem fx:id="returnFormation" mnemonicParsing="false" onAction="#retour" text="Retour" />
-                        <MenuItem fx:id="toShowEtudiant" mnemonicParsing="false" onAction="#toShowEtudiant" text="Etudiant" />
-                        <MenuItem fx:id="toShowFormation" mnemonicParsing="false" onAction="#toShowFormation" text="Formation" />
-                        <MenuItem fx:id="toProjets" mnemonicParsing="false" onAction="#toShowProjet" text="Projet" />
-                        <MenuItem fx:id="toBinomes" mnemonicParsing="false" onAction="#toShowBinome" text="Binome" />
-                        <MenuItem fx:id="toNotes" mnemonicParsing="false" onAction="#toShowNote" text="Note" />
+                        <MenuItem fx:id="toShowEtudiant" mnemonicParsing="false" onAction="#toShowEtudiant" text="Gestion d'etudiants" />
+                        <MenuItem fx:id="toShowFormation" mnemonicParsing="false" onAction="#toShowFormation" text="Gestion de formation" />
+                        <MenuItem fx:id="toProjets" mnemonicParsing="false" onAction="#toShowProjet" text="Gestion de projet" />
+                        <MenuItem fx:id="toBinomes" mnemonicParsing="false" onAction="#toShowBinome" text="Gestion de binome" />
                     </items>
                 </Menu>
                 <Menu fx:id="file" mnemonicParsing="false" text="File">
@@ -49,6 +47,7 @@
                 </Menu>
             </menus>
         </MenuBar>
+      <Label fx:id="error" alignment="CENTER" layoutX="28.0" layoutY="477.0" prefHeight="24.0" prefWidth="724.0" text="Pour la note de la soutenance, vous ne pouvez entrer que des chiffres de 0 à 20." textFill="#fc0f0f" AnchorPane.bottomAnchor="21.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="32.0" visible="false" />
 
     </children>
 </AnchorPane>

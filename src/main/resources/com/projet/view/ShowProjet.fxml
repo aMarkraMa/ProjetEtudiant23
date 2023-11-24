@@ -8,12 +8,13 @@
 
 <AnchorPane prefHeight="522.0" prefWidth="784.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projet.controller.ShowProjetController">
     <children>
-        <TableView fx:id="tableViewProjet" layoutX="10.0" layoutY="121.0" prefHeight="253.0" prefWidth="545.0" AnchorPane.bottomAnchor="26.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="121.0">
+        <TableView fx:id="tableViewProjet" layoutX="10.0" layoutY="121.0" prefHeight="364.0" prefWidth="764.0" AnchorPane.bottomAnchor="37.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="121.0">
             <columns>
                 <TableColumn fx:id="nomMatiere" prefWidth="134.0" text="nomMatière" />
                 <TableColumn fx:id="sujet" prefWidth="130.0" text="sujet" />
                 <TableColumn fx:id="datePrevueRemise" minWidth="0.0" prefWidth="131.0" text="datePrévueRemise" />
                 <TableColumn fx:id="pourcentageSoutenance" minWidth="0.0" prefWidth="149.0" text="pourcentageSoutenance" />
+                <TableColumn fx:id="pourcentageRapport" minWidth="0.0" prefWidth="149.0" text="pourcentageRapport" />
             </columns>
         </TableView>
         <Label alignment="CENTER" layoutX="161.0" layoutY="38.0" prefHeight="33.0" prefWidth="303.0" text="Gestion des projets" AnchorPane.leftAnchor="161.0" AnchorPane.rightAnchor="136.0" AnchorPane.topAnchor="38.0" />
@@ -23,28 +24,27 @@
         <Button fx:id="refreshProjet" layoutX="528.0" layoutY="75.0" mnemonicParsing="false" onAction="#refreshTable" prefHeight="27.0" prefWidth="45.0" AnchorPane.rightAnchor="27.0" AnchorPane.topAnchor="75.0" />
         <Button fx:id="deleteProjet" layoutX="470.0" layoutY="75.0" mnemonicParsing="false" onAction="#deleteProjet" prefHeight="27.0" prefWidth="45.0" AnchorPane.rightAnchor="85.0" AnchorPane.topAnchor="75.0" />
         <TextField fx:id="textFieldSujet" layoutX="133.0" layoutY="75.0" prefHeight="27.0" prefWidth="83.0" promptText="sujet" AnchorPane.leftAnchor="133.0" AnchorPane.topAnchor="75.0" />
-        <DatePicker fx:id="datePicker" layoutX="236.0" layoutY="74.0" prefHeight="27.0" prefWidth="98.0" AnchorPane.leftAnchor="236.0" AnchorPane.topAnchor="75.0" editable="false"/>
+        <DatePicker fx:id="datePicker" editable="false" layoutX="236.0" layoutY="74.0" prefHeight="27.0" prefWidth="98.0" AnchorPane.leftAnchor="236.0" AnchorPane.topAnchor="75.0" />
 
         <MenuBar layoutX="2.0" layoutY="3.0" prefHeight="38.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <menus>
                 <Menu fx:id="menuProjet" mnemonicParsing="false" text="Menu">
                     <items>
-                        <MenuItem fx:id="returnFormation" mnemonicParsing="false" onAction="#retour" text="Retour" />
-                        <MenuItem fx:id="toShowEtudiant" mnemonicParsing="false" onAction="#toShowEtudiant" text="Etudiant" />
-                        <MenuItem fx:id="toShowFormation" mnemonicParsing="false" onAction="#toShowFormation" text="Formation" />
-                        <MenuItem fx:id="toProjets" mnemonicParsing="false" onAction="#toShowProjet" text="Projet" />
-                        <MenuItem fx:id="toBinomes" mnemonicParsing="false" onAction="#toShowBinome" text="Binome" />
-                        <MenuItem fx:id="toNotes" mnemonicParsing="false" onAction="#toShowNote" text="Note" />
+                        <MenuItem fx:id="toShowEtudiant" mnemonicParsing="false" onAction="#toShowEtudiant" text="Gestion d'etudiants" />
+                        <MenuItem fx:id="toShowFormation" mnemonicParsing="false" onAction="#toShowFormation" text="Gestion de formation" />
+                        <MenuItem fx:id="toBinomes" mnemonicParsing="false" onAction="#toShowBinome" text="Gestion de binomes" />
+                        <MenuItem fx:id="toNotes" mnemonicParsing="false" onAction="#toShowNote" text="Gestion de notes" />
                     </items>
                 </Menu>
-                <Menu fx:id="file" mnemonicParsing="false" text="File" >
+                <Menu fx:id="file" mnemonicParsing="false" text="File">
                     <items>
-                        <MenuItem fx:id="downloadPDF" mnemonicParsing="false" onAction="#toPDF" text="Telecharger le PDF"/>
-                        <MenuItem fx:id="downloadExcel" mnemonicParsing="false" onAction="#toExcel" text="Telecharger l'excel"/>
+                        <MenuItem fx:id="downloadPDF" mnemonicParsing="false" onAction="#toPDF" text="Telecharger le PDF" />
+                        <MenuItem fx:id="downloadExcel" mnemonicParsing="false" onAction="#toExcel" text="Telecharger l'excel" />
                     </items>
                 </Menu>
             </menus>
         </MenuBar>
+      <Label fx:id="error" alignment="CENTER" layoutX="14.0" layoutY="485.0" prefHeight="24.0" prefWidth="756.0" text="Pour le pourcentage de soutenance, vous ne pouvez entrer que des chiffres de 0 à 20." textFill="#ee0606" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" visible="false"/>
 
     </children>
 </AnchorPane>

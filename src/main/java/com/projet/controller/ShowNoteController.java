@@ -87,6 +87,9 @@ public class ShowNoteController {
 	@FXML
 	private Button searchNote;
 	
+	@FXML
+	private Label error;
+	
 	
 	@FXML
 	public void initialize() {
@@ -168,6 +171,7 @@ public class ShowNoteController {
 						} catch (NumberFormatException exception) {
 							exception.printStackTrace();
 						}
+						error.setVisible(true);
 						return null; // L'entrée n'est pas acceptée car elle n'est pas comprise entre 0 et 100 ou n'est pas un nombre.
 					}));
 				}
@@ -202,23 +206,26 @@ public class ShowNoteController {
 					Integer pourcentageSoutenance = note.getValue().getProjet().getPourcentageSoutenance();
 					Integer pourcentageRapport = 100 - pourcentageSoutenance;
 					Double noteFinale = noteRapportE * pourcentageRapport * 0.01 + noteSoutenanceE * pourcentageSoutenance * 0.01;
-					long dateDelay = ChronoUnit.DAYS.between(note.getValue().getDateReeleRemise(), note.getValue().getProjet().getDatePrevueRemise());
-					noteFinale = noteFinale - dateDelay * 0.01;
+					if (note.getValue().getDateReeleRemise().isAfter(note.getValue().getProjet().getDatePrevueRemise())) {
+						long dateDelay = ChronoUnit.DAYS.between(note.getValue().getDateReeleRemise(), note.getValue().getProjet().getDatePrevueRemise());
+						noteFinale = noteFinale - dateDelay * 0.01;
+					}
 					return new SimpleStringProperty(noteFinale.toString());
 				}
-				// Integer ip = note.getValue().getProjet().getIdProjet();
-				// Integer ie = note.getValue().getEtudiant().getIdEtudiant();
-				// Integer pctg = note.getValue().getProjet().getPourcentageSoutenance();
-				// System.out.println("pctg:" + pctg);
-				// System.out.println(ip + "," + ie + "dateDelay : " + dateDelay + "Note: " + note.getValue().getNoteFinale().toString());
-				// if (note.getValue().getNoteSoutenance()==-1 || note.getValue().getNoteRapport()==-1){
-				// 	return new SimpleStringProperty("");
-				// }
-				// else {
-				// 	return new SimpleStringProperty(note.getValue().getNoteFinale().toString());
-				// }
-				
 			}
+		});
+		
+		tableViewNote.widthProperty().addListener((observable, oldValue, newValue) -> {
+			double tableWidth = newValue.doubleValue();
+			nomMatiere.setPrefWidth((tableWidth - 80) / 7);
+			sujet.setPrefWidth((tableWidth - 80) / 7);
+			idProjet.setPrefWidth(40);
+			idEtudiant.setPrefWidth(40);
+			nomEtudiant.setPrefWidth((tableWidth - 80) / 7);
+			prenomEtudiant.setPrefWidth((tableWidth - 80) / 7);
+			noteSoutenance.setPrefWidth((tableWidth - 80) / 7);
+			noteRapport.setPrefWidth((tableWidth - 80) / 7);
+			noteFinale.setPrefWidth((tableWidth - 80) / 7);
 		});
 		
 		
@@ -322,6 +329,7 @@ public class ShowNoteController {
 				}
 			}
 			tableViewNote.setItems(data);
+			tableViewNote.refresh();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
