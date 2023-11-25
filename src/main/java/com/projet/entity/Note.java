@@ -11,8 +11,6 @@ public class Note {
     private Double noteRapport;
     private LocalDate dateReeleRemise;
     private Double noteSoutenance;
-    
- 
 
     public Note() {
     }
