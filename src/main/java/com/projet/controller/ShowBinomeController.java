@@ -5,14 +5,11 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.projet.Main;
 import com.projet.entity.Binome;
-import com.projet.entity.Etudiant;
-import com.projet.entity.Formation;
 import com.projet.entity.Projet;
-import com.projet.mapper.BinomeMapper;
-import com.projet.mapper.ProjetMapper;
-import com.projet.service.impl.UpdateBinomeServiceImpl;
-import com.projet.utils.MyBatisUtils;
-import javafx.beans.property.SimpleDoubleProperty;
+import com.projet.service.BinomeService;
+import com.projet.service.ProjetService;
+import com.projet.service.impl.BinomeServiceImpl;
+import com.projet.service.impl.ProjetServiceImpl;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -27,7 +24,6 @@ import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import org.apache.ibatis.session.SqlSession;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -37,15 +33,13 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class ShowBinomeController {
 	@FXML
 	private TableColumn<Binome, String> idBinomes;
-	// @FXML
-	// private TableColumn<Binome, String> idProjet;
+	
 	@FXML
 	private TableColumn<Binome, String> nomMatiere;
 	
@@ -101,28 +95,25 @@ public class ShowBinomeController {
 	@FXML
 	private MenuItem toNotes;
 	
+	private ProjetService projetService = new ProjetServiceImpl();
+	
+	private BinomeService binomeService = new BinomeServiceImpl();
+	
 	
 	@FXML
 	public void initialize() {
-		SqlSession sqlSession = null;
+	
 		try {
-			sqlSession = MyBatisUtils.getSqlSession();
-			BinomeMapper binomeMapper = sqlSession.getMapper(BinomeMapper.class);
-			ProjetMapper projetMapper = sqlSession.getMapper(ProjetMapper.class);
-			List<Integer> idsProjet = projetMapper.getIdsProjet();
+			List<Integer> idsProjet = projetService.getIdsProjet();
 			ObservableList<Binome> data = FXCollections.observableArrayList();
 			for (Integer idProjet : idsProjet) {
-				List<Binome> binomes = binomeMapper.getBinomesByIdProjet(idProjet);
+				List<Binome> binomes = binomeService.getBinomesByIdProjet(idProjet);
 				binomes.forEach(System.out::println);
 				data.addAll(binomes);
 			}
 			tableviewBinome.setItems(data);
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (sqlSession != null) {
-				sqlSession.close();
-			}
 		}
 		
 		idBinomes = new TableColumn<>("id");
@@ -201,19 +192,12 @@ public class ShowBinomeController {
 					
 					{
 						modifier.setOnAction((ActionEvent event) -> {
-							SqlSession sqlSession = null;
 							try {
 								Binome binome = getTableView().getItems().get(getIndex());
-								sqlSession = MyBatisUtils.getSqlSession();
-								BinomeMapper binomeMapper = sqlSession.getMapper(BinomeMapper.class);
-								UpdateBinomeServiceImpl.binomeToUpdate = binomeMapper.selectByIdBinomeAndIdProjet(binome);
+								BinomeServiceImpl.binomeToUpdate = binomeService.selectByIdBinomeAndIdProjet(binome);
 								Main.addView("/com/projet/view/UpdateBinome.fxml");
 							} catch (Exception e) {
 								e.printStackTrace();
-							} finally {
-								if (sqlSession != null) {
-									sqlSession.close();
-								}
 							}
 						});
 						
@@ -227,35 +211,22 @@ public class ShowBinomeController {
 								Binome binome = getTableView().getItems().get(getIndex());
 								Integer idBinome = binome.getIdBinome();
 								Integer idProjet = binome.getProjet().getIdProjet();
-								SqlSession sqlSession = null;
 								try {
-									sqlSession = MyBatisUtils.getNonAutoCommittingSqlSession();
-									BinomeMapper binomeMapper = sqlSession.getMapper(BinomeMapper.class);
-									binomeMapper.deleteBinome(idBinome, idProjet);
-									binomeMapper.deleteAppartenir(idBinome, idProjet);
-									binomeMapper.deleteNotesSoutenanceStep1(binome.getEtudiants().get(0).getIdEtudiant(), idProjet);
-									if (binome.getEtudiants().size()>1) {
-										binomeMapper.deleteNotesSoutenanceStep2(binome.getEtudiants().get(1).getIdEtudiant(), idProjet);
+									if (binome.getEtudiants().size() > 1) {
+										binomeService.deleteBinome(idBinome, idProjet, binome.getEtudiants().get(0).getIdEtudiant(), binome.getEtudiants().get(1).getIdEtudiant());
+									} else {
+										binomeService.deleteBinome(idBinome, idProjet, binome.getEtudiants().get(0).getIdEtudiant(), null);
 									}
-									sqlSession.commit();
-									ProjetMapper projetMapper = sqlSession.getMapper(ProjetMapper.class);
-									List<Integer> idsProjet = projetMapper.getIdsProjet();
+									List<Integer> idsProjet = projetService.getIdsProjet();
 									ObservableList<Binome> data = FXCollections.observableArrayList();
 									for (Integer idProjetDB : idsProjet) {
-										List<Binome> binomes = binomeMapper.getBinomesByIdProjet(idProjetDB);
+										List<Binome> binomes = binomeService.getBinomesByIdProjet(idProjetDB);
 										binomes.forEach(System.out::println);
 										data.addAll(binomes);
 									}
 									tableviewBinome.setItems(data);
 								} catch (Exception e) {
-									if (sqlSession != null) {
-										sqlSession.rollback();
-									}
 									e.printStackTrace();
-								} finally {
-									if (sqlSession != null) {
-										sqlSession.close();
-									}
 								}
 							}
 
@@ -322,9 +293,6 @@ public class ShowBinomeController {
 	}
 	
 	
-	public void retour(ActionEvent actionEvent) {
-		Main.changeView("/com/projet/Main.fxml");
-	}
 	
 	public void toFormations(ActionEvent actionEvent) {
 		Main.changeView("/com/projet/view/ShowFormation.fxml");
@@ -335,50 +303,37 @@ public class ShowBinomeController {
 	}
 	
 	public void searchBinome(ActionEvent actionEvent) {
-		SqlSession sqlSession = null;
+		
 		try {
-			sqlSession = MyBatisUtils.getSqlSession();
-			BinomeMapper mapper = sqlSession.getMapper(BinomeMapper.class);
 			Binome binome = new Binome();
 			Projet projet = new Projet();
 			projet.setNomMatiere("%" + textfieldNomMatiere.getText() + "%");
 			projet.setSujet("%" + textfieldSujet.getText() + "%");
 			binome.setProjet(projet);
-			List<Binome> binomeDB = mapper.selectByCondition(binome);
+			List<Binome> binomeDB = binomeService.selectByCondition(binome);
 			ObservableList<Binome> data = FXCollections.observableArrayList();
 			data.addAll(binomeDB);
 			tableviewBinome.setItems(data);
+			tableviewBinome.refresh();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (sqlSession != null) {
-				sqlSession.close();
-			}
 		}
 	}
 	
 	public void refreshTable(ActionEvent actionEvent) {
-		SqlSession sqlSession = null;
+		
 		try {
-			sqlSession = MyBatisUtils.getSqlSession();
-			BinomeMapper binomeMapper = sqlSession.getMapper(BinomeMapper.class);
-			ProjetMapper projetMapper = sqlSession.getMapper(ProjetMapper.class);
-			List<Integer> idsProjet = projetMapper.getIdsProjet();
+			List<Integer> idsProjet = projetService.getIdsProjet();
 			ObservableList<Binome> data = FXCollections.observableArrayList();
 			for (Integer idProjet : idsProjet) {
-				List<Binome> binomes = binomeMapper.getBinomesByIdProjet(idProjet);
+				List<Binome> binomes = binomeService.getBinomesByIdProjet(idProjet);
 				binomes.forEach(System.out::println);
 				data.addAll(binomes);
 			}
 			tableviewBinome.setItems(data);
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (sqlSession != null) {
-				sqlSession.close();
-			}
 		}
-		
 		textfieldNomMatiere.setText("");
 		textfieldNomMatiere.setPromptText("Nom Matiere");
 		textfieldSujet.setText("");

@@ -28,8 +28,8 @@
         select * from projets
         <where>
             <if test="idProjet != null">id_projet = #{idProjet}</if>
-            <if test="nomMatiere != null and nomMatiere != '' ">and nom_matiere like #{nomMatiere}</if>
-            <if test="sujet != null and sujet != '' ">and sujet like #{sujet}</if>
+            <if test="nomMatiere != null and nomMatiere != '' ">and lower(nom_matiere) like lower(#{nomMatiere})</if>
+            <if test="sujet != null and sujet != '' ">and lower(sujet) like lower(#{sujet})</if>
             <if test="datePrevueRemise != null">and date_prevue_remise = #{datePrevueRemise}</if>
         </where>
     </select>
@@ -37,6 +37,20 @@
 	<select id="getIdsProjet" resultType="java.lang.Integer">
         SELECT id_projet
         FROM projets
+    </select>
+    
+	<select id="getIdsProjetByCondition" resultType="java.lang.Integer">
+        SELECT id_projet
+        FROM projets
+        <where>
+            <if test="nomMatiere != null and nomMatiere != '' ">
+                AND lower(nom_matiere) like lower(#{nomMatiere})
+            </if>
+            
+            <if test="sujet != null and sujet != '' ">
+                AND lower(sujet) like lower(#{sujet})
+            </if>
+        </where>
     </select>
 	
 	<insert id="addProjet" useGeneratedKeys="true" keyProperty="idProjet">

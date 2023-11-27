@@ -3,10 +3,12 @@ package com.projet.controller;
 import com.projet.entity.Binome;
 import com.projet.entity.Etudiant;
 import com.projet.entity.Projet;
-import com.projet.mapper.BinomeMapper;
-import com.projet.mapper.EtudiantMapper;
-import com.projet.mapper.ProjetMapper;
-import com.projet.utils.MyBatisUtils;
+import com.projet.service.BinomeService;
+import com.projet.service.EtudiantService;
+import com.projet.service.ProjetService;
+import com.projet.service.impl.BinomeServiceImpl;
+import com.projet.service.impl.EtudiantServiceImpl;
+import com.projet.service.impl.ProjetServiceImpl;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -16,7 +18,6 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.ibatis.session.SqlSession;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,12 @@ public class AddBinomeController {
 	@FXML
 	private TextField idBinome;
 	
+	private ProjetService projetService = new ProjetServiceImpl();
+	
+	private EtudiantService etudiantService = new EtudiantServiceImpl();
+	
+	private BinomeService binomeService = new BinomeServiceImpl();
+	
 	
 	@FXML
 	public void initialize() {
@@ -60,13 +67,9 @@ public class AddBinomeController {
 		projet.getItems().clear();
 		etudiant1.getItems().clear();
 		etudiant2.getItems().clear();
-		SqlSession sqlSession = null;
 		try {
-			sqlSession = MyBatisUtils.getSqlSession();
-			ProjetMapper projetMapper = sqlSession.getMapper(ProjetMapper.class);
-			EtudiantMapper etudiantMapper = sqlSession.getMapper(EtudiantMapper.class);
 			
-			List<Projet> projets = projetMapper.selectAll();
+			List<Projet> projets = projetService.selectAll();
 			List<String> infoProjets = new ArrayList<>();
 			
 			for (int i = 0; i < projets.size(); i++) {
@@ -77,9 +80,9 @@ public class AddBinomeController {
 				infoProjets.add(idProjet + " " + nomMatiere + " " + sujet);
 			}
 			
-			List<Integer> idsEtudiant = etudiantMapper.getIdsEtudiant();
-			List<String> nomsEtudiant = etudiantMapper.getNomsEtudiant();
-			List<String> prenomsEtudiant = etudiantMapper.getPrenomsEtudiant();
+			List<Integer> idsEtudiant = etudiantService.getIdsEtudiant();
+			List<String> nomsEtudiant = etudiantService.getNomsEtudiant();
+			List<String> prenomsEtudiant = etudiantService.getPrenomsEtudiant();
 			
 			List<String> infoEtudiants = new ArrayList<>();
 			infoEtudiants.add("");
@@ -92,10 +95,6 @@ public class AddBinomeController {
 			etudiant2.getItems().addAll(infoEtudiants);
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (sqlSession != null) {
-				sqlSession.close();
-			}
 		}
 		
 		
@@ -115,7 +114,7 @@ public class AddBinomeController {
 		} else {
 			Binome binome = new Binome();
 			
-			if (!NumberUtils.isParsable(idBinome.getText())) {
+			if (!NumberUtils.isParsable(idBinome.getText().trim())) {
 				Alert alert = new Alert(Alert.AlertType.ERROR);
 				alert.setTitle("ERREUR: Vous n'avez pas saisi un nombre dans le champ \"idBinome\"!");
 				alert.setHeaderText("Vous n'avez pas saisi un nombre dans le champ \"idBinome\"!");
@@ -123,12 +122,10 @@ public class AddBinomeController {
 				alert.getDialogPane().setPrefWidth(800);
 				alert.show();
 			} else {
-				binome.setIdBinome(Integer.parseInt(idBinome.getText()));
+				binome.setIdBinome(Integer.parseInt(idBinome.getText().trim()));
 				Projet projetP = new Projet();
 				String[] infoProjet = projet.getValue().split(" ");
 				projetP.setIdProjet(Integer.parseInt(infoProjet[0]));
-				projetP.setNomMatiere(infoProjet[1]);
-				projetP.setSujet(infoProjet[2]);
 				
 				Etudiant etudiant1P = new Etudiant();
 				String[] infoEtudiant1 = etudiant1.getValue().split(" ");
@@ -149,15 +146,13 @@ public class AddBinomeController {
 				
 				binome.setProjet(projetP);
 				binome.setEtudiants(etudiants);
-				SqlSession sqlSession = null;
+				
 				try {
-					sqlSession = MyBatisUtils.getNonAutoCommittingSqlSession();
-					BinomeMapper binomeMapper = sqlSession.getMapper(BinomeMapper.class);
-					Binome binomeDB1 = binomeMapper.selectByIdBinomeAndIdProjet(binome);
-					Binome binomeDB2 = binomeMapper.getBinomeByIdProjetAndIdEtudiant(etudiant1P.getIdEtudiant(), projetP.getIdProjet());
+					Binome binomeDB1 = binomeService.selectByIdBinomeAndIdProjet(binome);
+					Binome binomeDB2 = binomeService.getBinomeByIdProjetAndIdEtudiant(etudiant1P.getIdEtudiant(), projetP.getIdProjet());
 					Binome binomeDB3 = null;
 					if (etudiant2P != null) {
-						binomeDB3 = binomeMapper.getBinomeByIdProjetAndIdEtudiant(etudiant2P.getIdEtudiant(), projetP.getIdProjet());
+						binomeDB3 = binomeService.getBinomeByIdProjetAndIdEtudiant(etudiant2P.getIdEtudiant(), projetP.getIdProjet());
 					}
 					if (binomeDB1 != null) {
 						Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -183,31 +178,14 @@ public class AddBinomeController {
 								alert.getDialogPane().setPrefWidth(800);
 								alert.show();
 							} else {
-								
-								binomeMapper.insertBinomeStep1(binome);
-								binomeMapper.insertOrUpdateBinomeStep2(binome);
-								if (binome.getEtudiants().size() > 1) {
-									binomeMapper.insertOrUpdateBinomeStep3(binome);
-								}
-								binomeMapper.insertOrUpdateBinomeStep4(binome.getProjet().getIdProjet(), binome.getEtudiants().get(0).getIdEtudiant(), -1.0);
-								if (binome.getEtudiants().size() > 1) {
-									binomeMapper.insertOrUpdateBinomeStep5(binome.getProjet().getIdProjet(), binome.getEtudiants().get(1).getIdEtudiant(), -1.0);
-								}
-								sqlSession.commit();
+								binomeService.addBinome(binome);
 								Stage stage = (Stage) ajouterBi.getScene().getWindow();
 								stage.close();
 							}
 						}
 					}
 				} catch (Exception e) {
-					if (sqlSession != null) {
-						sqlSession.rollback();
-					}
 					e.printStackTrace();
-				} finally {
-					if (sqlSession != null) {
-						sqlSession.close();
-					}
 				}
 				
 			}

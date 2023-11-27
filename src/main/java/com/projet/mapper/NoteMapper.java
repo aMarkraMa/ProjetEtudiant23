@@ -15,6 +15,6 @@ public interface NoteMapper {
 	
 	int updateNoteSoutenance(@Param("idProjet") Integer idProjet, @Param("idEtudiant") Integer idEtudiant, @Param("noteSoutenance") Double noteSoutenance);
 	
-	List<Note> selectByCondition(@Param("idProjet") Integer idProjet, @Param("idEtudiant") Integer idEtudiant, @Param("nomMatiere") String nomMatiere, @Param("sujet") String sujet, @Param("nomEtudiant") String nomEtudiant, @Param("prenomEtudiant") String prenomEtudiant);
+	List<Note> selectByCondition(@Param("idProjet") Integer idProjet, @Param("idEtudiant") Integer idEtudiant);
 	
 }

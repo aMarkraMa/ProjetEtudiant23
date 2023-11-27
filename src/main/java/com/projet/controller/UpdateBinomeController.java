@@ -2,14 +2,17 @@ package com.projet.controller;
 
 import com.projet.entity.Binome;
 import com.projet.entity.Etudiant;
-import com.projet.entity.Note;
 import com.projet.entity.Projet;
 import com.projet.mapper.BinomeMapper;
 import com.projet.mapper.EtudiantMapper;
 import com.projet.mapper.NoteMapper;
 import com.projet.mapper.ProjetMapper;
-import com.projet.service.UpdateBinomeService;
-import com.projet.service.impl.UpdateBinomeServiceImpl;
+import com.projet.service.BinomeService;
+import com.projet.service.EtudiantService;
+import com.projet.service.ProjetService;
+import com.projet.service.impl.BinomeServiceImpl;
+import com.projet.service.impl.EtudiantServiceImpl;
+import com.projet.service.impl.ProjetServiceImpl;
 import com.projet.utils.MyBatisUtils;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -49,7 +52,11 @@ public class UpdateBinomeController {
 	private Button updateBinome;
 	
 	
-	private UpdateBinomeService updateBinomeService = new UpdateBinomeServiceImpl();
+	private BinomeService binomeService = new BinomeServiceImpl();
+	
+	private ProjetService projetService = new ProjetServiceImpl();
+	
+	private EtudiantService etudiantService = new EtudiantServiceImpl();
 	
 	@FXML
 	public void initialize() {
@@ -73,13 +80,9 @@ public class UpdateBinomeController {
 		projet.getItems().clear();
 		etudiant1.getItems().clear();
 		etudiant2.getItems().clear();
-		SqlSession sqlSession = null;
 		try {
-			sqlSession = MyBatisUtils.getSqlSession();
-			ProjetMapper projetMapper = sqlSession.getMapper(ProjetMapper.class);
-			EtudiantMapper etudiantMapper = sqlSession.getMapper(EtudiantMapper.class);
 			
-			List<Projet> projets = projetMapper.selectAll();
+			List<Projet> projets = projetService.selectAll();
 			List<String> infoProjets = new ArrayList<>();
 			
 			for (int i = 0; i < projets.size(); i++) {
@@ -90,9 +93,9 @@ public class UpdateBinomeController {
 				infoProjets.add(idProjet + " " + nomMatiere + " " + sujet);
 			}
 			
-			List<Integer> idsEtudiant = etudiantMapper.getIdsEtudiant();
-			List<String> nomsEtudiant = etudiantMapper.getNomsEtudiant();
-			List<String> prenomsEtudiant = etudiantMapper.getPrenomsEtudiant();
+			List<Integer> idsEtudiant = etudiantService.getIdsEtudiant();
+			List<String> nomsEtudiant = etudiantService.getNomsEtudiant();
+			List<String> prenomsEtudiant = etudiantService.getPrenomsEtudiant();
 			
 			List<String> infoEtudiants = new ArrayList<>();
 			infoEtudiants.add("");
@@ -105,16 +108,12 @@ public class UpdateBinomeController {
 			etudiant2.getItems().addAll(infoEtudiants);
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (sqlSession != null) {
-				sqlSession.close();
-			}
 		}
 		
 		idBinome.setDisable(true);
 		projet.setDisable(true);
 		
-		Binome binomeToUpdate = UpdateBinomeServiceImpl.binomeToUpdate;
+		Binome binomeToUpdate = BinomeServiceImpl.binomeToUpdate;
 		
 		idBinome.setText(binomeToUpdate.getIdBinome().toString());
 		projet.setValue(binomeToUpdate.getProjet().getIdProjet() + " " + binomeToUpdate.getProjet().getNomMatiere() + " " + binomeToUpdate.getProjet().getSujet());
@@ -124,16 +123,38 @@ public class UpdateBinomeController {
 		if (binomeToUpdate.getEtudiants().size() > 1) {
 			etudiant2.setValue(binomeToUpdate.getEtudiants().get(1).getIdEtudiant().toString() + " " + binomeToUpdate.getEtudiants().get(1).getNomEtudiant() + " " + binomeToUpdate.getEtudiants().get(1).getPrenomEtudiant());
 		}
-		noteRapport.setText(binomeToUpdate.getNoteRapport().toString());
-		dateRelleRemise.setValue(binomeToUpdate.getDateReelleRemise());
+		
+		if (binomeToUpdate.getNoteRapport() == -1.0) {
+			noteRapport.setText("");
+		} else {
+			noteRapport.setText(binomeToUpdate.getNoteRapport().toString());
+		}
+		
+		if (binomeToUpdate.getDateReelleRemise().equals(LocalDate.of(1111, 11, 11))) {
+			dateRelleRemise.setValue(null);
+		} else {
+			dateRelleRemise.setValue(binomeToUpdate.getDateReelleRemise());
+		}
 		
 		etudiant1.valueProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				noteRapport.setDisable(true);
-				noteRapport.setText(String.valueOf(-1.0));
+				noteRapport.setText(null);
 				dateRelleRemise.setDisable(true);
-				dateRelleRemise.setValue(LocalDate.of(1111, 11, 11));
+				dateRelleRemise.setValue(null);
+				if (oldValue != null && !"".equals(oldValue)) {
+					binomeService.deleteNoteSoutenance(Integer.parseInt(String.valueOf(oldValue.charAt(0))), Integer.parseInt(String.valueOf(projet.getValue().charAt(0))));
+				}
+				if (newValue != null && !"".equals(newValue)) {
+					binomeService.insertNoteSoutenance(Integer.parseInt(String.valueOf(projet.getValue().charAt(0))), Integer.parseInt(String.valueOf(newValue.charAt(0))),-1.0);
+				}
+				if (etudiant2.getValue() != null && !"".equals(etudiant2.getValue())) {
+					binomeService.deleteNoteSoutenance(Integer.parseInt(String.valueOf(etudiant2.getValue().charAt(0))), Integer.parseInt(String.valueOf(projet.getValue().charAt(0))));
+					binomeService.insertNoteSoutenance(Integer.parseInt(String.valueOf(projet.getValue().charAt(0))), Integer.parseInt(String.valueOf(etudiant2.getValue().charAt(0))), -1.0);
+				}
+				
+				
 			}
 		});
 		
@@ -141,16 +162,26 @@ public class UpdateBinomeController {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				noteRapport.setDisable(true);
-				noteRapport.setText(String.valueOf(-1.0));
+				noteRapport.setText(null);
 				dateRelleRemise.setDisable(true);
-				dateRelleRemise.setValue(LocalDate.of(1111, 11, 11));
+				dateRelleRemise.setValue(null);
+				if (oldValue != null && !"".equals(oldValue)) {
+					binomeService.deleteNoteSoutenance(Integer.parseInt(String.valueOf(oldValue.charAt(0))), Integer.parseInt(String.valueOf(projet.getValue().charAt(0))));
+				}
+				if (newValue != null && !"".equals(newValue)) {
+					binomeService.insertNoteSoutenance(Integer.parseInt(String.valueOf(projet.getValue().charAt(0))), Integer.parseInt(String.valueOf(newValue.charAt(0))), -1.0);
+				}
+				if (etudiant1.getValue() != null && !"".equals(etudiant1.getValue())) {
+					binomeService.deleteNoteSoutenance(Integer.parseInt(String.valueOf(etudiant1.getValue().charAt(0))), Integer.parseInt(String.valueOf(projet.getValue().charAt(0))));
+					binomeService.insertNoteSoutenance(Integer.parseInt(String.valueOf(projet.getValue().charAt(0))), Integer.parseInt(String.valueOf(etudiant1.getValue().charAt(0))), -1.0);
+				}
 			}
 		});
 		
 		noteRapport.textProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				if (!newValue.equals("-1.0")) {
+				if (newValue != null) {
 					etudiant1.setDisable(true);
 					etudiant2.setDisable(true);
 				}
@@ -160,7 +191,7 @@ public class UpdateBinomeController {
 		dateRelleRemise.valueProperty().addListener(new ChangeListener<LocalDate>() {
 			@Override
 			public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
-				if (!newValue.equals(LocalDate.of(1111, 11, 11))){
+				if (newValue != null) {
 					etudiant1.setDisable(true);
 					etudiant2.setDisable(true);
 				}
@@ -187,7 +218,7 @@ public class UpdateBinomeController {
 		}
 		Binome binome = new Binome();
 		
-		if (!NumberUtils.isParsable(idBinome.getText())) {
+		if (!NumberUtils.isParsable(idBinome.getText().trim())) {
 			Alert alert = new Alert(Alert.AlertType.ERROR);
 			alert.setTitle("ERREUR: Vous n'avez pas saisi un nombre dans le champ \"idBinome\"!");
 			alert.setHeaderText("Vous n'avez pas saisi un nombre dans le champ \"idBinome\"!");
@@ -196,7 +227,7 @@ public class UpdateBinomeController {
 			alert.show();
 			return;
 		}
-		binome.setIdBinome(Integer.parseInt(idBinome.getText()));
+		binome.setIdBinome(Integer.parseInt(idBinome.getText().trim()));
 		Projet projetP = new Projet();
 		String[] infoProjet = projet.getValue().split(" ");
 		projetP.setIdProjet(Integer.parseInt(infoProjet[0]));
@@ -224,8 +255,8 @@ public class UpdateBinomeController {
 		binome.setProjet(projetP);
 		binome.setEtudiants(etudiants);
 		
-		if (noteRapport.getText() != null && !"".equals(noteRapport.getText())) {
-			if (!NumberUtils.isParsable(noteRapport.getText()) || Double.parseDouble(noteRapport.getText()) > 20 || Double.parseDouble(noteRapport.getText()) < -1) {
+		if (noteRapport.getText() != null && !"".equals(noteRapport.getText().trim())) {
+			if (!NumberUtils.isParsable(noteRapport.getText().trim()) || Double.parseDouble(noteRapport.getText().trim()) > 20 || Double.parseDouble(noteRapport.getText().trim()) < -1) {
 				Alert alert = new Alert(Alert.AlertType.ERROR);
 				alert.setTitle("ERREUR: La note de rapport saisie n'est pas valide!");
 				alert.setHeaderText("La note de rapport saisie n'est pas valide!");
@@ -234,24 +265,24 @@ public class UpdateBinomeController {
 				alert.show();
 				return;
 			}
-			binome.setNoteRapport(Double.parseDouble(noteRapport.getText()));
+			binome.setNoteRapport(Double.parseDouble(noteRapport.getText().trim()));
+		} else {
+			binome.setNoteRapport(-1.0);
 		}
 		if (dateRelleRemise.getValue() != null) {
 			binome.setDateReelleRemise(dateRelleRemise.getValue());
+		} else {
+			binome.setDateReelleRemise(LocalDate.of(1111, 11, 11));
 		}
-		SqlSession sqlSession = null;
 		try {
-			sqlSession = MyBatisUtils.getNonAutoCommittingSqlSession();
-			BinomeMapper binomeMapper = sqlSession.getMapper(BinomeMapper.class);
-			NoteMapper noteMapper = sqlSession.getMapper(NoteMapper.class);
-			Binome binomeDB1 = binomeMapper.getBinomeByIdProjetAndIdEtudiant(etudiant1P.getIdEtudiant(), projetP.getIdProjet());
+			Binome binomeDB1 = binomeService.getBinomeByIdProjetAndIdEtudiant(etudiant1P.getIdEtudiant(), projetP.getIdProjet());
 			Binome binomeDB2 = null;
 			if (etudiant2P != null) {
-				binomeDB2 = binomeMapper.getBinomeByIdProjetAndIdEtudiant(etudiant2P.getIdEtudiant(), projetP.getIdProjet());
+				binomeDB2 = binomeService.getBinomeByIdProjetAndIdEtudiant(etudiant2P.getIdEtudiant(), projetP.getIdProjet());
 			}
 			
 			if (binomeDB1 != null) {
-				if (binomeDB1.getIdBinome() != Integer.parseInt(idBinome.getText())) {
+				if (binomeDB1.getIdBinome() != Integer.parseInt(idBinome.getText().trim())) {
 					Alert alert = new Alert(Alert.AlertType.ERROR);
 					alert.setTitle("ERREUR: L'etudiant 1 que vous avez choisi est deja dans un binome de ce projet!");
 					alert.setHeaderText("L'etudiant 1 que vous avez choisi est deja dans un binome de ce projet!");
@@ -262,7 +293,7 @@ public class UpdateBinomeController {
 				}
 			}
 			if (binomeDB2 != null) {
-				if (binomeDB2.getIdBinome() != Integer.parseInt(idBinome.getText())) {
+				if (binomeDB2.getIdBinome() != Integer.parseInt(idBinome.getText().trim())) {
 					Alert alert = new Alert(Alert.AlertType.ERROR);
 					alert.setTitle("ERREUR: L'etudiant 2 que vous avez choisi est deja dans un binome de ce projet!");
 					alert.setHeaderText("L'etudiant 2 que vous avez choisi est deja dans un binome de ce projet!");
@@ -272,45 +303,12 @@ public class UpdateBinomeController {
 					return;
 				}
 			}
-			Double noteSoutenanceEtudiant1 = noteMapper.getNotesByIdProjetAndIdEtudiant(binome.getProjet().getIdProjet(), binome.getEtudiants().get(0).getIdEtudiant()).getNoteSoutenance();
-			Double noteSoutenanceEtudiant2 = null;
-			if (binome.getEtudiants().size() > 1) {
-				noteSoutenanceEtudiant2 = noteMapper.getNotesByIdProjetAndIdEtudiant(binome.getProjet().getIdProjet(), binome.getEtudiants().get(1).getIdEtudiant()).getNoteSoutenance();
-			}
-			if (binome.getNoteRapport() != null || binome.getDateReelleRemise() != null) {
-				binomeMapper.updateBinomeStep1(binome.getNoteRapport(), binome.getDateReelleRemise(), binome.getIdBinome(), binome.getProjet().getIdProjet());
-			}
-			binomeMapper.deleteAppartenir(binome.getIdBinome(), binome.getProjet().getIdProjet());
-			binomeMapper.deleteNotesSoutenanceStep1(binome.getEtudiants().get(0).getIdEtudiant(), binome.getProjet().getIdProjet());
-			if (binome.getEtudiants().size() > 1) {
-				binomeMapper.deleteNotesSoutenanceStep2(binome.getEtudiants().get(1).getIdEtudiant(), binome.getProjet().getIdProjet());
-			}
-			binomeMapper.insertOrUpdateBinomeStep2(binome);
-			if (binome.getEtudiants().size() > 1) {
-				binomeMapper.insertOrUpdateBinomeStep3(binome);
-			}
-			binomeMapper.insertOrUpdateBinomeStep4(binome.getProjet().getIdProjet(), binome.getEtudiants().get(0).getIdEtudiant(), noteSoutenanceEtudiant1);
-			if (binome.getEtudiants().size() > 1) {
-				if (noteSoutenanceEtudiant2 != null) {
-					binomeMapper.insertOrUpdateBinomeStep5(binome.getProjet().getIdProjet(), binome.getEtudiants().get(1).getIdEtudiant(), noteSoutenanceEtudiant2);
-				} else {
-					binomeMapper.insertOrUpdateBinomeStep5(binome.getProjet().getIdProjet(), binome.getEtudiants().get(1).getIdEtudiant(), -1.0);
-				}
-			}
-			sqlSession.commit();
+			binomeService.updateBinome(binome);
+			
 			Stage stage = (Stage) updateBinome.getScene().getWindow();
 			stage.close();
-			
-			
 		} catch (Exception e) {
-			if (sqlSession != null) {
-				sqlSession.rollback();
-			}
 			e.printStackTrace();
-		} finally {
-			if (sqlSession != null) {
-				sqlSession.close();
-			}
 		}
 	}
 }

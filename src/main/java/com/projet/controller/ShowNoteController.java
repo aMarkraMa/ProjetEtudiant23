@@ -8,6 +8,12 @@ import com.projet.entity.*;
 import com.projet.mapper.EtudiantMapper;
 import com.projet.mapper.NoteMapper;
 import com.projet.mapper.ProjetMapper;
+import com.projet.service.EtudiantService;
+import com.projet.service.NoteService;
+import com.projet.service.ProjetService;
+import com.projet.service.impl.EtudiantServiceImpl;
+import com.projet.service.impl.NoteServiceImpl;
+import com.projet.service.impl.ProjetServiceImpl;
 import com.projet.utils.MyBatisUtils;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -33,6 +39,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -89,6 +96,12 @@ public class ShowNoteController {
 	
 	@FXML
 	private Label error;
+	
+	private ProjetService projetService = new ProjetServiceImpl();
+	
+	private EtudiantService etudiantService = new EtudiantServiceImpl();
+	
+	private NoteService noteService = new NoteServiceImpl();
 	
 	
 	@FXML
@@ -198,7 +211,7 @@ public class ShowNoteController {
 		noteFinale.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Note, String>, ObservableValue<String>>() {
 			@Override
 			public ObservableValue<String> call(TableColumn.CellDataFeatures<Note, String> note) {
-				if (note.getValue().getNoteRapport().doubleValue() == -1.0 || note.getValue().getNoteSoutenance().doubleValue() == -1.0) {
+				if (note.getValue().getNoteRapport().doubleValue() == -1.0 || note.getValue().getNoteSoutenance().doubleValue() == -1.0 || note.getValue().getDateReeleRemise().equals(LocalDate.of(1111, 11, 11))) {
 					return new SimpleStringProperty("");
 				} else {
 					Double noteRapportE = note.getValue().getNoteRapport();
@@ -208,7 +221,7 @@ public class ShowNoteController {
 					Double noteFinale = noteRapportE * pourcentageRapport * 0.01 + noteSoutenanceE * pourcentageSoutenance * 0.01;
 					if (note.getValue().getDateReeleRemise().isAfter(note.getValue().getProjet().getDatePrevueRemise())) {
 						long dateDelay = ChronoUnit.DAYS.between(note.getValue().getDateReeleRemise(), note.getValue().getProjet().getDatePrevueRemise());
-						noteFinale = noteFinale - dateDelay * 0.01;
+						noteFinale = noteFinale - Math.abs(dateDelay) * 0.01;
 					}
 					return new SimpleStringProperty(noteFinale.toString());
 				}
@@ -234,13 +247,13 @@ public class ShowNoteController {
 	}
 	
 	public void initializeImg() {
-		Image search = new Image("com/projet/img/search.png");
+		Image search = new Image("/com/projet/img/search.png");
 		ImageView searchImageView = new ImageView(search);
 		searchImageView.setFitWidth(18);
 		searchImageView.setFitHeight(18);
 		searchNote.setGraphic(searchImageView);
 		
-		Image refresh = new Image("com/projet/img/refresh.png");
+		Image refresh = new Image("/com/projet/img/refresh.png");
 		ImageView refreshImageView = new ImageView(refresh);
 		refreshImageView.setFitWidth(18);
 		refreshImageView.setFitHeight(18);
@@ -248,81 +261,62 @@ public class ShowNoteController {
 	}
 	
 	public void searchNote(ActionEvent actionEvent) {
+		String nomEtudiant = null;
+		if (textFieldNomEtudiant.getText() != null && !"".equals(textFieldNomEtudiant.getText().trim())) {
+			nomEtudiant = "%" + textFieldNomEtudiant.getText() + "%";
+			
+		}
+		String prenomEtudiant = null;
+		if (textFieldPrenomEtudiant.getText() != null && !"".equals(textFieldPrenomEtudiant.getText().trim())) {
+			prenomEtudiant = "%" + textFieldPrenomEtudiant.getText() + "%";
+		}
+		String sujet = null;
+		if (textFieldSujet.getText() != null && !"".equals(textFieldSujet.getText().trim())) {
+			sujet = "%" + textFieldSujet.getText() + "%";
+		}
 		
-		String nomEtudiant = "%" + textFieldNomEtudiant.getText() + "%";
-		String prenomEtudiant = "%" + textFieldPrenomEtudiant.getText() + "%";
-		String sujet = "%" + textFieldSujet.getText() + "%";
-		String nomMatiere = "%" + textFieldNomMatiere.getText() + "%";
+		String nomMatiere = null;
+		if (textFieldNomMatiere.getText() != null && !"".equals(textFieldNomMatiere.getText().trim())) {
+			nomMatiere = "%" + textFieldNomMatiere.getText() + "%";
+		}
 		
-		System.out.println(nomEtudiant);
-		System.out.println(prenomEtudiant);
-		System.out.println(sujet);
-		System.out.println(nomMatiere);
 		
-		SqlSession sqlSession = null;
 		try {
-			sqlSession = MyBatisUtils.getSqlSession();
-			NoteMapper noteMapper = sqlSession.getMapper(NoteMapper.class);
-			ProjetMapper projetMapper = sqlSession.getMapper(ProjetMapper.class);
-			EtudiantMapper etudiantMapper = sqlSession.getMapper(EtudiantMapper.class);
-			List<Integer> idsProjet = projetMapper.getIdsProjet();
-			List<Integer> idsEtudiant = etudiantMapper.getIdsEtudiant();
+			List<Integer> idsProjet = projetService.getIdsProjetByCondition(nomMatiere, sujet);
+			List<Integer> idsEtudiant = etudiantService.getIdsEtudiantByCondition(nomEtudiant, prenomEtudiant);
 			ObservableList<Note> data = FXCollections.observableArrayList();
 			for (Integer idProjet : idsProjet) {
 				for (Integer idEtudiant : idsEtudiant) {
-					List<Note> notes = noteMapper.selectByCondition(idProjet, idEtudiant, nomMatiere, sujet, nomEtudiant, prenomEtudiant);
-					// for (Note note : notes) {
-					// 	long dateDelay = ChronoUnit.DAYS.between(note.getDateReeleRemise(), note.getProjet().getDatePrevueRemise());
-					// 	note.setNoteFinale((int)dateDelay);
-					// }
+					List<Note> notes = noteService.selectByCondition(idProjet, idEtudiant);
 					data.addAll(notes);
 				}
 			}
-			
 			tableViewNote.setItems(data);
+			tableViewNote.refresh();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (sqlSession != null) {
-				sqlSession.close();
-			}
 		}
 		
 	}
 	
 	public void updateSoutenance(Integer idProjet, Integer idEtudiant, Double noteSoutenance) {
-		SqlSession sqlSession = null;
 		try {
-			sqlSession = MyBatisUtils.getSqlSession();
-			NoteMapper noteMapper = sqlSession.getMapper(NoteMapper.class);
-			int i = noteMapper.updateNoteSoutenance(idProjet, idEtudiant, noteSoutenance);
+			noteService.updateNoteSoutenance(idProjet, idEtudiant, noteSoutenance);
 			System.out.println("idProjet : " + idProjet + " idEtudiant : " + idEtudiant + " noteSoutenance : " + noteSoutenance);
-			System.out.println("update Note Soutenance nb line: " + i);
-			
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (sqlSession != null) {
-				sqlSession.close();
-			}
 		}
 	}
 	
 	
 	public void refreshTable() {
-		
-		SqlSession sqlSession = null;
 		try {
-			sqlSession = MyBatisUtils.getSqlSession();
-			NoteMapper noteMapper = sqlSession.getMapper(NoteMapper.class);
-			ProjetMapper projetMapper = sqlSession.getMapper(ProjetMapper.class);
-			EtudiantMapper etudiantMapper = sqlSession.getMapper(EtudiantMapper.class);
-			List<Integer> idsProjet = projetMapper.getIdsProjet();
-			List<Integer> idsEtudiant = etudiantMapper.getIdsEtudiant();
+			List<Integer> idsProjet = projetService.getIdsProjet();
+			List<Integer> idsEtudiant = etudiantService.getIdsEtudiant();
 			ObservableList<Note> data = FXCollections.observableArrayList();
 			for (Integer idProjet : idsProjet) {
 				for (Integer idEtudiant : idsEtudiant) {
-					Note note = noteMapper.getNotesByIdProjetAndIdEtudiant(idProjet, idEtudiant);
+					Note note = noteService.getNotesByIdProjetAndIdEtudiant(idProjet, idEtudiant);
 					if (note != null) {
 						data.add(note);
 					}
@@ -332,10 +326,6 @@ public class ShowNoteController {
 			tableViewNote.refresh();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (sqlSession != null) {
-				sqlSession.close();
-			}
 		}
 		textFieldNomEtudiant.setText("");
 		textFieldPrenomEtudiant.setText("");
@@ -348,9 +338,6 @@ public class ShowNoteController {
 		refreshTable();
 	}
 	
-	public void showAddView(ActionEvent actionEvent) {
-		Main.addView("/com/projet/view/AddNote.fxml");
-	}
 	
 	public void toShowFormation(ActionEvent actionEvent) {
 		Main.changeView("/com/projet/view/ShowFormation.fxml");
@@ -370,10 +357,6 @@ public class ShowNoteController {
 	
 	public void toShowNote(ActionEvent actionEvent) {
 		Main.changeView("/com/projet/view/ShowNote.fxml");
-	}
-	
-	public void retour(ActionEvent actionEvent) {
-		Main.changeView("/com/projet/view/Main.fxml");
 	}
 	
 	

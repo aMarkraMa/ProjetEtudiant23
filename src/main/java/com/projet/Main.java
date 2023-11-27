@@ -27,13 +27,13 @@ public class Main extends Application {
         //Scene scene = new Scene(fxmlLoader.load(), 600, 420);
         stage.setTitle("Système de gestion de projets des étudiants");
        // stage.setScene(scene);
-        stage.getIcons().add(new Image("com/projet/img/logo.png"));
+        stage.getIcons().add(new Image("/com/projet/img/logo.png"));
         stage.setResizable(true);
         stage.initStyle(StageStyle.DECORATED);
         stage.setMinWidth(600);
         stage.setMinHeight(400);
-        changeView("/com/projet/view/Main.fxml");
-        //startView("/com/projet/view/LogIn.fxml");
+        // changeView("/com/projet/view/Main.fxml");
+        startView("/com/projet/view/LogIn.fxml");
         stage.show();
     }
     

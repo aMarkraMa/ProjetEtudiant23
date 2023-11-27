@@ -22,7 +22,7 @@
 		</collection>
 	</resultMap>
 	
-	<update id="updateBinomeStep1">
+	<update id="updateBinomeStep3">
 		UPDATE binomes
 		<set>
 			<if test="noteRapport != null">
@@ -151,22 +151,22 @@
 		VALUES (#{idBinome}, #{projet.idProjet}, -1, '1111-11-11');
 	</insert>
 	
-	<insert id="insertOrUpdateBinomeStep2">
+	<insert id="insertBinomeStep2OrUpdateBinomeStep1">
 		INSERT INTO appartenir (id_binome, id_projet, id_etudiant)
 		VALUES (#{idBinome}, #{projet.idProjet}, #{etudiants[0].idEtudiant})
 	</insert>
 	
-	<insert id="insertOrUpdateBinomeStep3">
+	<insert id="insertBinomeStep3OrUpdateBinomeStep2">
 		INSERT INTO appartenir (id_binome, id_projet, id_etudiant)
 		VALUES (#{idBinome}, #{projet.idProjet}, #{etudiants[1].idEtudiant})
 	</insert>
 	
-	<insert id="insertOrUpdateBinomeStep4">
+	<insert id="insertOrUpdateBinomeStep4AndStep5">
 		INSERT INTO notes_soutenance(id_projet, id_etudiant, note_soutenance)
 		VALUES (#{idProjet}, #{idEtudiant}, #{noteSoutenance})
 	</insert>
 	
-	<insert id="insertOrUpdateBinomeStep5">
+	<insert id="insertNoteSoutenance">
 		INSERT INTO notes_soutenance(id_projet, id_etudiant, note_soutenance)
 		VALUES (#{idProjet}, #{idEtudiant}, #{noteSoutenance})
 	</insert>
@@ -180,9 +180,11 @@
 	<delete id="deleteAppartenir">
 		DELETE FROM appartenir WHERE id_binome = #{idBinome} AND id_projet = #{idProjet}
 	</delete>
-	<delete id="deleteNotesSoutenanceStep1">
+	
+	<delete id="deleteNotesSoutenance">
 		DELETE FROM notes_soutenance WHERE id_etudiant = #{idEtudiant} AND id_projet = #{idProjet}
 	</delete>
+	
 	<delete id="deleteNotesSoutenanceStep2">
 		DELETE FROM notes_soutenance WHERE id_etudiant = #{idEtudiant} AND id_projet = #{idProjet}
 	</delete>

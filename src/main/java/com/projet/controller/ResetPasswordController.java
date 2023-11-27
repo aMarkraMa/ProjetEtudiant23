@@ -1,19 +1,14 @@
 package com.projet.controller;
 
-import com.projet.entity.Etudiant;
-import com.projet.entity.Formation;
 import com.projet.mapper.EnseignantMapper;
-import com.projet.mapper.EtudiantMapper;
-import com.projet.mapper.FormationMapper;
-import com.projet.service.UpdateEtudiantService;
-import com.projet.service.impl.UpdateEtudiantServiceImpl;
+import com.projet.service.EnseignantService;
+import com.projet.service.impl.EnseignantServiceImpl;
 import com.projet.utils.MyBatisUtils;
 import com.projet.utils.ProjetStringUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.ibatis.session.SqlSession;
 
@@ -39,31 +34,24 @@ public class ResetPasswordController {
 	@FXML
 	private Button reinitialiser;
 	
+	private EnseignantService enseignantService = new EnseignantServiceImpl();
+	
 	
 	@FXML
 	public void initialize() {
-		SqlSession sqlSession = null;
 		try {
 			question.getItems().clear();
-			sqlSession = MyBatisUtils.getSqlSession();
-			EnseignantMapper enseignantMapper = sqlSession.getMapper(EnseignantMapper.class);
-			List<String> questions = enseignantMapper.getQuestions();
+			List<String> questions = enseignantService.getQuestions();
 			question.getItems().addAll(questions);
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (sqlSession != null) {
-				sqlSession.close();
-			}
 		}
-		
 	}
 	
 	
 	public void reinitialiser(ActionEvent actionEvent) {
-		SqlSession sqlSession = null;
 		try {
-			if (numEn.getText() == null || numEn.getText().trim().equals("") || question.getValue() == null || question.getValue().equals("") || reponse.getText() == null || reponse.getText().equals("")) {
+			if (numEn.getText() == null || numEn.getText().trim().equals("") || question.getValue() == null || question.getValue().equals("") || reponse.getText() == null || reponse.getText().trim().equals("")) {
 				Alert alert = new Alert(Alert.AlertType.ERROR);
 				alert.setTitle("ERREUR: Tous les champs sont obligatoires!");
 				alert.setHeaderText("Tous les champs sont obligatoires!");
@@ -72,7 +60,7 @@ public class ResetPasswordController {
 				alert.show();
 				return;
 			}
-			if (numEn.getText().length() != 8 || !NumberUtils.isParsable(numEn.getText())) {
+			if (numEn.getText().trim().length() != 8 || !NumberUtils.isParsable(numEn.getText().trim())) {
 				Alert alert = new Alert(Alert.AlertType.ERROR);
 				alert.setTitle("ERREUR: Numero enseignant invalide!");
 				alert.setHeaderText("Numero enseignant invalide!");
@@ -81,10 +69,8 @@ public class ResetPasswordController {
 				alert.show();
 				return;
 			}
-			sqlSession = MyBatisUtils.getSqlSession();
-			EnseignantMapper enseignantMapper = sqlSession.getMapper(EnseignantMapper.class);
-			Integer numEnseignant = Integer.parseInt(numEn.getText());
-			List<Integer> numerosEnseignant = enseignantMapper.getNumerosEnseignant();
+			Integer numEnseignant = Integer.parseInt(numEn.getText().trim());
+			List<Integer> numerosEnseignant = enseignantService.getNumerosEnseignant();
 			if (!numerosEnseignant.contains(numEnseignant)) {
 				Alert alert = new Alert(Alert.AlertType.ERROR);
 				alert.setTitle("ERREUR: Ce numero enseignant n'existe pas!");
@@ -94,7 +80,7 @@ public class ResetPasswordController {
 				alert.show();
 				return;
 			}
-			String questionDB = enseignantMapper.getQuestionByNumEnseignant(numEnseignant);
+			String questionDB = enseignantService.getQuestionByNumEnseignant(numEnseignant);
 			if (!questionDB.equals(question.getValue())) {
 				Alert alert = new Alert(Alert.AlertType.ERROR);
 				alert.setTitle("ERREUR: Vous n'avez pas choisi la bonne question!");
@@ -104,8 +90,8 @@ public class ResetPasswordController {
 				alert.show();
 				return;
 			}
-			String reponseDB = enseignantMapper.getReponseByNumeroEnseignant(numEnseignant);
-			if (!reponse.getText().toLowerCase().equals(reponseDB)) {
+			String reponseDB = enseignantService.getReponseByNumeroEnseignant(numEnseignant);
+			if (!reponse.getText().trim().toLowerCase().equals(reponseDB)) {
 				Alert alert = new Alert(Alert.AlertType.ERROR);
 				alert.setTitle("ERREUR: Vous n'avez pas saisi la bonne reponse!");
 				alert.setHeaderText("Vous n'avez pas saisi la bonne reponse!");
@@ -115,7 +101,7 @@ public class ResetPasswordController {
 				return;
 			}
 			String newPassword = generatePassword();
-			enseignantMapper.updateMotDePasseByNumeroEnseignant(numEnseignant, ProjetStringUtils.sha256(newPassword));
+			enseignantService.updateMotDePasseByNumeroEnseignant(numEnseignant, ProjetStringUtils.sha256(newPassword));
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			alert.setTitle("Votre nouveau mot de passe est dans votre email");
 			alert.setHeaderText("Votre nouveau mot de passe dans votre email");
@@ -138,9 +124,8 @@ public class ResetPasswordController {
 					return new PasswordAuthentication("lyingxuan789@gmail.com","ebiq lulx tfsq bovo");
 				}
 			});
-			String emailEnseignant = enseignantMapper.getEmailEnseignantByNumeroEnseignant(numEnseignant);
+			String emailEnseignant = enseignantService.getEmailEnseignantByNumeroEnseignant(numEnseignant);
 			try {
-				
 				MimeMessage message = new MimeMessage(session);
 				message.setFrom(new InternetAddress("lyingxuan789@gmail.com"));
 				message.addRecipient(Message.RecipientType.TO, new InternetAddress(emailEnseignant));
@@ -153,10 +138,6 @@ public class ResetPasswordController {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (sqlSession != null) {
-				sqlSession.close();
-			}
 		}
 	}
 	

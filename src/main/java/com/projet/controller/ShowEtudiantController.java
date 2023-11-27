@@ -7,6 +7,7 @@ import com.projet.Main;
 import com.projet.entity.Etudiant;
 import com.projet.entity.Formation;
 import com.projet.mapper.EtudiantMapper;
+import com.projet.service.EtudiantService;
 import com.projet.utils.MyBatisUtils;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -23,7 +24,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.apache.ibatis.session.SqlSession;
-import com.projet.service.impl.UpdateEtudiantServiceImpl;
+import com.projet.service.impl.EtudiantServiceImpl;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -84,6 +85,8 @@ public class ShowEtudiantController {
 	@FXML
 	private MenuItem toNotes;
 	
+	private EtudiantService etudiantService = new EtudiantServiceImpl();
+	
 	
 	@FXML
 	public void initialize() {
@@ -99,7 +102,7 @@ public class ShowEtudiantController {
 		nomFormation.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Etudiant, String>, ObservableValue<String>>() {
 			@Override
 			public ObservableValue<String> call(TableColumn.CellDataFeatures<Etudiant, String> etudiant) {
-				return new SimpleStringProperty(etudiant.getValue().getFormation().getNomFormation());
+				return new SimpleStringProperty(etudiant.getValue().getFormation().getNomFormation() + "--" + etudiant.getValue().getFormation().getPromotion());
 			}
 		});
 		
@@ -117,7 +120,7 @@ public class ShowEtudiantController {
 					{
 						modifier.setOnAction((ActionEvent event) -> {
 							Etudiant etudiant = getTableView().getItems().get(getIndex());
-							UpdateEtudiantServiceImpl.etudiantToUpdate = etudiant;
+							EtudiantServiceImpl.etudiantToUpdate = etudiant;
 							Main.addView("/com/projet/view/UpdateEtudiant.fxml");
 							
 						});
@@ -129,28 +132,18 @@ public class ShowEtudiantController {
 							alert.setContentText("Vous allez supprimer cet etudiant. Etes-vous sur?");
 							Optional<ButtonType> resultat = alert.showAndWait();
 							if (resultat.isPresent() && resultat.get() == ButtonType.OK) {
-								SqlSession sqlSession = null;
 								try {
 									Etudiant etudiant = getTableView().getItems().get(getIndex());
-									System.out.println(etudiant);
 									Integer idEtudiant = etudiant.getIdEtudiant();
-									sqlSession = MyBatisUtils.getSqlSession();
-									EtudiantMapper mapper = sqlSession.getMapper(EtudiantMapper.class);
-									mapper.deleteById(idEtudiant);
+									etudiantService.deleteById(idEtudiant);
 									ObservableList<Etudiant> data = FXCollections.observableArrayList();
-									List<Etudiant> etudiants = mapper.selectAll();
+									List<Etudiant> etudiants = etudiantService.selectAll();
 									data.addAll(etudiants);
 									tableviewEtudiant.setItems(data);
 								} catch (Exception e) {
 									e.printStackTrace();
-								} finally {
-									if(sqlSession != null){
-										sqlSession.close();
-									}
 								}
 							}
-							
-							
 						});
 					}
 					
@@ -185,26 +178,20 @@ public class ShowEtudiantController {
 			boutons.setPrefWidth((tableWidth - 40) / 4);
 		});
 		
-		SqlSession sqlSession = null;
+		
 		try {
-			sqlSession = MyBatisUtils.getSqlSession();
-			EtudiantMapper mapper = sqlSession.getMapper(EtudiantMapper.class);
-			List<Etudiant> etudiants = mapper.selectAll();
+			List<Etudiant> etudiants = etudiantService.selectAll();
 			refreshTable(etudiants);
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if(sqlSession != null){
-				sqlSession.close();
-			}
 		}
 		
-		Image refresh = new Image("com/projet/img/refresh.png");
+		Image refresh = new Image("/com/projet/img/refresh.png");
 		ImageView refreshImageView = new ImageView(refresh);
 		refreshImageView.setFitHeight(20);
 		refreshImageView.setFitWidth(20);
 		refreshEtudiant.setGraphic(refreshImageView);
-		Image search = new Image("com/projet/img/search.png");
+		Image search = new Image("/com/projet/img/search.png");
 		ImageView searchImageView = new ImageView(search);
 		searchImageView.setFitWidth(20);
 		searchImageView.setFitHeight(20);
@@ -220,9 +207,6 @@ public class ShowEtudiantController {
 	}
 	
 	
-	public void retour(ActionEvent actionEvent) {
-		Main.changeView("/com/projet/view/Main.fxml");
-	}
 	
 	public void toFormations(ActionEvent actionEvent) {
 		Main.changeView("/com/projet/view/ShowFormation.fxml");
@@ -233,46 +217,33 @@ public class ShowEtudiantController {
 	}
 	
 	public void searchEtudiant(ActionEvent actionEvent) {
-		SqlSession sqlSession = null;
 		try {
-			sqlSession = MyBatisUtils.getSqlSession();
-			EtudiantMapper mapper = sqlSession.getMapper(EtudiantMapper.class);
 			Etudiant etudiant = new Etudiant();
-			etudiant.setNomEtudiant("%" + textfieldNomEtudiant.getText() + "%");
-			etudiant.setPrenomEtudiant("%" + textfieldPrenomEtudiant.getText() + "%");
+			etudiant.setNomEtudiant("%" + textfieldNomEtudiant.getText().trim() + "%");
+			etudiant.setPrenomEtudiant("%" + textfieldPrenomEtudiant.getText().trim() + "%");
 			Formation formation = new Formation();
-			formation.setNomFormation("%" + textfieldNomFormation.getText() + "%");
+			formation.setNomFormation("%" + textfieldNomFormation.getText().trim() + "%");
 			etudiant.setFormation(formation);
-			List<Etudiant> etudiants = mapper.selectByCondition(etudiant);
+			List<Etudiant> etudiants = etudiantService.selectByCondition(etudiant);
 			ObservableList<Etudiant> data = FXCollections.observableArrayList();
 			data.addAll(etudiants);
 			tableviewEtudiant.setItems(data);
+			tableviewEtudiant.refresh();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if(sqlSession != null){
-				sqlSession.close();
-			}
 		}
 	}
 	
 	public void refreshTable(ActionEvent actionEvent) {
-		SqlSession sqlSession = null;
+		
 		try {
-			sqlSession = MyBatisUtils.getSqlSession();
-			EtudiantMapper mapper = sqlSession.getMapper(EtudiantMapper.class);
-			List<Etudiant> etudiants = mapper.selectAll();
+			List<Etudiant> etudiants = etudiantService.selectAll();
 			ObservableList<Etudiant> data = FXCollections.observableArrayList();
 			data.addAll(etudiants);
 			tableviewEtudiant.setItems(data);
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if(sqlSession != null){
-				sqlSession.close();
-			}
 		}
-		
 		textfieldNomEtudiant.setText("");
 		textfieldNomEtudiant.setPromptText("Nom");
 		textfieldPrenomEtudiant.setText("");

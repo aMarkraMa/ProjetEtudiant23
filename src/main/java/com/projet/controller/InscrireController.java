@@ -2,6 +2,8 @@ package com.projet.controller;
 
 import com.projet.entity.Enseigant;
 import com.projet.mapper.EnseignantMapper;
+import com.projet.service.EnseignantService;
+import com.projet.service.impl.EnseignantServiceImpl;
 import com.projet.utils.MyBatisUtils;
 import com.projet.utils.ProjetStringUtils;
 import javafx.event.ActionEvent;
@@ -40,13 +42,13 @@ public class InscrireController {
 	@FXML
 	private Label text;
 	
+	private EnseignantService enseignantService = new EnseignantServiceImpl();
+	
 	
 	@FXML
 	public void initialize() {
 		question.getItems().clear();
-		SqlSession sqlSession = MyBatisUtils.getSqlSession();
-		EnseignantMapper enseignantMapper = sqlSession.getMapper(EnseignantMapper.class);
-		List<String> questions = enseignantMapper.getQuestions();
+		List<String> questions = enseignantService.getQuestions();
 		question.getItems().addAll(questions);
 		text.setText("* Pour le mot de passe, veuillez saisir 8 caractères, \ncomprenant au moins une lettre majuscule, \nune lettre minuscule, un chiffre et un caractère spécial.");
 		text.setStyle("-fx-text-fill: red;");
@@ -55,7 +57,6 @@ public class InscrireController {
 	
 	@FXML
 	void ajouterEnseignant(ActionEvent event) {
-		SqlSession sqlSession = null;
 		try {
 			if (numEn.getText() == null || numEn.getText().trim().equals("") || motEn.getText() == null || motEn.getText().trim().equals("") || veriferMot.getText() == null || veriferMot.getText().trim().equals("") || email.getText() == null || email.getText().trim().equals("") || question.getValue() == null || question.getValue().equals("") || reponse.getText() == null || reponse.getText().equals("")) {
 				Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -66,7 +67,8 @@ public class InscrireController {
 				alert.show();
 				return;
 			}
-			if (numEn.getText().length() != 8 || !NumberUtils.isParsable(numEn.getText())) {
+			
+			if (numEn.getText().trim().length() != 8 || !NumberUtils.isParsable(numEn.getText().trim())) {
 				Alert alert = new Alert(Alert.AlertType.ERROR);
 				alert.setTitle("ERREUR: Numero enseignant invalide!");
 				alert.setHeaderText("Numero enseignant invalide!");
@@ -75,11 +77,9 @@ public class InscrireController {
 				alert.show();
 				return;
 			}
-			sqlSession = MyBatisUtils.getSqlSession();
-			EnseignantMapper enseignantMapper = sqlSession.getMapper(EnseignantMapper.class);
-			List<Integer> numerosEnseignant = enseignantMapper.getNumerosEnseignant();
+			List<Integer> numerosEnseignant = enseignantService.getNumerosEnseignant();
 			for (Integer numero : numerosEnseignant) {
-				if (Integer.parseInt(numEn.getText()) == numero) {
+				if (Integer.parseInt(numEn.getText().trim()) == numero) {
 					Alert alert = new Alert(Alert.AlertType.ERROR);
 					alert.setTitle("ERREUR: Ce numero enseignant existe deja!");
 					alert.setHeaderText("Ce numero enseignant existe deja!");
@@ -89,7 +89,7 @@ public class InscrireController {
 					return;
 				}
 			}
-			if (!ProjetStringUtils.isValidPassword(motEn.getText())) {
+			if (!ProjetStringUtils.isValidPassword(motEn.getText().trim())) {
 				Alert alert = new Alert(Alert.AlertType.ERROR);
 				alert.setTitle("ERREUR: Mot de passe invalide!");
 				alert.setHeaderText("Mot de passe invalide!");
@@ -98,7 +98,8 @@ public class InscrireController {
 				alert.show();
 				return;
 			}
-			if (!motEn.getText().equals(veriferMot.getText())) {
+			
+			if (!motEn.getText().trim().equals(veriferMot.getText().trim())) {
 				Alert alert = new Alert(Alert.AlertType.ERROR);
 				alert.setTitle("ERREUR: Les deux mots de passe saisis ne sont pas identiques!");
 				alert.setHeaderText("Les deux mots de passe saisis ne sont pas identiques!");
@@ -108,7 +109,7 @@ public class InscrireController {
 				return;
 			}
 			
-			if (!ProjetStringUtils.isValidEmail(email.getText())) {
+			if (!ProjetStringUtils.isValidEmail(email.getText().trim())) {
 				Alert alert = new Alert(Alert.AlertType.ERROR);
 				alert.setTitle("ERREUR: Email invalide!");
 				alert.setHeaderText("Email invalide!");
@@ -118,27 +119,19 @@ public class InscrireController {
 				return;
 			}
 			
-			
-			
 			Enseigant enseigant = new Enseigant();
-			enseigant.setNumeroEnseignant(Integer.parseInt(numEn.getText()));
-			enseigant.setMotDePasseEnseignant(ProjetStringUtils.sha256(motEn.getText()));
-			enseigant.setEmailEnseignant(email.getText());
-			enseigant.setQuestion(question.getValue());
-			enseigant.setReponse(reponse.getText().toLowerCase());
-			enseignantMapper.insertEnseignant(enseigant);
+			enseigant.setNumeroEnseignant(Integer.parseInt(numEn.getText().trim()));
+			enseigant.setMotDePasseEnseignant(ProjetStringUtils.sha256(motEn.getText().trim()));
+			enseigant.setEmailEnseignant(email.getText().trim());
+			enseigant.setQuestion(question.getValue().trim());
+			enseigant.setReponse(reponse.getText().trim().toLowerCase());
+			enseignantService.insertEnseignant(enseigant);
 			
 			Stage stage = (Stage) validerEn.getScene().getWindow();
 			stage.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (sqlSession != null) {
-				sqlSession.close();
-			}
 		}
-		
-		
 	}
 	
 }

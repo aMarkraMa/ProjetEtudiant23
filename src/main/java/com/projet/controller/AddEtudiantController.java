@@ -4,8 +4,10 @@ import com.projet.entity.Etudiant;
 import com.projet.entity.Formation;
 import com.projet.mapper.EtudiantMapper;
 import com.projet.mapper.FormationMapper;
-import com.projet.service.UpdateEtudiantService;
-import com.projet.service.impl.UpdateEtudiantServiceImpl;
+import com.projet.service.EtudiantService;
+import com.projet.service.FormationService;
+import com.projet.service.impl.EtudiantServiceImpl;
+import com.projet.service.impl.FormationServiceImpl;
 import com.projet.utils.MyBatisUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -35,20 +37,24 @@ public class AddEtudiantController {
 	@FXML
 	private ChoiceBox<String> promotion;
 	
-	private UpdateEtudiantService updateEtudiantService = new UpdateEtudiantServiceImpl();
+	private EtudiantService etudiantService = new EtudiantServiceImpl();
+	
+	private FormationService formationService = new FormationServiceImpl();
 	
 	
 	@FXML
 	public void initialize() {
-		nomFormation.getItems().clear();
-		SqlSession sqlSession = MyBatisUtils.getSqlSession();
-		FormationMapper mapper = sqlSession.getMapper(FormationMapper.class);
-		List nomsFormation = mapper.getNomsFormation();
-		nomFormation.getItems().addAll(nomsFormation);
-		
-		promotion.getItems().clear();
-		List promotions = mapper.getPromotions();
-		promotion.getItems().addAll(promotions);
+		try {
+			nomFormation.getItems().clear();
+			List<String> nomsFormation = formationService.getNomsFormation();
+			nomFormation.getItems().addAll(nomsFormation);
+			
+			promotion.getItems().clear();
+			List<String> promotions = formationService.getPromotions();
+			promotion.getItems().addAll(promotions);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private String transformerStr(String prenom) {
@@ -62,23 +68,29 @@ public class AddEtudiantController {
 	
 	@FXML
 	void ajouterEtudiant(ActionEvent event) {
+		if (nomEtu.getText() == null || "".equals(nomEtu.getText().trim()) || prenomEtu.getText() == null || "".equals(prenomEtu.getText().trim()) || nomFormation.getValue() == null || "".equals(nomFormation.getValue()) || promotion.getValue() == null || "".equals(promotion.getValue())) {
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setTitle("ERREUR: Tous les champs sont obligatoires!");
+			alert.setHeaderText("Tous les champs sont obligatoires!");
+			alert.setContentText("Tous les champs sont obligatoires, veuillez les remplir.");
+			alert.getDialogPane().setPrefWidth(800);
+			alert.show();
+			return;
+		}
 		Etudiant etudiant = new Etudiant();
-		etudiant.setNomEtudiant(nomEtu.getText().toUpperCase());
-		etudiant.setPrenomEtudiant(transformerStr(prenomEtu.getText()));
-		SqlSession sqlSession = null;
+		etudiant.setNomEtudiant(nomEtu.getText().trim().toUpperCase());
+		etudiant.setPrenomEtudiant(transformerStr(prenomEtu.getText().trim()));
+		
 		try {
-			sqlSession = MyBatisUtils.getSqlSession();
-			FormationMapper formationMapper = sqlSession.getMapper(FormationMapper.class);
 			Formation formation = new Formation();
-			formation.setNomFormation(nomFormation.getValue());
-			formation.setPromotion(promotion.getValue());
-			List<Formation> formations = formationMapper.selectByCondition(formation);
+			formation.setNomFormation(nomFormation.getValue().trim());
+			formation.setPromotion(promotion.getValue().trim());
+			List<Formation> formations = formationService.selectByCondition(formation);
 			Formation formationDB;
 			if (formations != null && formations.size() > 0) {
 				formationDB = formations.get(0);
 				etudiant.setFormation(formationDB);
-				EtudiantMapper etudiantMapper = sqlSession.getMapper(EtudiantMapper.class);
-				etudiantMapper.addEtudiant(etudiant);
+				etudiantService.addEtudiant(etudiant);
 				Stage stage = (Stage) ajouterEtu.getScene().getWindow();
 				stage.close();
 			} else {
@@ -86,16 +98,12 @@ public class AddEtudiantController {
 				alert.setTitle("ERREUR: Il n'y a pas cette formation");
 				alert.setHeaderText("Il n'y a pas cette formation");
 				alert.setContentText("La formation que vous choisissez n'existe pas. Veuillez l'ajouter dans la section \"Gestion de formations\".");
+				alert.getDialogPane().setPrefWidth(800);
 				alert.show();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (sqlSession != null) {
-				sqlSession.close();
-			}
 		}
-		
 	}
 	
 }

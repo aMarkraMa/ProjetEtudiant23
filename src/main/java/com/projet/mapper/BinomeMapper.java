@@ -11,18 +11,18 @@ public interface BinomeMapper {
 	
 	
 	int insertBinomeStep1(Binome binome);
-	int insertOrUpdateBinomeStep2(Binome binome);
-	int insertOrUpdateBinomeStep3(Binome binome);
+	int insertBinomeStep2OrUpdateBinomeStep1(Binome binome);
+	int insertBinomeStep3OrUpdateBinomeStep2(Binome binome);
 	
-	int insertOrUpdateBinomeStep4(@Param("idProjet") Integer idProjet, @Param("idEtudiant") Integer idEtudiant, @Param("noteSoutenance") Double noteSoutenance);
+	int insertOrUpdateBinomeStep4AndStep5(@Param("idProjet") Integer idProjet, @Param("idEtudiant") Integer idEtudiant, @Param("noteSoutenance") Double noteSoutenance);
 	
-	int insertOrUpdateBinomeStep5(@Param("idProjet") Integer idProjet, @Param("idEtudiant") Integer idEtudiant, @Param("noteSoutenance") Double noteSoutenance);
+	int insertNoteSoutenance(@Param("idProjet") Integer idProjet, @Param("idEtudiant") Integer idEtudiant, @Param("noteSoutenance") Double noteSoutenance);
 	
 	int deleteBinome(@Param("idBinome") Integer idBinome, @Param("idProjet") Integer idProjet);
 	int deleteAppartenir(@Param("idBinome") Integer idBinome, @Param("idProjet") Integer idProjet);
-	int deleteNotesSoutenanceStep1(@Param("idEtudiant") Integer idEtudiant, @Param("idProjet") Integer idProjet);
+	int deleteNotesSoutenance(@Param("idEtudiant") Integer idEtudiant, @Param("idProjet") Integer idProjet);
 	int deleteNotesSoutenanceStep2(@Param("idEtudiant") Integer idEtudiant, @Param("idProjet") Integer idProjet);
-	int updateBinomeStep1(@Param("noteRapport") Double noteRapport, @Param("dateReelleRemise") LocalDate dateReelleRemise, @Param("idBinome") Integer idBinome, @Param("idProjet") Integer idProjet);
+	int updateBinomeStep3(@Param("noteRapport") Double noteRapport, @Param("dateReelleRemise") LocalDate dateReelleRemise, @Param("idBinome") Integer idBinome, @Param("idProjet") Integer idProjet);
 	
 	List<Binome> selectByCondition(Binome binome);
 	Binome selectByIdBinomeAndIdProjet(Binome binome);

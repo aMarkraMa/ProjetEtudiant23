@@ -1,16 +1,15 @@
 package com.projet.controller;
 
-import com.projet.entity.Etudiant;
 import com.projet.entity.Formation;
-import com.projet.mapper.EtudiantMapper;
 import com.projet.mapper.FormationMapper;
-import com.projet.service.UpdateFormationService;
-import com.projet.service.impl.UpdateEtudiantServiceImpl;
-import com.projet.service.impl.UpdateFormationServiceImpl;
+import com.projet.service.FormationService;
+import com.projet.service.impl.FormationServiceImpl;
 import com.projet.utils.MyBatisUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.apache.ibatis.session.SqlSession;
@@ -22,46 +21,53 @@ public class UpdateFormationController {
 	private TextField nomFormation;
 	
 	@FXML
-	private TextField promotion;
+	private ChoiceBox<String> promotion;
 	
 	@FXML
 	private Button updateFormation;
 	
-	private UpdateFormationService updateFormationService = new UpdateFormationServiceImpl();
+	private FormationService formationService = new FormationServiceImpl();
 	
 	public void initialize() {
-		Formation formationToUpdate = UpdateFormationServiceImpl.formationToUpdate;
+		promotion.getItems().clear();
+		promotion.getItems().add("Initiale");
+		promotion.getItems().add("En Alternance");
+		promotion.getItems().add("Formation Continue");
+		
+		Formation formationToUpdate = FormationServiceImpl.formationToUpdate;
 		nomFormation.setText(formationToUpdate.getNomFormation());
-		promotion.setText(formationToUpdate.getPromotion());
+		promotion.setValue(formationToUpdate.getPromotion());
 	}
 	
 	private String[] transformerStr(String nomFormation, String promotion) {
 		String nomFormationUpperCase = nomFormation.toUpperCase();
-		String promotionUpperCase = promotion.toUpperCase();
-		return new String[]{nomFormationUpperCase, promotionUpperCase};
+		return new String[]{nomFormationUpperCase, promotion};
 	}
 	
 	public void updateFormation(ActionEvent actionEvent) {
 		Formation formation = new Formation();
-		String nomFormation = this.nomFormation.getText();
-		String promotion = this.promotion.getText();
+		String nomFormation = this.nomFormation.getText().trim();
+		String promotion = this.promotion.getValue();
 		String[] nomFormationAndPromotion = transformerStr(nomFormation, promotion);
 		formation.setNomFormation(nomFormationAndPromotion[0]);
 		formation.setPromotion(nomFormationAndPromotion[1]);
-		formation.setIdFormation(UpdateFormationServiceImpl.formationToUpdate.getIdFormation());
-		SqlSession sqlSession = null;
+		formation.setIdFormation(FormationServiceImpl.formationToUpdate.getIdFormation());
 		try {
-			sqlSession = MyBatisUtils.getSqlSession();
-			FormationMapper mapper = sqlSession.getMapper(FormationMapper.class);
-			mapper.updateFormation(formation);
+			List<Formation> formationsDB = formationService.selectByCondition(formation);
+			if (formationsDB.size() > 0) {
+				Alert alert = new Alert(Alert.AlertType.ERROR);
+				alert.setTitle("ERREUR: Cette formation existe deja!");
+				alert.setHeaderText("Cette formation existe deja!");
+				alert.setContentText("Cette formation existe deja, veuillez verifier votre saisie.");
+				alert.getDialogPane().setPrefWidth(800);
+				alert.show();
+				return;
+			}
+			formationService.updateFormation(formation);
 			Stage stage = (Stage) updateFormation.getScene().getWindow();
 			stage.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if(sqlSession != null){
-				sqlSession.close();
-			}
 		}
 	}
 }

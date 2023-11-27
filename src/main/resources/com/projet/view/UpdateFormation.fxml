@@ -13,6 +13,6 @@
         <Label layoutX="24.0" layoutY="173.0" prefHeight="24.0" prefWidth="96.0" text="Promotion" />
         <Button fx:id="updateFormation" layoutX="104.0" layoutY="323.0" mnemonicParsing="false" onAction="#updateFormation" prefHeight="36.0" prefWidth="191.0" text="Modifier" />
         <TextField fx:id="nomFormation" layoutX="143.0" layoutY="106.0" />
-        <TextField fx:id="promotion" layoutX="143.0" layoutY="167.0" />
+        <ChoiceBox fx:id="promotion" layoutX="143.0" layoutY="167.0" />
     </children>
 </AnchorPane>

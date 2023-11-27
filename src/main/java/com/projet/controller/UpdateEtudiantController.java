@@ -4,8 +4,10 @@ import com.projet.entity.Etudiant;
 import com.projet.entity.Formation;
 import com.projet.mapper.EtudiantMapper;
 import com.projet.mapper.FormationMapper;
-import com.projet.service.UpdateEtudiantService;
-import com.projet.service.impl.UpdateEtudiantServiceImpl;
+import com.projet.service.EtudiantService;
+import com.projet.service.FormationService;
+import com.projet.service.impl.EtudiantServiceImpl;
+import com.projet.service.impl.FormationServiceImpl;
 import com.projet.utils.MyBatisUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,7 +16,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.List;
@@ -35,28 +36,24 @@ public class UpdateEtudiantController {
 	@FXML
 	private ChoiceBox<String> promotion;
 	
-	private UpdateEtudiantService updateEtudiantService = new UpdateEtudiantServiceImpl();
+	private EtudiantService etudiantService = new EtudiantServiceImpl();
+	
+	private FormationService formationService = new FormationServiceImpl();
 	
 	public void initialize() {
-		nomFormation.getItems().clear();
-		SqlSession sqlSession = null;
 		try {
-			sqlSession = MyBatisUtils.getSqlSession();
-			FormationMapper mapper = sqlSession.getMapper(FormationMapper.class);
-			List nomsFormation = mapper.getNomsFormation();
+			nomFormation.getItems().clear();
+			List<String> nomsFormation = formationService.getNomsFormation();
 			nomFormation.getItems().addAll(nomsFormation);
 			
 			promotion.getItems().clear();
-			List promotions = mapper.getPromotions();
+			List<String> promotions = formationService.getPromotions();
 			promotion.getItems().addAll(promotions);
-		} finally {
-			if(sqlSession != null){
-				sqlSession.close();
-			}
-			
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		
-		Etudiant etudiantToUpdate = UpdateEtudiantServiceImpl.etudiantToUpdate;
+		Etudiant etudiantToUpdate = EtudiantServiceImpl.etudiantToUpdate;
 		
 		nomEtu.setText(etudiantToUpdate.getNomEtudiant());
 		prenomEtu.setText(etudiantToUpdate.getPrenomEtudiant());
@@ -76,23 +73,19 @@ public class UpdateEtudiantController {
 	
 	public void updateEtudiant(ActionEvent actionEvent) {
 		Etudiant etudiant = new Etudiant();
-		etudiant.setIdEtudiant(UpdateEtudiantServiceImpl.etudiantToUpdate.getIdEtudiant());
-		etudiant.setNomEtudiant(nomEtu.getText().toUpperCase());
-		etudiant.setPrenomEtudiant(transformerStr(prenomEtu.getText()));
-		SqlSession sqlSession = null;
+		etudiant.setIdEtudiant(EtudiantServiceImpl.etudiantToUpdate.getIdEtudiant());
+		etudiant.setNomEtudiant(nomEtu.getText().trim().toUpperCase());
+		etudiant.setPrenomEtudiant(transformerStr(prenomEtu.getText().trim()));
 		try {
-			sqlSession = MyBatisUtils.getSqlSession();
-			FormationMapper formationMapper = sqlSession.getMapper(FormationMapper.class);
 			Formation formation = new Formation();
 			formation.setNomFormation(nomFormation.getValue());
 			formation.setPromotion(promotion.getValue());
-			List<Formation> formations = formationMapper.selectByCondition(formation);
+			List<Formation> formations = formationService.selectByCondition(formation);
 			Formation formationDB;
 			if (formations != null && formations.size() > 0) {
 				formationDB = formations.get(0);
 				etudiant.setFormation(formationDB);
-				EtudiantMapper etudiantMapper = sqlSession.getMapper(EtudiantMapper.class);
-				etudiantMapper.updateEtudiant(etudiant);
+				etudiantService.updateEtudiant(etudiant);
 				Stage stage = (Stage) updateEtudiant.getScene().getWindow();
 				stage.close();
 			} else {
@@ -104,10 +97,6 @@ public class UpdateEtudiantController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if(sqlSession != null){
-				sqlSession.close();
-			}
 		}
 	}
 }
