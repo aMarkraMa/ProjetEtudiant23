@@ -13,6 +13,7 @@ public class BinomeServiceImpl implements BinomeService {
 	
 	public static Binome binomeToUpdate;
 	
+	// Récupère la liste des binômes associés à un projet spécifique
 	@Override
 	public List<Binome> getBinomesByIdProjet(Integer idProjet) {
 		SqlSession sqlSession = null;
@@ -30,6 +31,7 @@ public class BinomeServiceImpl implements BinomeService {
 		}
 	}
 	
+	// Sélectionne un binôme spécifique par identifiant de binôme et de projet
 	@Override
 	public Binome selectByIdBinomeAndIdProjet(Binome binome) {
 		SqlSession sqlSession = null;
@@ -47,6 +49,7 @@ public class BinomeServiceImpl implements BinomeService {
 		}
 	}
 	
+	// Supprime un binôme par ses identifiants et ceux des étudiants associés
 	@Override
 	public void deleteBinome(Integer idBinome, Integer idProjet, Integer idEtudiant1, Integer idEtudiant2) {
 		SqlSession sqlSession = null;
@@ -72,6 +75,7 @@ public class BinomeServiceImpl implements BinomeService {
 		}
 	}
 	
+	// Sélectionne des binômes selon des conditions spécifiques
 	@Override
 	public List<Binome> selectByCondition(Binome binome) {
 		SqlSession sqlSession = null;
@@ -89,6 +93,7 @@ public class BinomeServiceImpl implements BinomeService {
 		}
 	}
 	
+	// Récupère un binôme par identifiant de projet et d'étudiant
 	@Override
 	public Binome getBinomeByIdProjetAndIdEtudiant(Integer idEtudiant, Integer idProjet) {
 		SqlSession sqlSession = null;
@@ -106,6 +111,7 @@ public class BinomeServiceImpl implements BinomeService {
 		}
 	}
 	
+	// Ajoute un nouveau binôme
 	@Override
 	public void addBinome(Binome binome) {
 		SqlSession sqlSession = null;
@@ -132,10 +138,9 @@ public class BinomeServiceImpl implements BinomeService {
 				sqlSession.close();
 			}
 		}
-		
-		
 	}
 	
+	// Supprime une note de soutenance par identifiant d'étudiant et de projet
 	@Override
 	public void deleteNoteSoutenance(Integer idEtudiant, Integer idProjet) {
 		SqlSession sqlSession = null;
@@ -152,6 +157,7 @@ public class BinomeServiceImpl implements BinomeService {
 		}
 	}
 	
+	// Insère une note de soutenance
 	@Override
 	public void insertNoteSoutenance(Integer idEtudiant, Integer idProjet, Double noteSoutenance) {
 		SqlSession sqlSession = null;
@@ -168,6 +174,7 @@ public class BinomeServiceImpl implements BinomeService {
 		}
 	}
 	
+	// Met à jour un binôme
 	@Override
 	public void updateBinome(Binome binome) {
 		SqlSession sqlSession = null;

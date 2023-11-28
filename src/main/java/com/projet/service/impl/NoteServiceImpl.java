@@ -14,6 +14,7 @@ import java.util.List;
 
 public class NoteServiceImpl implements NoteService {
 	
+	// Sélectionne des notes selon des conditions spécifiques, comme l'identifiant du projet et de l'étudiant
 	@Override
 	public List<Note> selectByCondition(Integer idProjet, Integer idEtudiant) {
 		SqlSession sqlSession = null;
@@ -31,6 +32,7 @@ public class NoteServiceImpl implements NoteService {
 		}
 	}
 	
+	// Met à jour la note de soutenance pour un étudiant et un projet spécifiques
 	@Override
 	public void updateNoteSoutenance(Integer idProjet, Integer idEtudiant, Double noteSoutenance) {
 		SqlSession sqlSession = null;
@@ -48,6 +50,7 @@ public class NoteServiceImpl implements NoteService {
 		
 	}
 	
+	// Obtient les notes d'un étudiant pour un projet spécifique
 	@Override
 	public Note getNotesByIdProjetAndIdEtudiant(Integer idProjet, Integer idEtudiant) {
 		SqlSession sqlSession = null;

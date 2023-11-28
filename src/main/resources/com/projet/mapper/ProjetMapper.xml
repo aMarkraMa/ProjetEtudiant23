@@ -1,73 +1,83 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.projet.mapper.ProjetMapper">
-    <resultMap id="projetResultMap" type="Projet">
-        <!--
-                    id : clé primaire
-                    result : normal
-                        column : nom de table bdd
-                        property : nom d'attribut de java
-                 -->
-        <id column="id_projet" property="idProjet"/>
-        <result column="nom_matiere" property="nomMatiere"/>
-        <result column="sujet" property="sujet"/>
-        <result column="date_prevue_remise" property="datePrevueRemise"/>
-        <result column="pourcentage_soutenance" property="pourcentageSoutenance"/>
-    </resultMap>
-
-    <select id="selectAll" resultMap="projetResultMap" resultType="projet">
-        select *
-        from projets;
-    </select>
-    
-    <select id="selectById" resultMap="projetResultMap">select * from projets where id_projet = #{idProjet};</select>
-    <!-- Requêtes conditionnelles dynamiques -->
-    <select id="selectByCondition" resultMap="projetResultMap">
-        select * from projets
-        <where>
-            <if test="idProjet != null">id_projet = #{idProjet}</if>
-            <if test="nomMatiere != null and nomMatiere != '' ">and lower(nom_matiere) like lower(#{nomMatiere})</if>
-            <if test="sujet != null and sujet != '' ">and lower(sujet) like lower(#{sujet})</if>
-            <if test="datePrevueRemise != null">and date_prevue_remise = #{datePrevueRemise}</if>
-        </where>
-    </select>
-    
-	<select id="getIdsProjet" resultType="java.lang.Integer">
-        SELECT id_projet
-        FROM projets
-    </select>
-    
-	<select id="getIdsProjetByCondition" resultType="java.lang.Integer">
-        SELECT id_projet
-        FROM projets
-        <where>
-            <if test="nomMatiere != null and nomMatiere != '' ">
-                AND lower(nom_matiere) like lower(#{nomMatiere})
-            </if>
-            
-            <if test="sujet != null and sujet != '' ">
-                AND lower(sujet) like lower(#{sujet})
-            </if>
-        </where>
-    </select>
 	
-	<insert id="addProjet" useGeneratedKeys="true" keyProperty="idProjet">
-        insert into projets (nom_matiere, sujet,
-        date_prevue_remise, pourcentage_soutenance) values (#{nomMatiere}, #{sujet}, #{datePrevueRemise}, #{pourcentageSoutenance});
-    </insert>
-    
-    
-    <update id="updateProjet">
-        update projets
-        <set>
-            <if test="nomMatiere != null and nomMatiere != ''">nom_matiere = #{nomMatiere},</if>
-            <if test="sujet != null and sujet != ''">sujet = #{sujet},</if>
-            <if test="datePrevueRemise != null">date_prevue_remise = #{datePrevueRemise},</if>
-            <if test="pourcentageSoutenance != null">pourcentage_soutenance = #{pourcentageSoutenance},</if>
-        </set>
-        where id_projet = #{idProjet};
-    </update>
-    <delete id="deleteById">delete from projets where id_projet = #{idProjet};</delete>
+	<!-- Cartographie des résultats pour un projet -->
+	<resultMap id="projetResultMap" type="Projet">
+		<!--
+					id : clé primaire
+					result : normal
+						column : nom de table bdd
+						property : nom d'attribut de java
+				 -->
+		<id column="id_projet" property="idProjet"/>
+		<result column="nom_matiere" property="nomMatiere"/>
+		<result column="sujet" property="sujet"/>
+		<result column="date_prevue_remise" property="datePrevueRemise"/>
+		<result column="pourcentage_soutenance" property="pourcentageSoutenance"/>
+	</resultMap>
+	
+	<!-- Sélection de tous les projets -->
+	<select id="selectAll" resultMap="projetResultMap" resultType="projet">
+		select *
+		from projets;
+	</select>
+	
+	<!-- Sélection d'un projet par son identifiant -->
+	<select id="selectById" resultMap="projetResultMap">select * from projets where id_projet = #{idProjet};</select>
+	<!-- Requêtes conditionnelles dynamiques -->
+	<select id="selectByCondition" resultMap="projetResultMap">
+		select * from projets
+		<where>
+			<if test="idProjet != null">id_projet = #{idProjet}</if>
+			<if test="nomMatiere != null and nomMatiere != '' ">and lower(nom_matiere) like lower(#{nomMatiere})</if>
+			<if test="sujet != null and sujet != '' ">and lower(sujet) like lower(#{sujet})</if>
+			<if test="datePrevueRemise != null">and date_prevue_remise = #{datePrevueRemise}</if>
+		</where>
+	</select>
+	
+	<!-- Récupération des identifiants de tous les projets -->
+	<select id="getIdsProjet" resultType="java.lang.Integer">
+		SELECT id_projet
+		FROM projets
+	</select>
+	
+	<!-- Récupération des identifiants des projets selon des critères spécifiques -->
+	<select id="getIdsProjetByCondition" resultType="java.lang.Integer">
+		SELECT id_projet
+		FROM projets
+		<where>
+			<if test="nomMatiere != null and nomMatiere != '' ">
+				AND lower(nom_matiere) like lower(#{nomMatiere})
+			</if>
+			
+			<if test="sujet != null and sujet != '' ">
+				AND lower(sujet) like lower(#{sujet})
+			</if>
+		</where>
+	</select>
+	
+	<!-- Ajout d'un nouveau projet -->
+	<insert id="insertProjet" useGeneratedKeys="true" keyProperty="idProjet">
+		insert into projets (nom_matiere, sujet,
+		date_prevue_remise, pourcentage_soutenance) values (#{nomMatiere}, #{sujet}, #{datePrevueRemise},
+		#{pourcentageSoutenance});
+	</insert>
+	
+	<!-- Mise à jour d'un projet -->
+	<update id="updateProjet">
+		update projets
+		<set>
+			<if test="nomMatiere != null and nomMatiere != ''">nom_matiere = #{nomMatiere},</if>
+			<if test="sujet != null and sujet != ''">sujet = #{sujet},</if>
+			<if test="datePrevueRemise != null">date_prevue_remise = #{datePrevueRemise},</if>
+			<if test="pourcentageSoutenance != null">pourcentage_soutenance = #{pourcentageSoutenance},</if>
+		</set>
+		where id_projet = #{idProjet};
+	</update>
+	
+	<!-- Suppression d'un projet par identifiant -->
+	<delete id="deleteById">delete from projets where id_projet = #{idProjet};</delete>
 </mapper>

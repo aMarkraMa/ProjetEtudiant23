@@ -87,10 +87,10 @@ public class ShowEtudiantController {
 	
 	private EtudiantService etudiantService = new EtudiantServiceImpl();
 	
-	
+	// Initialisation du contrôleur et configuration du tableau
 	@FXML
 	public void initialize() {
-		
+		// Initialisation de chaque colonne du tableau
 		idEtudiant = new TableColumn<>("id");
 		idEtudiant.setCellValueFactory(new PropertyValueFactory<>("idEtudiant"));
 		idEtudiant.setPrefWidth(40);
@@ -163,13 +163,14 @@ public class ShowEtudiantController {
 			
 		});
 		
-		
+		// Ajout des colonnes à la vue du tableau
 		tableviewEtudiant.getColumns().add(idEtudiant);
 		tableviewEtudiant.getColumns().add(nomEtudiant);
 		tableviewEtudiant.getColumns().add(prenomEtudiant);
 		tableviewEtudiant.getColumns().add(nomFormation);
 		tableviewEtudiant.getColumns().add(boutons);
 		
+		// Ajustement de la largeur des colonnes du tableau
 		tableviewEtudiant.widthProperty().addListener((observable, oldValue, newValue) -> {
 			double tableWidth = newValue.doubleValue();
 			nomEtudiant.setPrefWidth((tableWidth - 40) / 4);
@@ -178,7 +179,7 @@ public class ShowEtudiantController {
 			boutons.setPrefWidth((tableWidth - 40) / 4);
 		});
 		
-		
+		// Tentative de chargement des données des étudiants et rafraîchissement du tableau
 		try {
 			List<Etudiant> etudiants = etudiantService.selectAll();
 			refreshTable(etudiants);
@@ -186,6 +187,7 @@ public class ShowEtudiantController {
 			e.printStackTrace();
 		}
 		
+		// Configuration des icônes des boutons
 		Image refresh = new Image("/com/projet/img/refresh.png");
 		ImageView refreshImageView = new ImageView(refresh);
 		refreshImageView.setFitHeight(20);
@@ -200,6 +202,7 @@ public class ShowEtudiantController {
 		
 	}
 	
+	// Rafraîchissement des données du tableau
 	public void refreshTable(List newData) {
 		ObservableList<Etudiant> data = FXCollections.observableArrayList();
 		data.addAll(newData);
@@ -207,7 +210,7 @@ public class ShowEtudiantController {
 	}
 	
 	
-	
+	// Navigation vers différentes vues
 	public void toFormations(ActionEvent actionEvent) {
 		Main.changeView("/com/projet/view/ShowFormation.fxml");
 	}
@@ -216,6 +219,7 @@ public class ShowEtudiantController {
 		Main.addView("/com/projet/view/AddEtudiant.fxml");
 	}
 	
+	// Recherche d'étudiants
 	public void searchEtudiant(ActionEvent actionEvent) {
 		try {
 			Etudiant etudiant = new Etudiant();
@@ -234,6 +238,7 @@ public class ShowEtudiantController {
 		}
 	}
 	
+	// Rafraîchissement des données du tableau
 	public void refreshTable(ActionEvent actionEvent) {
 		
 		try {
@@ -244,6 +249,7 @@ public class ShowEtudiantController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		// Réinitialisation des champs de recherche
 		textfieldNomEtudiant.setText("");
 		textfieldNomEtudiant.setPromptText("Nom");
 		textfieldPrenomEtudiant.setText("");
@@ -266,6 +272,7 @@ public class ShowEtudiantController {
 		
 	}
 	
+	// Exportation des données en PDF
 	public void toPDF(ActionEvent actionEvent) {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Save as PDF");
@@ -311,6 +318,7 @@ public class ShowEtudiantController {
 		}
 	}
 	
+	// Exportation des données en Excel
 	public void toExcel(ActionEvent actionEvent) {
 		Stage stage = (Stage) tableviewEtudiant.getScene().getWindow(); // Obtenir la fenêtre actuelle pour afficher le sélecteur de fichiers
 		

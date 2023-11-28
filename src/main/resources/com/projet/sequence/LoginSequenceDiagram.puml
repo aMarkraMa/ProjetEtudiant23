@@ -1,0 +1,22 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+Actor Utilisateur
+Utilisateur -> Contrôleur: Interface de connexion
+Contrôleur -> Contrôleur: Entrer le nom d'utilisateur et le mot de passe, \n cliquer sur connexion
+Contrôleur -> Service: Transférer le nom d'utilisateur et le mot de passe \n au niveau du service (getEnseignant(enseignant))
+Service -> Mapper: Transmettre les paramètres au niveau du mapper
+Mapper -> BDD: Rechercher dans la table enseignants, par le numeroEnseignant
+BDD -> Mapper: Retourner les résultats de la recherche
+Mapper --> Service: Recevoir l'objet de recherche du mapper
+Service --> Contrôleur: Renvoyer les résultats de la recherche au Contrôleur
+alt L'objet n'est pas vide
+Contrôleur -> Contrôleur: Connexion réussie, redirection vers la page principale
+else L'objet est vide
+Contrôleur -> Contrôleur: Afficher une fenêtre pop-up d'échec de connexion
+end
+
+
+
+@enduml

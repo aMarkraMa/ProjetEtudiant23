@@ -1,0 +1,14 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+Actor Utilisateur
+Utilisateur -> Contrôleur: Rechercher des données
+Contrôleur -> Contrôleur: Lire les informations saisies
+Contrôleur -> Service: Appeler la méthode de la couche service
+Service -> Mapper: Transférer les paramètres au mapper
+Mapper -> BDD: Recherche floue
+BDD --> Mapper: Transmettre les résultats au mapper
+Mapper --> Service: Transférer les résultats au service
+Service --> Contrôleur: Afficher les résultats
+@enduml

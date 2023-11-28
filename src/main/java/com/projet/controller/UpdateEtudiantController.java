@@ -40,8 +40,10 @@ public class UpdateEtudiantController {
 	
 	private FormationService formationService = new FormationServiceImpl();
 	
+	// Initialisation de la fenêtre de mise à jour
 	public void initialize() {
 		try {
+			// Charger les noms de formation et les promotions dans les listes déroulantes
 			nomFormation.getItems().clear();
 			List<String> nomsFormation = formationService.getNomsFormation();
 			nomFormation.getItems().addAll(nomsFormation);
@@ -53,6 +55,7 @@ public class UpdateEtudiantController {
 			e.printStackTrace();
 		}
 		
+		// Récupérer les informations de l'étudiant à modifier et les afficher dans les champs correspondants
 		Etudiant etudiantToUpdate = EtudiantServiceImpl.etudiantToUpdate;
 		
 		nomEtu.setText(etudiantToUpdate.getNomEtudiant());
@@ -62,6 +65,7 @@ public class UpdateEtudiantController {
 		
 	}
 	
+	// Méthode pour transformer la première lettre du prénom en majuscule
 	private String transformerStr(String prenom) {
 		String premiereLettre = prenom.substring(0, 1);
 		String autresLettres = prenom.substring(1);
@@ -71,17 +75,21 @@ public class UpdateEtudiantController {
 		return prenomF;
 	}
 	
+	// Méthode pour mettre à jour un étudiant
 	public void updateEtudiant(ActionEvent actionEvent) {
+		// Création d'un nouvel objet Etudiant avec les informations saisies
 		Etudiant etudiant = new Etudiant();
 		etudiant.setIdEtudiant(EtudiantServiceImpl.etudiantToUpdate.getIdEtudiant());
 		etudiant.setNomEtudiant(nomEtu.getText().trim().toUpperCase());
 		etudiant.setPrenomEtudiant(transformerStr(prenomEtu.getText().trim()));
 		try {
+			// Recherche de la formation sélectionnée dans la base de données
 			Formation formation = new Formation();
 			formation.setNomFormation(nomFormation.getValue());
 			formation.setPromotion(promotion.getValue());
 			List<Formation> formations = formationService.selectByCondition(formation);
 			Formation formationDB;
+			// Mise à jour de l'étudiant si la formation existe
 			if (formations != null && formations.size() > 0) {
 				formationDB = formations.get(0);
 				etudiant.setFormation(formationDB);
@@ -89,6 +97,7 @@ public class UpdateEtudiantController {
 				Stage stage = (Stage) updateEtudiant.getScene().getWindow();
 				stage.close();
 			} else {
+				// Afficher une alerte si la formation n'existe pas
 				Alert alert = new Alert(Alert.AlertType.ERROR);
 				alert.setTitle("ERREUR: Il n'y a pas cette formation");
 				alert.setHeaderText("Il n'y a pas cette formation");

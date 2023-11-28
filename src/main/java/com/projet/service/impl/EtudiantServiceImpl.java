@@ -13,15 +13,16 @@ public class EtudiantServiceImpl implements EtudiantService {
 	
 	public static Etudiant etudiantToUpdate;
 	
-	
+	// Récupère un étudiant par son identifiant
 	@Override
 	public Etudiant getEtudiantById(Etudiant etudiant) {
 		SqlSession sqlSession = MyBatisUtils.getSqlSession();
-	EtudiantMapper etudiantMapper = sqlSession.getMapper(EtudiantMapper.class);
-	Etudiant etudiantDB = etudiantMapper.selectById(etudiant);
+		EtudiantMapper etudiantMapper = sqlSession.getMapper(EtudiantMapper.class);
+		Etudiant etudiantDB = etudiantMapper.selectById(etudiant);
 		return etudiantDB;
-}
+	}
 	
+	// Récupère la liste des étudiants associés à une formation spécifique
 	@Override
 	public List<Etudiant> getEtudiantsByIdFormation(Formation formation) {
 		SqlSession sqlSession = null;
@@ -41,6 +42,7 @@ public class EtudiantServiceImpl implements EtudiantService {
 		}
 	}
 	
+	// Supprime un étudiant par son identifiant
 	@Override
 	public void deleteById(Integer idEtudiant) {
 		SqlSession sqlSession = null;
@@ -57,6 +59,7 @@ public class EtudiantServiceImpl implements EtudiantService {
 		}
 	}
 	
+	// Sélectionne tous les étudiants
 	@Override
 	public List<Etudiant> selectAll() {
 		SqlSession sqlSession = null;
@@ -74,6 +77,7 @@ public class EtudiantServiceImpl implements EtudiantService {
 		}
 	}
 	
+	// Sélectionne des étudiants selon des conditions spécifiques
 	@Override
 	public List<Etudiant> selectByCondition(Etudiant etudiant) {
 		SqlSession sqlSession = null;
@@ -91,6 +95,7 @@ public class EtudiantServiceImpl implements EtudiantService {
 		}
 	}
 	
+	// Récupère les identifiants de tous les étudiants
 	@Override
 	public List<Integer> getIdsEtudiant() {
 		SqlSession sqlSession = null;
@@ -108,6 +113,7 @@ public class EtudiantServiceImpl implements EtudiantService {
 		}
 	}
 	
+	// Récupère les identifiants des étudiants selon des conditions spécifiques
 	@Override
 	public List<Integer> getIdsEtudiantByCondition(String nomEtudiant, String prenomEtudiant) {
 		SqlSession sqlSession = null;
@@ -125,13 +131,14 @@ public class EtudiantServiceImpl implements EtudiantService {
 		}
 	}
 	
+	// Ajoute un nouvel étudiant
 	@Override
 	public void addEtudiant(Etudiant etudiant) {
 		SqlSession sqlSession = null;
 		try {
 			sqlSession = MyBatisUtils.getSqlSession();
 			EtudiantMapper etudiantMapper = sqlSession.getMapper(EtudiantMapper.class);
-			etudiantMapper.addEtudiant(etudiant);
+			etudiantMapper.insertEtudiant(etudiant);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -141,6 +148,7 @@ public class EtudiantServiceImpl implements EtudiantService {
 		}
 	}
 	
+	// Récupère les noms de tous les étudiants
 	@Override
 	public List<String> getNomsEtudiant() {
 		SqlSession sqlSession = null;
@@ -158,6 +166,7 @@ public class EtudiantServiceImpl implements EtudiantService {
 		}
 	}
 	
+	// Récupère les prénoms de tous les étudiants
 	@Override
 	public List<String> getPrenomsEtudiant() {
 		SqlSession sqlSession = null;
@@ -175,6 +184,7 @@ public class EtudiantServiceImpl implements EtudiantService {
 		}
 	}
 	
+	// Met à jour un étudiant
 	@Override
 	public void updateEtudiant(Etudiant etudiant) {
 		SqlSession sqlSession = null;

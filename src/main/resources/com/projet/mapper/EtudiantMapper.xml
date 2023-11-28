@@ -4,13 +4,8 @@
 		"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.projet.mapper.EtudiantMapper">
 	
+	<!-- Cartographie des résultats pour un étudiant, incluant des détails sur sa formation -->
 	<resultMap id="etudiantResultMap" type="Etudiant">
-		<!--
-			id : clé primaire
-			result : normal
-				column : nom de table bdd
-				property : nom d'attribut de java
-		-->
 		<id column="id_etudiant" property="idEtudiant"/>
 		<result column="nom_etudiant" property="nomEtudiant"/>
 		<result column="prenom_etudiant" property="prenomEtudiant"/>
@@ -21,6 +16,7 @@
 		</association>
 	</resultMap>
 	
+	<!-- Sélection de tous les étudiants avec leurs informations de formation -->
 	<select id="selectAll" resultMap="etudiantResultMap" resultType="etudiant">
 		select e.id_etudiant, e.nom_etudiant, e.prenom_etudiant, f.id_formation, f.nom_formation, f.promotion
 		from etudiants e, formations f
@@ -46,34 +42,39 @@
 	
 	</select>
 	
+	<!-- Sélection d'un étudiant spécifique par identifiant -->
 	<select id="selectById" resultType="com.projet.entity.Etudiant" resultMap="etudiantResultMap">
 		select e.id_etudiant, e.nom_etudiant, e.prenom_etudiant, f.id_formation, f.nom_formation, f.promotion
 		from etudiants e, formations f
 		where e.id_formation = f.id_formation and e.id_etudiant = #{idEtudiant}
 	</select>
 	
-	
+	<!-- Récupération des noms de tous les étudiants -->
 	<select id="getNomsEtudiant" resultType="java.lang.String">
 		SELECT nom_etudiant
 		FROM etudiants
 	</select>
 	
+	<!-- Récupération des prénoms de tous les étudiants -->
 	<select id="getPrenomsEtudiant" resultType="java.lang.String">
 		SELECT prenom_etudiant
 		FROM etudiants
 	</select>
 	
+	<!-- Récupération des identifiants de tous les étudiants -->
 	<select id="getIdsEtudiant" resultType="java.lang.Integer">
 		SELECT id_etudiant
 		FROM etudiants
 	</select>
 	
+	<!-- Sélection des étudiants par identifiant de formation -->
 	<select id="getEtudiantsByIdFormation" resultType="com.projet.entity.Etudiant">
 		SELECT *
 		FROM etudiants
 		WHERE id_formation = #{formation.idFormation}
 	</select>
 	
+	<!-- Récupération des identifiants des étudiants selon des critères spécifiques -->
 	<select id="getIdsEtudiantByCondition" resultType="java.lang.Integer">
 		SELECT id_etudiant
 		FROM etudiants
@@ -88,12 +89,13 @@
 		</where>
 	</select>
 	
-	
-	<insert id="addEtudiant" useGeneratedKeys="true" keyProperty="idEtudiant">
+	<!-- Ajout d'un nouvel étudiant -->
+	<insert id="insertEtudiant" useGeneratedKeys="true" keyProperty="idEtudiant">
 		insert into etudiants (nom_etudiant, prenom_etudiant, id_formation)
 		values (#{nomEtudiant}, #{prenomEtudiant}, #{formation.idFormation});
 	</insert>
 	
+	<!-- Mise à jour des informations d'un étudiant -->
 	<update id="updateEtudiant">
 		update etudiants
 		<set>
@@ -110,6 +112,7 @@
 		where id_etudiant = #{idEtudiant};
 	</update>
 	
+	<!-- Suppression d'un étudiant par identifiant -->
 	<delete id="deleteById">
 		delete from etudiants
 		where id_etudiant = #{idEtudiant};

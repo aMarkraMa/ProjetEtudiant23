@@ -37,12 +37,12 @@ import java.util.List;
 import java.util.Optional;
 
 public class ShowBinomeController {
+	// Déclaration des composants FXML
 	@FXML
 	private TableColumn<Binome, String> idBinomes;
 	
 	@FXML
 	private TableColumn<Binome, String> nomMatiere;
-	
 	
 	@FXML
 	private TableColumn<Binome, String> sujet;
@@ -59,10 +59,8 @@ public class ShowBinomeController {
 	@FXML
 	private TableColumn<Binome, String> dateRelleRemise;
 	
-	
 	@FXML
 	private TableColumn<Binome, Void> boutons;
-	
 	
 	@FXML
 	private TableView<Binome> tableviewBinome;
@@ -95,14 +93,16 @@ public class ShowBinomeController {
 	@FXML
 	private MenuItem toNotes;
 	
+	// Services pour interagir avec les données
 	private ProjetService projetService = new ProjetServiceImpl();
 	
 	private BinomeService binomeService = new BinomeServiceImpl();
 	
-	
+	// Initialisation de l'interface utilisateur
 	@FXML
 	public void initialize() {
-	
+		// Configuration initiale de la vue : chargement des données des binômes dans le tableau
+		// et configuration des colonnes du tableau
 		try {
 			List<Integer> idsProjet = projetService.getIdsProjet();
 			ObservableList<Binome> data = FXCollections.observableArrayList();
@@ -120,7 +120,6 @@ public class ShowBinomeController {
 		idBinomes.setCellValueFactory(new PropertyValueFactory<>("idBinome"));
 		idBinomes.setPrefWidth(40);
 		
-
 		
 		nomMatiere = new TableColumn<>("Nom matiere");
 		nomMatiere.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Binome, String>, ObservableValue<String>>() {
@@ -229,8 +228,8 @@ public class ShowBinomeController {
 									e.printStackTrace();
 								}
 							}
-
-
+							
+							
 						});
 					}
 					
@@ -271,7 +270,6 @@ public class ShowBinomeController {
 		});
 		
 		
-		
 		Image refresh = new Image("/com/projet/img/refresh.png");
 		ImageView refreshImageView = new ImageView(refresh);
 		refreshImageView.setFitHeight(20);
@@ -286,7 +284,9 @@ public class ShowBinomeController {
 		
 	}
 	
+	// Méthode pour rafraîchir les données affichées dans le tableau
 	public void refreshTable(List newData) {
+		// Mettre à jour les données du tableau avec les nouvelles données fournies
 		ObservableList<Binome> data = FXCollections.observableArrayList();
 		data.addAll(newData);
 		tableviewBinome.setItems(data);
@@ -294,22 +294,22 @@ public class ShowBinomeController {
 	
 	
 	
-	public void toFormations(ActionEvent actionEvent) {
-		Main.changeView("/com/projet/view/ShowFormation.fxml");
-	}
 	
 	public void toAjouterBinome(ActionEvent actionEvent) {
 		Main.addView("/com/projet/view/AddBinome.fxml");
 	}
 	
+	// Recherche de binômes selon les critères spécifiés
 	public void searchBinome(ActionEvent actionEvent) {
 		
 		try {
+			// Création d'un objet binôme et définition des critères de recherche
 			Binome binome = new Binome();
 			Projet projet = new Projet();
 			projet.setNomMatiere("%" + textfieldNomMatiere.getText() + "%");
 			projet.setSujet("%" + textfieldSujet.getText() + "%");
 			binome.setProjet(projet);
+			// Récupération des binômes correspondants aux critères
 			List<Binome> binomeDB = binomeService.selectByCondition(binome);
 			ObservableList<Binome> data = FXCollections.observableArrayList();
 			data.addAll(binomeDB);
@@ -320,9 +320,11 @@ public class ShowBinomeController {
 		}
 	}
 	
+	// Rafraîchissement de la table des binômes
 	public void refreshTable(ActionEvent actionEvent) {
 		
 		try {
+			// Récupération de tous les binômes
 			List<Integer> idsProjet = projetService.getIdsProjet();
 			ObservableList<Binome> data = FXCollections.observableArrayList();
 			for (Integer idProjet : idsProjet) {
@@ -334,6 +336,7 @@ public class ShowBinomeController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		// Réinitialisation des champs de texte
 		textfieldNomMatiere.setText("");
 		textfieldNomMatiere.setPromptText("Nom Matiere");
 		textfieldSujet.setText("");
@@ -342,19 +345,27 @@ public class ShowBinomeController {
 		tableviewBinome.refresh();
 	}
 	
-	public void toProjets(ActionEvent actionEvent) {
-		Main.changeView("/com/projet/view/ShowProjet.fxml");
-	}
-	
+	// Navigation vers la vue des étudiants
 	public void toEtudiants(ActionEvent actionEvent) {
 		Main.changeView("/com/projet/view/ShowEtudiant.fxml");
 	}
 	
-	public void toNotes(ActionEvent actionEvent) {
-		Main.changeView("/com/projet/view/ShowNote.fxml");
-		
+	// Navigation vers la vue des formations
+	public void toFormations(ActionEvent actionEvent) {
+		Main.changeView("/com/projet/view/ShowFormation.fxml");
 	}
 	
+	// Navigation vers la vue des projets
+	public void toProjets(ActionEvent actionEvent) {
+		Main.changeView("/com/projet/view/ShowProjet.fxml");
+	}
+	
+	// Navigation vers la vue des notes
+	public void toNotes(ActionEvent actionEvent) {
+		Main.changeView("/com/projet/view/ShowNote.fxml");
+	}
+	
+	// Exportation des données en PDF
 	public void toPDF(ActionEvent actionEvent) {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Save as PDF");
@@ -396,6 +407,7 @@ public class ShowBinomeController {
 		}
 	}
 	
+	// Exportation des données en Excel
 	public void toExcel(ActionEvent actionEvent) {
 		Stage stage = (Stage) tableviewBinome.getScene().getWindow();
 		

@@ -24,22 +24,27 @@ import java.util.List;
 
 public class AddBinomeController {
 	
-	
+	// Liste déroulante pour sélectionner un projet
 	@FXML
 	private ChoiceBox<String> projet;
 	
+	// Liste déroulante pour sélectionner le premier étudiant
 	@FXML
 	private ChoiceBox<String> etudiant1;
 	
+	// Liste déroulante pour sélectionner le deuxième étudiant
 	@FXML
 	private ChoiceBox<String> etudiant2;
 	
+	// Bouton pour ajouter un binôme
 	@FXML
 	private Button ajouterBi;
 	
+	// Champ de texte pour l'identifiant du binôme
 	@FXML
 	private TextField idBinome;
 	
+	// Initialisation de l'interface utilisateur
 	private ProjetService projetService = new ProjetServiceImpl();
 	
 	private EtudiantService etudiantService = new EtudiantServiceImpl();
@@ -49,6 +54,7 @@ public class AddBinomeController {
 	
 	@FXML
 	public void initialize() {
+		// Configuration des actions et chargement des données dans les listes déroulantes
 		ajouterBi.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent actionEvent) {
@@ -100,7 +106,7 @@ public class AddBinomeController {
 		
 	}
 	
-	
+	// Méthode pour ajouter un binôme
 	@FXML
 	void ajouterBinome(ActionEvent event) {
 		

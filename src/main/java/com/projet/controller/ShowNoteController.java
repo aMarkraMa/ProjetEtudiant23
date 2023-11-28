@@ -104,14 +104,12 @@ public class ShowNoteController {
 	private NoteService noteService = new NoteServiceImpl();
 	
 	
+	// Initialisation du contrôleur
 	@FXML
 	public void initialize() {
-		
+		// Configuration des colonnes du tableau
 		tableViewNote.setEditable(true);
-//		noteSoutenance.setEditable(true);
 		nomMatiere.setCellValueFactory(note -> new SimpleStringProperty(note.getValue().getProjet().getNomMatiere()));
-// 		idProjet.setCellValueFactory(new PropertyValueFactory<>("idProjet"));
-// 		idEtudiant.setCellValueFactory(new PropertyValueFactory<>("idEtudiant"));
 		idProjet.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Note, String>, ObservableValue<String>>() {
 			@Override
 			public ObservableValue<String> call(TableColumn.CellDataFeatures<Note, String> note) {
@@ -193,7 +191,6 @@ public class ShowNoteController {
 		noteSoutenance.setOnEditCommit(
 				(TableColumn.CellEditEvent<Note, Double> t) -> {
 					Note note = t.getTableView().getItems().get(t.getTablePosition().getRow());
-//					note.setNoteSoutenance(t.getNewValue());
 					System.out.println(note.toString());
 					updateSoutenance(note.getProjet().getIdProjet(), note.getEtudiant().getIdEtudiant(), t.getNewValue());
 				});
@@ -207,7 +204,7 @@ public class ShowNoteController {
 				}
 			}
 		});
-		// noteFinale.setCellValueFactory(new PropertyValueFactory<>("noteFinale"));
+		
 		noteFinale.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Note, String>, ObservableValue<String>>() {
 			@Override
 			public ObservableValue<String> call(TableColumn.CellDataFeatures<Note, String> note) {
@@ -228,6 +225,7 @@ public class ShowNoteController {
 			}
 		});
 		
+		// Ajout des colonnes au TableView
 		tableViewNote.widthProperty().addListener((observable, oldValue, newValue) -> {
 			double tableWidth = newValue.doubleValue();
 			nomMatiere.setPrefWidth((tableWidth - 80) / 7);
@@ -241,11 +239,13 @@ public class ShowNoteController {
 			noteFinale.setPrefWidth((tableWidth - 80) / 7);
 		});
 		
-		
+		// Chargement et affichage des données des notes
 		refreshTable();
+		// Configuration des icônes de boutons
 		initializeImg();
 	}
 	
+	// Configuration des icônes de boutons
 	public void initializeImg() {
 		Image search = new Image("/com/projet/img/search.png");
 		ImageView searchImageView = new ImageView(search);
@@ -260,6 +260,7 @@ public class ShowNoteController {
 		refreshNote.setGraphic(refreshImageView);
 	}
 	
+	// Recherche des notes
 	public void searchNote(ActionEvent actionEvent) {
 		String nomEtudiant = null;
 		if (textFieldNomEtudiant.getText() != null && !"".equals(textFieldNomEtudiant.getText().trim())) {
@@ -299,6 +300,7 @@ public class ShowNoteController {
 		
 	}
 	
+	// Mise à jour de la note de soutenance
 	public void updateSoutenance(Integer idProjet, Integer idEtudiant, Double noteSoutenance) {
 		try {
 			noteService.updateNoteSoutenance(idProjet, idEtudiant, noteSoutenance);
@@ -308,7 +310,7 @@ public class ShowNoteController {
 		}
 	}
 	
-	
+	// Rafraîchissement des données du tableau
 	public void refreshTable() {
 		try {
 			List<Integer> idsProjet = projetService.getIdsProjet();
@@ -338,7 +340,7 @@ public class ShowNoteController {
 		refreshTable();
 	}
 	
-	
+	// Navigation vers différentes vues
 	public void toShowFormation(ActionEvent actionEvent) {
 		Main.changeView("/com/projet/view/ShowFormation.fxml");
 	}
@@ -359,7 +361,7 @@ public class ShowNoteController {
 		Main.changeView("/com/projet/view/ShowNote.fxml");
 	}
 	
-	
+	// Exportation des données en PDF
 	public void toPDF(ActionEvent actionEvent) {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Save as PDF");
@@ -405,6 +407,7 @@ public class ShowNoteController {
 		}
 	}
 	
+	// Exportation des données en Excel
 	public void toExcel(ActionEvent actionEvent) {
 		Stage stage = (Stage) tableViewNote.getScene().getWindow();
 		

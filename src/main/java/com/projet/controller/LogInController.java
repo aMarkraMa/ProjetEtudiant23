@@ -25,31 +25,33 @@ import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
 public class LogInController {
-	@FXML
-	private TextField idMot;
 	
 	@FXML
-	private Pane paneB;
+	private TextField idMot; // Champ de texte pour le mot de passe
 	
 	@FXML
-	private TextField idEn;
+	private Pane paneB; // Panneau pour l'image de fond
 	
 	@FXML
-	private Pane paneL;
+	private TextField idEn; // Champ de texte pour l'identifiant
 	
 	@FXML
-	private Button connecter;
+	private Pane paneL; // Panneau pour l'image de l'université
 	
 	@FXML
-	private Hyperlink reset;
+	private Button connecter; // Bouton pour se connecter
 	
 	@FXML
-	private Hyperlink inscrire;
+	private Hyperlink reset; // Lien pour réinitialiser le mot de passe
+	
+	@FXML
+	private Hyperlink inscrire; // Lien pour s'inscrire
 	
 	private EnseignantService enseignantService = new EnseignantServiceImpl();
 	
-	
+	// Initialisation de l'interface utilisateur
 	public void initialize() {
+		// Configuration des images et des vues
 		Image imageB = new Image("/com/projet/img/login.png");
 		Image imageL = new Image("/com/projet/img/dauphine.png");
 		
@@ -66,17 +68,21 @@ public class LogInController {
 		
 	}
 	
-	
+	// Méthode pour réinitialiser le mot de passe
 	public void resetPassword(ActionEvent actionEvent) {
+		// Logique pour ouvrir la fenêtre de réinitialisation du mot de passe
 		Main.addView("/com/projet/view/ResetPassword.fxml");
 		
 	}
 	
+	// Méthode pour s'inscrire
 	public void inscrire(ActionEvent actionEvent) {
 		Main.addView("/com/projet/view/Inscrire.fxml");
 	}
 	
+	// Méthode pour se connecter
 	public void connecter(ActionEvent actionEvent) {
+		// Logique pour connecter l'utilisateur avec gestion des erreurs et validation
 		try {
 			if (idEn.getText() == null || idEn.getText().trim().equals("") || idMot.getText() == null || idMot.getText().trim().equals("")) {
 				Alert alert = new Alert(Alert.AlertType.ERROR);

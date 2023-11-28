@@ -28,8 +28,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+// Classe de contrôle pour mettre à jour un binôme
 public class UpdateBinomeController {
 	
+	// Déclaration des éléments de l'interface utilisateur et des services
 	@FXML
 	private TextField idBinome;
 	
@@ -58,13 +60,14 @@ public class UpdateBinomeController {
 	
 	private EtudiantService etudiantService = new EtudiantServiceImpl();
 	
+	// Méthode d'initialisation appelée lors du chargement de la vue
 	@FXML
 	public void initialize() {
-		
-		
+		// Configuration de l'action du bouton de mise à jour du binôme
 		updateBinome.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent actionEvent) {
+				// Vérification si l'étudiant 1 est sélectionné, sinon afficher une erreur
 				if (etudiant1.getValue() == null || "".equals(etudiant1.getValue())) {
 					Alert alert = new Alert(Alert.AlertType.ERROR);
 					alert.setTitle("ERREUR: Le choix de l'etudiant 1 est obligatoire!");
@@ -73,15 +76,17 @@ public class UpdateBinomeController {
 					alert.getDialogPane().setPrefWidth(800);
 					alert.show();
 				} else {
+					// Appeler la méthode de mise à jour du binôme
 					updateBinome(actionEvent);
 				}
 			}
 		});
+		// Initialisation des listes déroulantes pour les projets et les étudiants
 		projet.getItems().clear();
 		etudiant1.getItems().clear();
 		etudiant2.getItems().clear();
 		try {
-			
+			// Chargement des données des projets et des étudiants
 			List<Projet> projets = projetService.selectAll();
 			List<String> infoProjets = new ArrayList<>();
 			
@@ -115,11 +120,12 @@ public class UpdateBinomeController {
 		
 		Binome binomeToUpdate = BinomeServiceImpl.binomeToUpdate;
 		
+		// Configurer les champs de texte et les listes déroulantes avec les données du binôme à mettre à jour
 		idBinome.setText(binomeToUpdate.getIdBinome().toString());
 		projet.setValue(binomeToUpdate.getProjet().getIdProjet() + " " + binomeToUpdate.getProjet().getNomMatiere() + " " + binomeToUpdate.getProjet().getSujet());
-		
 		etudiant1.setValue(binomeToUpdate.getEtudiants().get(0).getIdEtudiant().toString() + " " + binomeToUpdate.getEtudiants().get(0).getNomEtudiant() + " " + binomeToUpdate.getEtudiants().get(0).getPrenomEtudiant());
 		
+		// Si le binôme comporte un deuxième étudiant, le configurer également
 		if (binomeToUpdate.getEtudiants().size() > 1) {
 			etudiant2.setValue(binomeToUpdate.getEtudiants().get(1).getIdEtudiant().toString() + " " + binomeToUpdate.getEtudiants().get(1).getNomEtudiant() + " " + binomeToUpdate.getEtudiants().get(1).getPrenomEtudiant());
 		}
@@ -136,6 +142,8 @@ public class UpdateBinomeController {
 			dateRelleRemise.setValue(binomeToUpdate.getDateReelleRemise());
 		}
 		
+		// Ajouter des écouteurs pour les changements de valeurs dans les listes déroulantes et les champs de texte
+		// Ces écouteurs gèrent les interactions entre les différents composants de l'interface
 		etudiant1.valueProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -198,15 +206,19 @@ public class UpdateBinomeController {
 			}
 		});
 		
+		// Configurer une action pour la sélection de la date réelle de remise
 		dateRelleRemise.setOnMouseClicked(event -> {
+			// Si la date sélectionnée est nulle ou par défaut, la fixer à la date actuelle
 			if (dateRelleRemise.getValue() == null || dateRelleRemise.getValue().isEqual(LocalDate.of(1111, 11, 11))) {
 				dateRelleRemise.setValue(LocalDate.now());
 			}
 		});
 	}
 	
-	
+	// Méthode pour mettre à jour le binôme
 	public void updateBinome(ActionEvent actionEvent) {
+		// Validation des données et appel au service de mise à jour
+		// Gestion des erreurs et fermeture de la fenêtre en cas de succès
 		if (etudiant1.getValue().equals(etudiant2.getValue())) {
 			Alert alert = new Alert(Alert.AlertType.ERROR);
 			alert.setTitle("ERREUR: Vous avez choisi deux fois le meme etudiant!");
@@ -216,8 +228,10 @@ public class UpdateBinomeController {
 			alert.show();
 			return;
 		}
+		// Créer un nouvel objet Binome et définir ses propriétés à partir des valeurs saisies
 		Binome binome = new Binome();
 		
+		// Vérifier les valeurs saisies et afficher des alertes en cas d'erreurs
 		if (!NumberUtils.isParsable(idBinome.getText().trim())) {
 			Alert alert = new Alert(Alert.AlertType.ERROR);
 			alert.setTitle("ERREUR: Vous n'avez pas saisi un nombre dans le champ \"idBinome\"!");
@@ -305,6 +319,7 @@ public class UpdateBinomeController {
 			}
 			binomeService.updateBinome(binome);
 			
+			// Fermer la fenêtre si la mise à jour est réussie
 			Stage stage = (Stage) updateBinome.getScene().getWindow();
 			stage.close();
 		} catch (Exception e) {

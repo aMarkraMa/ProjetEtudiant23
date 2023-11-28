@@ -12,7 +12,7 @@ public class FormationServiceImpl implements FormationService {
 	
 	public static Formation formationToUpdate;
 	
-	
+	// Récupère une formation par son identifiant
 	@Override
 	public Formation getFormationById(Formation formation) {
 		SqlSession sqlSession = MyBatisUtils.getSqlSession();
@@ -21,6 +21,7 @@ public class FormationServiceImpl implements FormationService {
 		return formationDB;
 	}
 	
+	// Supprime une formation par son identifiant
 	@Override
 	public void deleteById(Integer idFormation) {
 		SqlSession sqlSession = null;
@@ -37,6 +38,7 @@ public class FormationServiceImpl implements FormationService {
 		}
 	}
 	
+	// Sélectionne toutes les formations
 	@Override
 	public List<Formation> selectAll() {
 		SqlSession sqlSession = null;
@@ -54,6 +56,7 @@ public class FormationServiceImpl implements FormationService {
 		}
 	}
 	
+	// Sélectionne des formations selon des conditions spécifiques
 	@Override
 	public List<Formation> selectByCondition(Formation formation) {
 		SqlSession sqlSession = null;
@@ -71,6 +74,7 @@ public class FormationServiceImpl implements FormationService {
 		}
 	}
 	
+	// Récupère les noms de toutes les formations
 	@Override
 	public List<String> getNomsFormation() {
 		SqlSession sqlSession = null;
@@ -88,6 +92,7 @@ public class FormationServiceImpl implements FormationService {
 		}
 	}
 	
+	// Récupère toutes les promotions
 	@Override
 	public List<String> getPromotions() {
 		SqlSession sqlSession = null;
@@ -105,13 +110,14 @@ public class FormationServiceImpl implements FormationService {
 		}
 	}
 	
+	// Ajoute une nouvelle formation
 	@Override
 	public void addFormation(Formation formation) {
 		SqlSession sqlSession = null;
 		try {
 			sqlSession = MyBatisUtils.getSqlSession();
 			FormationMapper formationMapper = sqlSession.getMapper(FormationMapper.class);
-			formationMapper.addFormation(formation);
+			formationMapper.insertFormation(formation);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -121,6 +127,7 @@ public class FormationServiceImpl implements FormationService {
 		}
 	}
 	
+	// Met à jour une formation
 	@Override
 	public void updateFormation(Formation formation) {
 		SqlSession sqlSession = null;

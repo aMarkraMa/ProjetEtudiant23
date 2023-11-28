@@ -1,0 +1,11 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+Actor Utilisateur
+Utilisateur -> Contrôleur: Cliquer sur le bouton de suppression
+Contrôleur -> Service: Appeler la méthode de la couche service
+Service -> Mapper: Transmettre les paramètres au niveau du mapper
+Mapper -> BDD: Transmettre les paramètres à la base de données
+BDD -> BDD: Supprimer l'objet correspondant
+@enduml

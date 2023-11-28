@@ -17,20 +17,31 @@ import java.util.List;
 
 public class AddProjetController {
 	
+	// Champ de texte pour le nom de la matière
 	@FXML
 	private TextField nomMatiere;
+	
+	// Champ de texte pour le sujet du projet
 	@FXML
 	private TextField sujet;
+	
+	// Sélecteur de date pour la date prévue de remise
 	@FXML
 	private DatePicker datePicker;
+	
+	// Champ de texte pour le pourcentage de la soutenance
 	@FXML
 	private TextField pourcentageSoutenance;
+	
+	// Bouton pour ajouter le projet
 	@FXML
 	private Button addProjet;
 	
 	private ProjetService projetService = new ProjetServiceImpl();
 	
+	// Initialisation de l'interface utilisateur
 	public void initialize() {
+		// Ajout d'un écouteur pour s'assurer que le pourcentage est un nombre
 		pourcentageSoutenance.textProperty().addListener((observable, oldValue, newValue) -> {
 			if (!newValue.matches("\\d+")) {
 				pourcentageSoutenance.setText(newValue.replaceAll("[^\\d]+", ""));
@@ -38,8 +49,9 @@ public class AddProjetController {
 		});
 	}
 	
-	
+	// Méthode pour ajouter un projet
 	public void addProjet() {
+		// Logique pour ajouter un projet avec gestion des erreurs et validation
 		try {
 			
 			Projet projet = new Projet();
@@ -93,7 +105,9 @@ public class AddProjetController {
 		}
 	}
 	
+	// Affiche une alerte en cas d'erreur
 	public void showErr(String msg) {
+		// Création et affichage d'une alerte d'erreur
 		Alert alert = new Alert(Alert.AlertType.ERROR);
 		alert.setTitle("Error Dialog");
 		alert.setHeaderText("Oups");

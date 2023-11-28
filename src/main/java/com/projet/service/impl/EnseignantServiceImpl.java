@@ -12,6 +12,7 @@ import java.util.List;
 
 public class EnseignantServiceImpl implements EnseignantService {
 	
+	// Récupère un enseignant à partir de ses informations
 	@Override
 	public Enseigant getEnseignant(Enseigant enseigant) {
 		SqlSession sqlSession = null;
@@ -29,6 +30,7 @@ public class EnseignantServiceImpl implements EnseignantService {
 		}
 	}
 	
+	// Récupère la liste de toutes les questions de sécurité
 	@Override
 	public List<String> getQuestions() {
 		SqlSession sqlSession = null;
@@ -46,6 +48,7 @@ public class EnseignantServiceImpl implements EnseignantService {
 		}
 	}
 	
+	// Récupère la liste de tous les numéros des enseignants
 	@Override
 	public List<Integer> getNumerosEnseignant() {
 		SqlSession sqlSession = null;
@@ -63,6 +66,7 @@ public class EnseignantServiceImpl implements EnseignantService {
 		}
 	}
 	
+	// Insère un nouvel enseignant dans la base de données
 	@Override
 	public void insertEnseignant(Enseigant enseigant) {
 		SqlSession sqlSession = null;
@@ -80,6 +84,7 @@ public class EnseignantServiceImpl implements EnseignantService {
 		}
 	}
 	
+	// Obtient la question de sécurité d'un enseignant par son numéro
 	@Override
 	public String getQuestionByNumEnseignant(Integer numEnseignant) {
 		SqlSession sqlSession = null;
@@ -97,6 +102,7 @@ public class EnseignantServiceImpl implements EnseignantService {
 		}
 	}
 	
+	// Obtient la réponse à la question de sécurité d'un enseignant par son numéro
 	@Override
 	public String getReponseByNumeroEnseignant(Integer numEnseignant) {
 		SqlSession sqlSession = null;
@@ -114,6 +120,7 @@ public class EnseignantServiceImpl implements EnseignantService {
 		}
 	}
 	
+	// Met à jour le mot de passe d'un enseignant par son numéro
 	@Override
 	public void updateMotDePasseByNumeroEnseignant(Integer numEnseignant, String newPassword) {
 		SqlSession sqlSession = null;
@@ -130,6 +137,7 @@ public class EnseignantServiceImpl implements EnseignantService {
 		}
 	}
 	
+	// Obtient l'adresse email d'un enseignant par son numéro
 	@Override
 	public String getEmailEnseignantByNumeroEnseignant(Integer numEnseignant) {
 		SqlSession sqlSession = null;

@@ -23,22 +23,23 @@ import java.util.Random;
 public class ResetPasswordController {
 	
 	@FXML
-	private TextField numEn;
+	private TextField numEn; // Champ de texte pour le numéro de l'enseignant
 	
 	@FXML
-	private ChoiceBox<String> question;
+	private ChoiceBox<String> question; // Liste déroulante pour la question de sécurité
 	
 	@FXML
-	private TextField reponse;
+	private TextField reponse; // Champ de texte pour la réponse à la question de sécurité
 	
 	@FXML
-	private Button reinitialiser;
+	private Button reinitialiser; // Bouton pour réinitialiser le mot de passe
 	
 	private EnseignantService enseignantService = new EnseignantServiceImpl();
 	
-	
+	// Initialisation de l'interface utilisateur
 	@FXML
 	public void initialize() {
+		// Chargement des questions de sécurité et configuration de l'interface
 		try {
 			question.getItems().clear();
 			List<String> questions = enseignantService.getQuestions();
@@ -48,8 +49,9 @@ public class ResetPasswordController {
 		}
 	}
 	
-	
+	// Méthode pour réinitialiser le mot de passe
 	public void reinitialiser(ActionEvent actionEvent) {
+		// Logique pour réinitialiser le mot de passe avec gestion des erreurs et validation
 		try {
 			if (numEn.getText() == null || numEn.getText().trim().equals("") || question.getValue() == null || question.getValue().equals("") || reponse.getText() == null || reponse.getText().trim().equals("")) {
 				Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -141,7 +143,9 @@ public class ResetPasswordController {
 		}
 	}
 	
+	// Génère un mot de passe aléatoire
 	private String generatePassword() {
+		// Génération d'un mot de passe aléatoire
 		String upperCaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		String lowerCaseLetters = "abcdefghijklmnopqrstuvwxyz";
 		String numbers = "0123456789";

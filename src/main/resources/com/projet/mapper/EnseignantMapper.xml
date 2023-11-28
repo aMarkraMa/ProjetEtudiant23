@@ -3,6 +3,7 @@
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.projet.mapper.EnseignantMapper">
 	
+	<!-- Cartographie des résultats : Associe les colonnes de la table des enseignants aux propriétés de l'objet enseignant -->
 	<resultMap id="EnseigantResultMap" type="enseigant">
 		<id column="id_enseignant" property="idEnseignant"/>
 		<result column="numero_enseignant" property="numeroEnseignant"/>
@@ -12,44 +13,53 @@
 		<result column="reponse" property="reponse"/>
 	</resultMap>
 	
+	<!-- Récupération d'un enseignant : Obtient les informations d'un enseignant en fonction de son numéro -->
 	<insert id="insertEnseignant">
 		INSERT INTO enseignants(numero_enseignant, mot_de_passe_enseignant, email_enseignant, question, reponse)
 		VALUES (#{numeroEnseignant}, #{motDePasseEnseignant}, #{emailEnseignant}, #{question}, #{reponse})
 	</insert>
 	
+	<!-- Mise à jour du mot de passe : Actualise le mot de passe de l'enseignant en fonction de son numéro -->
 	<update id="updateMotDePasseByNumeroEnseignant">
 		UPDATE enseignants
 		SET mot_de_passe_enseignant = #{motDePasse}
 		WHERE numero_enseignant = #{numEnseignant}
 	</update>
 	
+	<!-- Récupération d'un enseignant : Obtient les informations d'un enseignant en fonction de son numéro -->
 	<select id="getEnseignant" resultType="enseigant" resultMap="EnseigantResultMap">
 		SELECT id_enseignant, numero_enseignant, mot_de_passe_enseignant, email_enseignant, question, reponse
 		FROM enseignants
 		WHERE numero_enseignant = #{numeroEnseignant}
 	</select>
 	
+	<!-- Obtention des numéros des enseignants : Récupère tous les numéros des enseignants de la table -->
 	<select id="getNumerosEnseignant" resultType="java.lang.Integer">
 		SELECT numero_enseignant
 		FROM enseignants
 	</select>
 	
+	<!-- Obtention des questions de sécurité : Récupère toutes les questions de sécurité de la table des questions -->
 	<select id="getQuestions" resultType="java.lang.String">
 		SELECT question
 		FROM questions
 	</select>
 	
+	<!-- Obtention de la question de sécurité d'un enseignant : Récupère la question de sécurité d'un enseignant spécifique -->
 	<select id="getQuestionByNumEnseignant" resultType="java.lang.String">
 		SELECT question
 		FROM enseignants
 		WHERE numero_enseignant = #{numEnseignant}
 	</select>
 	
+	<!-- Obtention de la réponse de sécurité d'un enseignant : Récupère la réponse à la question de sécurité d'un enseignant spécifique -->
 	<select id="getReponseByNumeroEnseignant" resultType="java.lang.String">
 		SELECT reponse
 		FROM enseignants
 		WHERE numero_enseignant = #{numEnseignant}
 	</select>
+	
+	<!-- Obtention de l'email d'un enseignant : Récupère l'email d'un enseignant en fonction de son numéro -->
 	<select id="getEmailEnseignantByNumeroEnseignant" resultType="java.lang.String">
 		SELECT email_enseignant
 		FROM enseignants

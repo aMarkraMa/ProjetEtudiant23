@@ -17,36 +17,44 @@ import org.apache.ibatis.session.SqlSession;
 import java.util.List;
 
 public class InscrireController {
+	// Champ de texte pour le numéro de l'enseignant
 	@FXML
 	private TextField numEn;
 	
+	// Champ pour le mot de passe
 	@FXML
 	private PasswordField motEn;
 	
+	// Champ pour vérifier le mot de passe
 	@FXML
 	private PasswordField veriferMot;
 	
-	
+	// Champ de texte pour l'email
 	@FXML
 	private TextField email;
 	
+	// Bouton pour valider l'inscription
 	@FXML
 	private Button validerEn;
 	
+	// Liste déroulante pour la question de sécurité
 	@FXML
 	private ChoiceBox<String> question;
 	
+	// Champ de texte pour la réponse à la question de sécurité
 	@FXML
 	private TextField reponse;
 	
+	// Étiquette pour les instructions
 	@FXML
 	private Label text;
 	
 	private EnseignantService enseignantService = new EnseignantServiceImpl();
 	
-	
+	// Initialisation de l'interface utilisateur
 	@FXML
 	public void initialize() {
+		// Chargement des questions de sécurité et paramétrage des champs
 		question.getItems().clear();
 		List<String> questions = enseignantService.getQuestions();
 		question.getItems().addAll(questions);
@@ -54,9 +62,10 @@ public class InscrireController {
 		text.setStyle("-fx-text-fill: red;");
 	}
 	
-	
+	// Méthode pour ajouter un enseignant
 	@FXML
 	void ajouterEnseignant(ActionEvent event) {
+		// Logique pour ajouter un enseignant avec gestion des erreurs et validation
 		try {
 			if (numEn.getText() == null || numEn.getText().trim().equals("") || motEn.getText() == null || motEn.getText().trim().equals("") || veriferMot.getText() == null || veriferMot.getText().trim().equals("") || email.getText() == null || email.getText().trim().equals("") || question.getValue() == null || question.getValue().equals("") || reponse.getText() == null || reponse.getText().equals("")) {
 				Alert alert = new Alert(Alert.AlertType.ERROR);

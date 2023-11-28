@@ -10,6 +10,7 @@ import java.util.List;
 
 public class ProjetServiceImpl implements ProjetService {
 	
+	// Sélectionne des projets selon des conditions spécifiques
 	@Override
 	public List<Projet> selectByCondition(Projet projet) {
 		SqlSession sqlSession = null;
@@ -27,6 +28,7 @@ public class ProjetServiceImpl implements ProjetService {
 		}
 	}
 	
+	// Met à jour un projet
 	@Override
 	public void updateProjet(Projet projet) {
 		SqlSession sqlSession = null;
@@ -43,6 +45,7 @@ public class ProjetServiceImpl implements ProjetService {
 		}
 	}
 	
+	// Supprime un projet par son identifiant
 	@Override
 	public void deleteById(Integer idProjet) {
 		SqlSession sqlSession = null;
@@ -59,6 +62,7 @@ public class ProjetServiceImpl implements ProjetService {
 		}
 	}
 	
+	// Sélectionne tous les projets
 	@Override
 	public List<Projet> selectAll() {
 		SqlSession sqlSession = null;
@@ -76,6 +80,7 @@ public class ProjetServiceImpl implements ProjetService {
 		}
 	}
 	
+	// Récupère les identifiants de tous les projets
 	@Override
 	public List<Integer> getIdsProjet() {
 		SqlSession sqlSession = null;
@@ -93,6 +98,7 @@ public class ProjetServiceImpl implements ProjetService {
 		}
 	}
 	
+	// Récupère les identifiants des projets selon des conditions spécifiques
 	@Override
 	public List<Integer> getIdsProjetByCondition(String nomMatiere, String sujet) {
 		SqlSession sqlSession = null;
@@ -110,13 +116,14 @@ public class ProjetServiceImpl implements ProjetService {
 		}
 	}
 	
+	// Ajoute un nouveau projet
 	@Override
 	public void addProjet(Projet projet) {
 		SqlSession sqlSession = null;
 		try {
 			sqlSession = MyBatisUtils.getSqlSession();
 			ProjetMapper projetMapper = sqlSession.getMapper(ProjetMapper.class);
-			projetMapper.addProjet(projet);
+			projetMapper.insertProjet(projet);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

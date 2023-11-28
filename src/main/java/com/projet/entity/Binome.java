@@ -21,7 +21,7 @@ public class Binome {
 	private List<Etudiant> etudiants;
 	
 	
-	
+	// constructor
 	public Binome() {
 	}
 	
@@ -33,6 +33,7 @@ public class Binome {
 		this.etudiants = new ArrayList<>();
 	}
 	
+	// getter et setter
 	public Integer getIdBinome() {
 		return idBinome;
 	}
@@ -73,6 +74,7 @@ public class Binome {
 		this.noteRapport = noteRapport;
 	}
 	
+	// toString
 	@Override
 	public String toString() {
 		return "Binome{" +
@@ -83,6 +85,7 @@ public class Binome {
 				'}';
 	}
 	
+	// equals et hashCode
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;

@@ -84,9 +84,10 @@ public class ShowFormationController {
 	
 	private FormationService formationService = new FormationServiceImpl();
 	
+	// Initialisation du contrôleur
 	@FXML
 	public void initialize() {
-		
+		// Configuration des colonnes du tableau
 		idFormation = new TableColumn<>("id");
 		idFormation.setCellValueFactory(new PropertyValueFactory<>("idFormation"));
 		idFormation.setPrefWidth(40);
@@ -95,6 +96,7 @@ public class ShowFormationController {
 		promotion = new TableColumn<>("Promotion");
 		promotion.setCellValueFactory(new PropertyValueFactory<>("promotion"));
 		
+		// Configuration des boutons d'action
 		boutons = new TableColumn<>("Operation");
 		boutons.setCellFactory(new Callback<TableColumn<Formation, Void>, TableCell<Formation, Void>>() {
 			@Override
@@ -161,12 +163,13 @@ public class ShowFormationController {
 			
 		});
 		
-		
+		// Ajout des colonnes au TableView
 		tableviewFormation.getColumns().add(idFormation);
 		tableviewFormation.getColumns().add(nomFormation);
 		tableviewFormation.getColumns().add(promotion);
 		tableviewFormation.getColumns().add(boutons);
 		
+		// Ajustement de la largeur des colonnes
 		tableviewFormation.widthProperty().addListener((observable, oldValue, newValue) -> {
 			double tableWidth = newValue.doubleValue();
 			nomFormation.setPrefWidth((tableWidth - 40) / 3);
@@ -174,7 +177,7 @@ public class ShowFormationController {
 			boutons.setPrefWidth((tableWidth - 40) / 3);
 		});
 		
-		
+		// Chargement et affichage des données des formations
 		try {
 			List<Formation> formations = formationService.selectAll();
 			refreshTable(formations);
@@ -182,6 +185,7 @@ public class ShowFormationController {
 			e.printStackTrace();
 		}
 		
+		// Configuration des icônes de boutons
 		Image refresh = new Image("com/projet/img/refresh.png");
 		ImageView refreshImageView = new ImageView(refresh);
 		refreshImageView.setFitHeight(20);
@@ -196,6 +200,7 @@ public class ShowFormationController {
 		
 	}
 	
+	// Rafraîchissement des données du tableau
 	public void refreshTable(List newData) {
 		ObservableList<Formation> data = FXCollections.observableArrayList();
 		data.addAll(newData);
@@ -203,7 +208,7 @@ public class ShowFormationController {
 	}
 	
 	
-	
+	// Navigation vers différentes vues
 	public void toEtudiants(ActionEvent actionEvent) {
 		Main.changeView("/com/projet/view/ShowEtudiant.fxml");
 	}
@@ -212,6 +217,7 @@ public class ShowFormationController {
 		Main.addView("/com/projet/view/AddFormation.fxml");
 	}
 	
+	// Recherche des formations
 	public void searchFormation(ActionEvent actionEvent) {
 		
 		try {
@@ -228,6 +234,7 @@ public class ShowFormationController {
 		}
 	}
 	
+	// Rafraîchissement du tableau avec les données actualisées
 	public void refreshTable(ActionEvent actionEvent) {
 
 		try {
@@ -257,6 +264,7 @@ public class ShowFormationController {
 		
 	}
 	
+	// Exportation des données en PDF
 	public void toPDF(ActionEvent actionEvent) {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Save as PDF");
@@ -298,6 +306,7 @@ public class ShowFormationController {
 		}
 	}
 	
+	// Exportation des données en Excel
 	public void toExcel(ActionEvent actionEvent) {
 		Stage stage = (Stage) tableviewFormation.getScene().getWindow();
 		

@@ -22,18 +22,23 @@ import java.util.List;
 
 public class AddEtudiantController {
 	
+	// Champ de texte pour le prénom de l'étudiant
 	@FXML
 	private TextField prenomEtu;
 	
+	// Liste déroulante pour le nom de la formation
 	@FXML
 	private ChoiceBox<String> nomFormation;
 	
+	// Champ de texte pour le nom de l'étudiant
 	@FXML
 	private TextField nomEtu;
 	
+	// Bouton pour ajouter l'étudiant
 	@FXML
 	private Button ajouterEtu;
 	
+	// Liste déroulante pour la promotion
 	@FXML
 	private ChoiceBox<String> promotion;
 	
@@ -41,9 +46,10 @@ public class AddEtudiantController {
 	
 	private FormationService formationService = new FormationServiceImpl();
 	
-	
+	// Initialisation de l'interface utilisateur
 	@FXML
 	public void initialize() {
+		// Chargement des données dans les listes déroulantes
 		try {
 			nomFormation.getItems().clear();
 			List<String> nomsFormation = formationService.getNomsFormation();
@@ -57,7 +63,9 @@ public class AddEtudiantController {
 		}
 	}
 	
+	// Méthode pour transformer la première lettre en majuscule
 	private String transformerStr(String prenom) {
+		// Logique pour transformer le prénom
 		String premiereLettre = prenom.substring(0, 1);
 		String autresLettres = prenom.substring(1);
 		String premiereLettreUpperCase = premiereLettre.toUpperCase();
@@ -66,8 +74,10 @@ public class AddEtudiantController {
 		return prenomF;
 	}
 	
+	// Méthode pour ajouter un étudiant
 	@FXML
 	void ajouterEtudiant(ActionEvent event) {
+		// Logique pour ajouter un étudiant avec gestion des erreurs et validation
 		if (nomEtu.getText() == null || "".equals(nomEtu.getText().trim()) || prenomEtu.getText() == null || "".equals(prenomEtu.getText().trim()) || nomFormation.getValue() == null || "".equals(nomFormation.getValue()) || promotion.getValue() == null || "".equals(promotion.getValue())) {
 			Alert alert = new Alert(Alert.AlertType.ERROR);
 			alert.setTitle("ERREUR: Tous les champs sont obligatoires!");

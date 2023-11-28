@@ -16,6 +16,7 @@ public class Enseigant {
 	
 	private String reponse;
 	
+	// constructor
 	public Enseigant() {
 	}
 	
@@ -28,6 +29,7 @@ public class Enseigant {
 		this.reponse = reponse;
 	}
 	
+	// getter et setter
 	public Integer getIdEnseignant() {
 		return idEnseignant;
 	}
@@ -76,6 +78,7 @@ public class Enseigant {
 		this.reponse = reponse;
 	}
 	
+	// toString
 	@Override
 	public String toString() {
 		return "Enseigant{" +
@@ -88,6 +91,7 @@ public class Enseigant {
 				'}';
 	}
 	
+	// equals et hashCode
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;

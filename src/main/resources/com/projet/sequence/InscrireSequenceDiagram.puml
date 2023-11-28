@@ -1,0 +1,17 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+Actor Utilisateur
+Utilisateur -> Contrôleur: Cliquer sur inscription
+Contrôleur -> Contrôleur: Rediriger vers la page d'inscription
+Utilisateur -> Contrôleur: Entrer les informations et cliquer sur inscription
+Contrôleur -> Contrôleur: Vérifier les informations \n (conformité du nom d'utilisateur et du mot de passe, \n validité de l'email)
+alt Vérification réussie
+Contrôleur -> Service: Transmettre les informations d'inscription \n et appeler insertEnseignant()
+Service -> Mapper: Appeler insertEnseignant()
+Mapper -> BDD: Insérer les données
+else Échec de la vérification
+Contrôleur -> Contrôleur: Afficher une fenêtre pop-up indiquant que \n les informations ne sont pas conformes
+end
+@enduml

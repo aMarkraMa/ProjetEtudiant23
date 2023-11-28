@@ -9,6 +9,7 @@ public class Projet {
     private LocalDate datePrevueRemise;
     private Integer pourcentageSoutenance;
 
+    //Constructor
     public Projet() {
     }
     
@@ -20,6 +21,7 @@ public class Projet {
         this.pourcentageSoutenance = pourcentageSoutenance;
     }
     
+    //getter et setter
     public Integer getIdProjet() {
         return idProjet;
     }
@@ -60,6 +62,7 @@ public class Projet {
         this.pourcentageSoutenance = pourcentageSoutenance;
     }
 
+    //toString
     @Override
     public String toString() {
         return "Projet{" +
@@ -71,6 +74,7 @@ public class Projet {
                 '}';
     }
 
+    //equals
     @Override
     public boolean equals(Object obj) {
         if (this == obj)

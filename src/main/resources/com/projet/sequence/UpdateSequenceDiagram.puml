@@ -1,0 +1,27 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+Actor Utilisateur
+Utilisateur -> Contrôleur: Effectuer une opération de modification
+Contrôleur -> Service: Transférer les informations avant modification à la couche service
+Service -> Contrôleur: Remonter les informations avant modification au contrôleur
+alt Vérification réussie
+Contrôleur -> Service: Appeler la méthode pour transférer les informations à la couche service
+Service -> Mapper: Transférer les paramètres au mapper
+Mapper -> BDD: Interroger la base de données
+BDD --> Mapper: Retourner les résultats de la requête
+Mapper --> Service: Retourner les résultats de la requête
+Service --> Contrôleur: Vérifier les résultats de la requête
+alt Si un objet similaire existe déjà dans la base de données
+    Contrôleur -> Contrôleur: Afficher une fenêtre pop-up indiquant que l'objet existe déjà
+    else Si la base de données ne contient pas cet objet
+    Contrôleur -> Service: Appeler la couche service
+    Service -> Mapper: Transférer les nouveaux paramètres au mapper
+    Mapper -> BDD: Insérer le nouvel objet
+    end
+else Échec de la vérification
+Contrôleur -> Contrôleur: Afficher une fenêtre pop-up de notification
+end
+
+@enduml

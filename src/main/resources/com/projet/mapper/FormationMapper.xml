@@ -1,76 +1,83 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.projet.mapper.FormationMapper">
-
-    <resultMap id="formationResultMap" type="Formation">
-        <!--
-            id : clé primaire
-            result : normal
-                column : nom de table bdd
-                property : nom d'attribut de java
-        -->
-        <id column="id_formation" property="idFormation"/>
-        <result column="nom_formation" property="nomFormation"/>
-        <result column="promotion" property="promotion"/>
-    </resultMap>
-
-    <select id="selectById" resultMap="formationResultMap">
-        select f.id_formation, f.nom_formation, f.promotion
-        from formations f
-        where id_formation = #{idFormation};
-    </select>
-
-    <!--Requêtes conditionnelles dynamiques-->
-    <select id="selectByCondition" resultMap="formationResultMap" resultType="formation">
-        select f.id_formation, f.nom_formation, f.promotion
-        from formations f
-        <where>
-            <if test="nomFormation != null and nomFormation != ''">
-                and lower(f.nom_formation) like lower(#{nomFormation})
-            </if>
-            <if test="promotion != null and promotion != ''">
-                and lower(f.promotion) like lower(#{promotion})
-            </if>
-        </where>
-    </select>
-
-    <select id="getNomsFormation" resultType="java.lang.String">
-        SELECT DISTINCT nom_formation from formations
-    </select>
-
-    <select id="getPromotions" resultType="java.lang.String">
-        SELECT DISTINCT promotion from formations
-    </select>
-
-    <insert id="addFormation" useGeneratedKeys="true" keyProperty="idFormation">
-        insert into formations (nom_formation, promotion)
-        values (#{nomFormation}, #{promotion})
-    </insert>
-
-    <update id="updateFormation">
-        update formations
-        <set>
-            <if test="nomFormation != null and nomFormation != ''">
-                nom_formation = #{nomFormation},
-            </if>
-            <if test="promotion != null and promotion != ''">
-                promotion = #{promotion},
-            </if>
-        </set>
-        where id_formation = #{idFormation};
-    </update>
-
-    <delete id="deleteById">
-        delete from formations
-        where id_formation = #{idFormation};
-    </delete>
-
-    <select id="selectAll" resultMap="formationResultMap" resultType="formation">
-        select f.id_formation, f.nom_formation, f.promotion
-        from formations f
-    </select>
+	
+	<resultMap id="formationResultMap" type="Formation">
+		<!--
+			id : clé primaire
+			result : normal
+				column : nom de table bdd
+				property : nom d'attribut de java
+		-->
+		<id column="id_formation" property="idFormation"/>
+		<result column="nom_formation" property="nomFormation"/>
+		<result column="promotion" property="promotion"/>
+	</resultMap>
+	
+	<!-- Sélection d'une formation par son identifiant -->
+	<select id="selectById" resultMap="formationResultMap">
+		select f.id_formation, f.nom_formation, f.promotion
+		from formations f
+		where id_formation = #{idFormation};
+	</select>
+	
+	<!--Requêtes conditionnelles dynamiques-->
+	<select id="selectByCondition" resultMap="formationResultMap" resultType="formation">
+		select f.id_formation, f.nom_formation, f.promotion
+		from formations f
+		<where>
+			<if test="nomFormation != null and nomFormation != ''">
+				and lower(f.nom_formation) like lower(#{nomFormation})
+			</if>
+			<if test="promotion != null and promotion != ''">
+				and lower(f.promotion) like lower(#{promotion})
+			</if>
+		</where>
+	</select>
+	
+	<!-- Récupération des noms distincts de toutes les formations -->
+	<select id="getNomsFormation" resultType="java.lang.String">
+		SELECT DISTINCT nom_formation from formations
+	</select>
+	
+	<!-- Récupération des promotions distinctes de toutes les formations -->
+	<select id="getPromotions" resultType="java.lang.String">
+		SELECT DISTINCT promotion from formations
+	</select>
+	
+	<!-- Ajout d'une nouvelle formation -->
+	<insert id="insertFormation" useGeneratedKeys="true" keyProperty="idFormation">
+		insert into formations (nom_formation, promotion)
+		values (#{nomFormation}, #{promotion})
+	</insert>
+	
+	<!-- Mise à jour d'une formation -->
+	<update id="updateFormation">
+		update formations
+		<set>
+			<if test="nomFormation != null and nomFormation != ''">
+				nom_formation = #{nomFormation},
+			</if>
+			<if test="promotion != null and promotion != ''">
+				promotion = #{promotion},
+			</if>
+		</set>
+		where id_formation = #{idFormation};
+	</update>
+	
+	<!-- Suppression d'une formation par identifiant -->
+	<delete id="deleteById">
+		delete from formations
+		where id_formation = #{idFormation};
+	</delete>
+	
+	<!-- Sélection de toutes les formations -->
+	<select id="selectAll" resultMap="formationResultMap" resultType="formation">
+		select f.id_formation, f.nom_formation, f.promotion
+		from formations f
+	</select>
 
 
 </mapper>
