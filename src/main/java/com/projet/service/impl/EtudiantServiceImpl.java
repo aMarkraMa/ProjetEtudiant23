@@ -3,10 +3,20 @@ package com.projet.service.impl;
 import com.projet.entity.Etudiant;
 import com.projet.entity.Formation;
 import com.projet.mapper.EtudiantMapper;
+import com.projet.mapper.FormationMapper;
 import com.projet.service.EtudiantService;
+import com.projet.service.FormationService;
 import com.projet.utils.MyBatisUtils;
+import javafx.scene.control.Alert;
 import org.apache.ibatis.session.SqlSession;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.awt.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.List;
 
 public class EtudiantServiceImpl implements EtudiantService {
@@ -200,4 +210,97 @@ public class EtudiantServiceImpl implements EtudiantService {
 			}
 		}
 	}
+	
+	@Override
+	public void importEtudiants(File file) {
+		FileInputStream fis = null;
+		XSSFWorkbook excel = null;
+		SqlSession sqlSession = null;
+		try {
+			fis = new FileInputStream(file);
+			excel = new XSSFWorkbook(fis);
+			sqlSession = MyBatisUtils.getNonAutoCommittingSqlSession();
+			FormationMapper formationMapper = sqlSession.getMapper(FormationMapper.class);
+			EtudiantMapper etudiantMapper = sqlSession.getMapper(EtudiantMapper.class);
+			XSSFSheet sheet = excel.getSheetAt(0);
+			int lastRowNum = sheet.getLastRowNum();
+			for (int i = 1; i <= lastRowNum; i++) {
+				XSSFRow row = sheet.getRow(i);
+				String nomEtudiant = row.getCell(0).getStringCellValue();
+				String prenomEtudiant = row.getCell(1).getStringCellValue();
+				String nomFormation = row.getCell(2).getStringCellValue();
+				String promotion = row.getCell(3).getStringCellValue();
+				System.out.println(nomEtudiant + " " + prenomEtudiant + " " + nomFormation + " " + promotion);
+				if (!"Initiale".equals(promotion.trim()) && !"En Alternance".equals(promotion.trim()) && !"Formation Continue".equals(promotion.trim())) {
+					Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setTitle("ERREUR: Une des valeurs dans la colonne \"Promotion\" n'est pas valide!");
+					alert.setHeaderText("Une des valeurs dans la colonne \"Promotion\" n'est pas valide!");
+					alert.setContentText("Une des valeurs dans la colonne \"Promotion\" n'est pas valide, veuillez verifier votre saisie.");
+					alert.getDialogPane().setPrefWidth(800);
+					alert.show();
+					return;
+				}
+				String[] infosFormation = transformerStrFormation(nomFormation, promotion);
+				Formation formation = new Formation();
+				formation.setNomFormation(infosFormation[0]);
+				formation.setPromotion(infosFormation[1]);
+				List<Formation> formationsDB = formationMapper.selectByCondition(formation);
+				if (formationsDB == null || formationsDB.size() == 0) {
+					formationMapper.insertFormation(formation);
+					System.out.println(formation.getIdFormation());
+				} else {
+					formation.setIdFormation(formationsDB.get(0).getIdFormation());
+				}
+				Etudiant etudiant = new Etudiant();
+				etudiant.setNomEtudiant(nomEtudiant.toUpperCase());
+				etudiant.setPrenomEtudiant(transformerStrEtudiant(prenomEtudiant));
+				etudiant.setFormation(formation);
+				etudiantMapper.insertEtudiant(etudiant);
+			}
+			sqlSession.commit();
+		} catch (Exception e) {
+			if (sqlSession != null) {
+				sqlSession.rollback();
+			}
+			e.printStackTrace();
+		} finally {
+			if (sqlSession != null) {
+				sqlSession.close();
+			}
+			
+			if (excel != null) {
+				try {
+					excel.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			if (fis != null) {
+				try {
+					fis.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	private String transformerStrEtudiant(String prenom) {
+		// Logique pour transformer le prénom
+		String premiereLettre = prenom.substring(0, 1);
+		String autresLettres = prenom.substring(1);
+		String premiereLettreUpperCase = premiereLettre.toUpperCase();
+		String autresLettresLowerCase = autresLettres.toLowerCase();
+		String prenomF = premiereLettreUpperCase.concat(autresLettresLowerCase);
+		return prenomF;
+	}
+	
+	private String[] transformerStrFormation(String nomFormation, String promotion) {
+		// Transformation du nom de la formation en majuscules
+		String nomFormationUpperCase = nomFormation.toUpperCase();
+		return new String[]{nomFormationUpperCase, promotion};
+	}
+	
+	
 }

@@ -196,6 +196,11 @@ public class ShowFormationController {
 		searchImageView.setFitWidth(20);
 		searchImageView.setFitHeight(20);
 		searchFormation.setGraphic(searchImageView);
+		Image add = new Image("/com/projet/img/add.png");
+		ImageView addImageView = new ImageView(add);
+		addImageView.setFitWidth(18);
+		addImageView.setFitHeight(18);
+		toAjouterFor.setGraphic(addImageView);
 		
 		
 	}

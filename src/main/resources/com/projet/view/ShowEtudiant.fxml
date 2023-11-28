@@ -34,9 +34,14 @@
                    <MenuItem fx:id="toNotes" mnemonicParsing="false" onAction="#toNotes" text="Gestion de notes" />
                </items></Menu>
           <Menu fx:id="file" mnemonicParsing="false" text="File">
+              <Menu fx:id="menu" mnemonicParsing="false" text="Telecharger">
+                  <items>
+                      <MenuItem fx:id="downloadPDF" mnemonicParsing="false" onAction="#toPDF" text="Telecharger le PDF" />
+                      <MenuItem fx:id="downloadExcel" mnemonicParsing="false" onAction="#toExcel" text="Telecharger l'excel" />
+                  </items>
+              </Menu>
               <items>
-                  <MenuItem fx:id="downloadPDF" mnemonicParsing="false" onAction="#toPDF" text="Telecharger le PDF" />
-                  <MenuItem fx:id="downloadExcel" mnemonicParsing="false" onAction="#toExcel" text="Telecharger l'excel" />
+                  <MenuItem fx:id="importExcel" mnemonicParsing="false" onAction="#addExcel" text="Importer le fichier excel" />
               </items>
           </Menu>
           

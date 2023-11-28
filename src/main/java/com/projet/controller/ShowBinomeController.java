@@ -260,13 +260,13 @@ public class ShowBinomeController {
 		
 		tableviewBinome.widthProperty().addListener((observable, oldValue, newValue) -> {
 			double tableWidth = newValue.doubleValue();
-			nomMatiere.setPrefWidth((tableWidth - 40) / 7);
-			sujet.setPrefWidth((tableWidth - 40) / 7);
-			etudiant1.setPrefWidth((tableWidth - 40) / 7);
-			etudiant2.setPrefWidth((tableWidth - 40) / 7);
-			noteRapport.setPrefWidth((tableWidth - 40) / 7);
-			dateRelleRemise.setPrefWidth((tableWidth - 40) / 7);
-			boutons.setPrefWidth((tableWidth - 40) / 7);
+			nomMatiere.setPrefWidth((tableWidth - 240) /6);
+			sujet.setPrefWidth((tableWidth - 240) / 6);
+			etudiant1.setPrefWidth((tableWidth - 240) / 6);
+			etudiant2.setPrefWidth((tableWidth - 240) / 6);
+			noteRapport.setPrefWidth((tableWidth - 240) / 6);
+			dateRelleRemise.setPrefWidth((tableWidth - 240) / 6);
+			boutons.setPrefWidth(200);
 		});
 		
 		

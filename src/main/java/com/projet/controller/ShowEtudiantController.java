@@ -198,6 +198,11 @@ public class ShowEtudiantController {
 		searchImageView.setFitWidth(20);
 		searchImageView.setFitHeight(20);
 		searchEtudiant.setGraphic(searchImageView);
+		Image add = new Image("/com/projet/img/add.png");
+		ImageView addImageView = new ImageView(add);
+		addImageView.setFitWidth(18);
+		addImageView.setFitHeight(18);
+		toAjouterEtu.setGraphic(addImageView);
 		
 		
 	}
@@ -362,5 +367,30 @@ public class ShowEtudiantController {
 			}
 		}
 		
+	}
+	
+	public void addExcel(ActionEvent actionEvent) {
+		// Créer un objet FileChooser
+		FileChooser fileChooser = new FileChooser();
+		
+		// Configurer un filtre de fichier pour autoriser uniquement les fichiers Excel
+		FileChooser.ExtensionFilter extFilter =
+				new FileChooser.ExtensionFilter("Excel files (*.xlsx, *.xls)", "*.xlsx", "*.xls");
+		fileChooser.getExtensionFilters().add(extFilter);
+		
+		
+		Stage stage = (Stage) tableviewEtudiant.getScene().getWindow();
+		
+		// Afficher la boîte de dialogue d'ouverture de fichier
+		File file = fileChooser.showOpenDialog(stage);
+		
+		// Vérifier si l'utilisateur a sélectionné un fichier
+		if (file != null) {
+			try {
+				etudiantService.importEtudiants(file);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }

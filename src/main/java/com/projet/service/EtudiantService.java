@@ -3,6 +3,7 @@ package com.projet.service;
 import com.projet.entity.Etudiant;
 import com.projet.entity.Formation;
 
+import java.io.File;
 import java.util.List;
 
 
@@ -30,4 +31,6 @@ public interface EtudiantService {
 	List<String> getPrenomsEtudiant();
 	
 	void updateEtudiant(Etudiant etudiant);
+	
+	void importEtudiants(File file);
 }
