@@ -1,0 +1,61 @@
+.root {
+    -fx-font-family: 'San Francisco', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    -fx-background-color: #f7f7f7;
+}
+
+.label {
+    -fx-text-fill: #333;
+    -fx-font-size: 14px;
+}
+
+.button {
+    -fx-background-color: #18a8dc;
+    -fx-text-fill: white;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-padding: 6px 15px;
+}
+
+.button:hover {
+    -fx-background-color: #0092c7;
+}
+
+.text-field {
+    -fx-background-color: white;
+    -fx-border-color: #bfbfbf;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-padding: 5px;
+}
+
+.table-view {
+    -fx-base: #f7f7f7;
+    -fx-control-inner-background: #f7f7f7;
+    -fx-table-cell-border-color: #d3d3d3;
+    -fx-table-header-border-color: transparent;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: transparent;
+}
+
+.table-row-cell:filled:selected {
+    -fx-background-color: #b6e6f6;
+    -fx-text-fill: #000000;
+}
+
+.menu-bar {
+    -fx-background-color: #ededed;
+}
+
+.menu-bar .menu .label {
+    -fx-text-fill: #333;
+}
+
+.menu-item {
+    -fx-text-fill: #333;
+}
+
+.menu-item:hover {
+    -fx-background-color: #f0f0f0;
+}

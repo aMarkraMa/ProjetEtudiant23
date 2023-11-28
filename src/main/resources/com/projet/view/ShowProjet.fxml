@@ -6,7 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="522.0" prefWidth="784.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projet.controller.ShowProjetController">
+<AnchorPane prefHeight="740.0" prefWidth="1149.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projet.controller.ShowProjetController">
     <children>
         <TableView fx:id="tableViewProjet" layoutX="10.0" layoutY="121.0" prefHeight="364.0" prefWidth="764.0" AnchorPane.bottomAnchor="37.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="121.0">
             <columns>
@@ -18,11 +18,11 @@
             </columns>
         </TableView>
         <Label alignment="CENTER" layoutX="161.0" layoutY="38.0" prefHeight="33.0" prefWidth="303.0" text="Gestion des projets" AnchorPane.leftAnchor="161.0" AnchorPane.rightAnchor="136.0" AnchorPane.topAnchor="38.0" />
-        <Button fx:id="addProjet" layoutX="412.0" layoutY="75.0" mnemonicParsing="false" onAction="#showAddView" prefHeight="27.0" prefWidth="45.0" AnchorPane.rightAnchor="143.0" AnchorPane.topAnchor="75.0" />
+        <Button fx:id="addProjet" layoutX="408.0" layoutY="75.0" mnemonicParsing="false" onAction="#showAddView" prefHeight="27.0" prefWidth="45.0" AnchorPane.rightAnchor="143.0" AnchorPane.topAnchor="75.0" />
         <TextField fx:id="textFieldNomMatiere" layoutX="28.0" layoutY="77.0" prefHeight="27.0" prefWidth="88.0" promptText="nomMatiere" AnchorPane.leftAnchor="28.0" AnchorPane.topAnchor="75.0" />
-        <Button fx:id="searchProjet" layoutX="356.0" layoutY="75.0" mnemonicParsing="false" onAction="#searchProjet" prefHeight="27.0" prefWidth="45.0" AnchorPane.rightAnchor="199.0" AnchorPane.topAnchor="75.0" />
+        <Button fx:id="searchProjet" layoutX="348.0" layoutY="75.0" mnemonicParsing="false" onAction="#searchProjet" prefHeight="27.0" prefWidth="45.0" AnchorPane.rightAnchor="199.0" AnchorPane.topAnchor="75.0" />
         <Button fx:id="refreshProjet" layoutX="528.0" layoutY="75.0" mnemonicParsing="false" onAction="#refreshTable" prefHeight="27.0" prefWidth="45.0" AnchorPane.rightAnchor="27.0" AnchorPane.topAnchor="75.0" />
-        <Button fx:id="deleteProjet" layoutX="470.0" layoutY="75.0" mnemonicParsing="false" onAction="#deleteProjet" prefHeight="27.0" prefWidth="45.0" AnchorPane.rightAnchor="85.0" AnchorPane.topAnchor="75.0" />
+        <Button fx:id="deleteProjet" layoutX="468.0" layoutY="75.0" mnemonicParsing="false" onAction="#deleteProjet" prefHeight="27.0" prefWidth="45.0" AnchorPane.rightAnchor="85.0" AnchorPane.topAnchor="75.0" />
         <TextField fx:id="textFieldSujet" layoutX="133.0" layoutY="75.0" prefHeight="27.0" prefWidth="83.0" promptText="sujet" AnchorPane.leftAnchor="133.0" AnchorPane.topAnchor="75.0" />
         <DatePicker fx:id="datePicker" editable="false" layoutX="236.0" layoutY="74.0" prefHeight="27.0" prefWidth="98.0" AnchorPane.leftAnchor="236.0" AnchorPane.topAnchor="75.0" />
 
@@ -44,7 +44,7 @@
                 </Menu>
             </menus>
         </MenuBar>
-      <Label fx:id="error" alignment="CENTER" layoutX="14.0" layoutY="485.0" prefHeight="24.0" prefWidth="756.0" text="Pour le pourcentage de soutenance, vous ne pouvez entrer que des chiffres de 0 à 20." textFill="#ee0606" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" visible="false"/>
+      <Label fx:id="error" alignment="CENTER" layoutX="14.0" layoutY="485.0" prefHeight="24.0" prefWidth="756.0" text="Pour le pourcentage de soutenance, vous ne pouvez entrer que des chiffres de 0 à 20." textFill="#ee0606" visible="false" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
 
     </children>
 </AnchorPane>

@@ -272,16 +272,19 @@ public class ShowBinomeController {
 		
 		Image refresh = new Image("/com/projet/img/refresh.png");
 		ImageView refreshImageView = new ImageView(refresh);
-		refreshImageView.setFitHeight(20);
-		refreshImageView.setFitWidth(20);
+		refreshImageView.setFitHeight(18);
+		refreshImageView.setFitWidth(18);
 		refreshBinome.setGraphic(refreshImageView);
 		Image search = new Image("/com/projet/img/search.png");
 		ImageView searchImageView = new ImageView(search);
-		searchImageView.setFitWidth(20);
-		searchImageView.setFitHeight(20);
+		searchImageView.setFitWidth(18);
+		searchImageView.setFitHeight(18);
 		searchBinome.setGraphic(searchImageView);
-		
-		
+		Image add = new Image("/com/projet/img/add.png");
+		ImageView addImageView = new ImageView(add);
+		addImageView.setFitWidth(18);
+		addImageView.setFitHeight(18);
+		toAjouterBi.setGraphic(addImageView);
 	}
 	
 	// Méthode pour rafraîchir les données affichées dans le tableau

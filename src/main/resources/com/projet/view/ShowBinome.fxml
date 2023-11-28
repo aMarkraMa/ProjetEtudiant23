@@ -6,17 +6,17 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="522.0" prefWidth="784.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projet.controller.ShowBinomeController">
+<AnchorPane prefHeight="740.0" prefWidth="1149.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projet.controller.ShowBinomeController">
     <children>
         <TableView fx:id="tableviewBinome" layoutX="28.0" layoutY="127.0" prefHeight="253.0" prefWidth="545.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="127.0">
         </TableView>
         <Label alignment="CENTER" layoutX="162.0" layoutY="43.0" prefHeight="33.0" prefWidth="303.0" text="Gestion des binomes" AnchorPane.leftAnchor="162.0" AnchorPane.rightAnchor="135.0" AnchorPane.topAnchor="43.0" />
-        <Button fx:id="toAjouterBi" layoutX="485.0" layoutY="82.0" mnemonicParsing="false" onAction="#toAjouterBinome" prefHeight="20.0" prefWidth="88.0" text="Ajouter" AnchorPane.rightAnchor="27.0" AnchorPane.topAnchor="82.0" />
+        <Button fx:id="toAjouterBi" layoutX="1095.0" layoutY="82.0" mnemonicParsing="false" onAction="#toAjouterBinome" prefHeight="27.0" prefWidth="45.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="82.0" />
         <TextField fx:id="textfieldNomMatiere" layoutX="10.0" layoutY="82.0" prefHeight="10.0" prefWidth="105.0" promptText="Matiere" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="82.0" />
-        <TextField fx:id="textfieldSujet" layoutX="116.0" layoutY="82.0" prefHeight="20.0" prefWidth="88.0" promptText="Sujet" AnchorPane.leftAnchor="116.0" AnchorPane.topAnchor="82.0" />
+        <TextField fx:id="textfieldSujet" layoutX="162.0" layoutY="82.0" prefHeight="20.0" prefWidth="88.0" promptText="Sujet" AnchorPane.leftAnchor="162.0" AnchorPane.topAnchor="82.0" />
 
-        <Button fx:id="searchBinome" layoutX="220.0" layoutY="82.0" mnemonicParsing="false" onAction="#searchBinome" prefHeight="20.0" prefWidth="20.0" AnchorPane.leftAnchor="220.0" AnchorPane.topAnchor="82.0" />
-        <Button fx:id="refreshBinome" layoutX="262.0" layoutY="82.0" mnemonicParsing="false" onAction="#refreshTable" prefHeight="20.0" prefWidth="20.0" AnchorPane.leftAnchor="262.0" AnchorPane.topAnchor="82.0" />
+        <Button fx:id="searchBinome" layoutX="955.0" layoutY="82.0" mnemonicParsing="false" onAction="#searchBinome" prefHeight="27.0" prefWidth="45.0" AnchorPane.leftAnchor="960.0" AnchorPane.topAnchor="82.0" />
+        <Button fx:id="refreshBinome" layoutX="1025.0" layoutY="82.0" mnemonicParsing="false" onAction="#refreshTable" prefHeight="27.0" prefWidth="45.0" AnchorPane.leftAnchor="1025.0" AnchorPane.topAnchor="82.0" />
         <MenuBar layoutX="2.0" layoutY="3.0" prefHeight="38.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <menus>
                 <Menu fx:id="menuBinome" mnemonicParsing="false" text="Menu">

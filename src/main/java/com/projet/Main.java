@@ -32,7 +32,8 @@ public class Main extends Application {
         stage.setMinWidth(600); // Largeur minimale
         stage.setMinHeight(400); // Hauteur minimale
         // changeView("/com/projet/view/Main.fxml");
-        startView("/com/projet/view/LogIn.fxml"); // Vue initiale
+        startView("/com/projet/view/Main.fxml");
+        //startView("/com/projet/view/LogIn.fxml"); // Vue initiale
         stage.show(); // Affiche la fenêtre
     }
     
@@ -41,7 +42,10 @@ public class Main extends Application {
         Parent root = null;
         try{
             root = FXMLLoader.load(Main.class.getResource(fxml));
-            stage.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(Main.class.getResource("/flat-style.css").toExternalForm());
+
+            stage.setScene(scene);
             stage.setResizable(false); // Fenêtre non redimensionnable
         }
         catch(IOException e){
@@ -54,7 +58,10 @@ public class Main extends Application {
         Parent root = null;
         try{
             root = FXMLLoader.load(Main.class.getResource(fxml));
-            stage.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(Main.class.getResource("/flat-style.css").toExternalForm());
+
+            stage.setScene(scene);
             stage.setResizable(true); // Fenêtre redimensionnable
         }
         catch(IOException e){
@@ -68,7 +75,10 @@ public class Main extends Application {
         Parent root = null;
         try {
             root = FXMLLoader.load(Main.class.getResource(fxml));
-            stage.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(Main.class.getResource("/flat-style.css").toExternalForm());
+
+            stage.setScene(scene);
             stage.setResizable(false); // Fenêtre non redimensionnable
         } catch (IOException e) {
             e.printStackTrace();
