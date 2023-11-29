@@ -77,12 +77,12 @@ public class BinomeServiceImpl implements BinomeService {
 	
 	// Sélectionne des binômes selon des conditions spécifiques
 	@Override
-	public List<Binome> selectByCondition(Binome binome) {
+	public List<Binome> selectByCondition(String nomMatiere, String sujet, Integer idProjet) {
 		SqlSession sqlSession = null;
 		try {
 			sqlSession = MyBatisUtils.getSqlSession();
 			BinomeMapper binomeMapper = sqlSession.getMapper(BinomeMapper.class);
-			List<Binome> binomes = binomeMapper.selectByCondition(binome);
+			List<Binome> binomes = binomeMapper.selectByCondition(nomMatiere, sujet, idProjet);
 			return binomes;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -213,6 +213,23 @@ public class BinomeServiceImpl implements BinomeService {
 				sqlSession.rollback();
 			}
 			e.printStackTrace();
+		} finally {
+			if (sqlSession != null) {
+				sqlSession.close();
+			}
+		}
+	}
+	
+	@Override
+	public Integer getNbBinomeByIdEtudiant(Integer idEtudiant) {
+		SqlSession sqlSession = null;
+		try {
+			sqlSession = MyBatisUtils.getSqlSession();
+			BinomeMapper binomeMapper = sqlSession.getMapper(BinomeMapper.class);
+			Integer nbBinome = binomeMapper.getNbBinomeByIdEtudiant(idEtudiant);
+			return nbBinome;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		} finally {
 			if (sqlSession != null) {
 				sqlSession.close();

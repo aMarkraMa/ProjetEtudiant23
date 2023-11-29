@@ -13,12 +13,12 @@
 		<Label layoutX="23.0" layoutY="131.0" prefHeight="24.0" prefWidth="144.0" text="Mon de passe" />
 		<Label layoutX="23.0" layoutY="190.0" prefHeight="24.0" prefWidth="144.0" text="Verifier mot de passe" />
 		<Label layoutX="23.0" layoutY="245.0" prefHeight="24.0" prefWidth="144.0" text="Email" />
-		<Button fx:id="validerEn" layoutX="104.0" layoutY="483.0" mnemonicParsing="false" onAction="#ajouterEnseignant" prefHeight="36.0" prefWidth="191.0" text="Valider" />
+		<Button fx:id="validerEn" layoutX="104.0" layoutY="497.0" mnemonicParsing="false" onAction="#ajouterEnseignant" prefHeight="36.0" prefWidth="191.0" text="Valider" />
 		<TextField fx:id="numEn" layoutX="206.0" layoutY="67.0" prefHeight="36.0" prefWidth="179.0" />
 		<TextField fx:id="email" layoutX="206.0" layoutY="235.0" prefHeight="36.0" prefWidth="179.0" />
 		<PasswordField fx:id="motEn" layoutX="206.0" layoutY="125.0" prefHeight="36.0" prefWidth="179.0" />
 		<PasswordField fx:id="veriferMot" layoutX="206.0" layoutY="183.0" prefHeight="36.0" prefWidth="179.0" />
-		<Label fx:id="text" layoutX="37.0" layoutY="409.0" prefHeight="62.0" prefWidth="343.0" />
+		<Label fx:id="text" layoutX="37.0" layoutY="387.0" prefHeight="106.0" prefWidth="343.0" />
       <Label layoutX="23.0" layoutY="299.0" prefHeight="24.0" prefWidth="144.0" text="Question" />
       <ChoiceBox fx:id="question" layoutX="206.0" layoutY="293.0" prefHeight="36.0" prefWidth="179.0" />
       <Label layoutX="23.0" layoutY="350.0" prefHeight="24.0" prefWidth="144.0" text="Reponse" />

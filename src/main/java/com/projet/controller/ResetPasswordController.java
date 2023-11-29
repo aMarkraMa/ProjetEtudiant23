@@ -106,7 +106,7 @@ public class ResetPasswordController {
 			enseignantService.updateMotDePasseByNumeroEnseignant(numEnseignant, ProjetStringUtils.sha256(newPassword));
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			alert.setTitle("Votre nouveau mot de passe est dans votre email");
-			alert.setHeaderText("Votre nouveau mot de passe dans votre email");
+			alert.setHeaderText("Votre nouveau mot de passe est dans votre email");
 			alert.setContentText("Veuillez trouver votre nouveau mot de passe dans votre email");
 			alert.getDialogPane().setPrefWidth(800);
 			Optional<ButtonType> resultat = alert.showAndWait();

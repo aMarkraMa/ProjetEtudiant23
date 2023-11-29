@@ -9,18 +9,42 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projet.controller.MainController">
+<AnchorPane prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projet.controller.MainController">
    <children>
-      <Pane disable="true" layoutX="-3.0" prefHeight="400.0" prefWidth="610.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="80.0" layoutY="63.0" prefHeight="24.0" prefWidth="473.0" text="Gestion de Projets des étudiants" textAlignment="CENTER" textFill="WHITE" AnchorPane.bottomAnchor="302.0" AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="47.0" AnchorPane.topAnchor="63.0">
+      <ImageView fitHeight="233.0" fitWidth="299.0" layoutX="330.0" layoutY="200.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="/com/projet/img/gestion.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="Gestion_Binome" layoutX="627.0" layoutY="458.0" mnemonicParsing="false" onAction="#gestionBinome" prefHeight="36.0" prefWidth="299.0" text="Gestion de binomes">
          <font>
-            <Font size="27.0" />
+            <Font size="25.0" />
+         </font>
+      </Button>
+      <Button fx:id="Gestion_Note" layoutX="275.0" layoutY="459.0" mnemonicParsing="false" onAction="#gestionNote" prefHeight="36.0" prefWidth="299.0" text="Gestion de notes">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Button>
+      <Button fx:id="Gestion_Projet" layoutX="627.0" layoutY="368.0" mnemonicParsing="false" onAction="#gestionProjet" prefHeight="36.0" prefWidth="299.0" text="Gestion de projets">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Button>
+      <Button fx:id="Gestion_Formation" layoutX="627.0" layoutY="284.0" mnemonicParsing="false" onAction="#gestionFormation" prefHeight="36.0" prefWidth="299.0" text="Gestion de formations">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Button>
+      <Button fx:id="Gestion_Etudiant" layoutX="627.0" layoutY="194.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#gestionEtudiant" prefHeight="51.0" prefWidth="299.0" text="Gestion d'étudiants">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Button>
+      <Label styleClass="custom-label" alignment="CENTER" contentDisplay="CENTER" layoutX="35.0" layoutY="31.0" prefHeight="128.0" prefWidth="1118.0" text="Gestion de Projets des étudiants" textAlignment="CENTER" textFill="#1e1e1e">
+         <font>
+            <Font size="100.0" />
          </font>
       </Label>
-      <Button fx:id="Gestion_Etudiant" layoutX="161.0" layoutY="113.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#gestionEtudiant" prefHeight="36.0" prefWidth="299.0" text="Gestion d'étudiants" AnchorPane.bottomAnchor="251.0" AnchorPane.leftAnchor="161.0" AnchorPane.rightAnchor="140.0" />
-      <Button fx:id="Gestion_Formation" layoutX="161.0" layoutY="164.0" mnemonicParsing="false" onAction="#gestionFormation" prefHeight="36.0" prefWidth="299.0" text="Gestion de formations" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="161.0" AnchorPane.rightAnchor="140.0" />
-      <Button fx:id="Gestion_Projet" layoutX="161.0" layoutY="217.0" mnemonicParsing="false" onAction="#gestionProjet" prefHeight="36.0" prefWidth="299.0" text="Gestion de projets" AnchorPane.bottomAnchor="147.0" AnchorPane.leftAnchor="161.0" AnchorPane.rightAnchor="140.0" />
-      <Button fx:id="Gestion_Binome" layoutX="161.0" layoutY="269.0" mnemonicParsing="false" onAction="#gestionBinome" prefHeight="36.0" prefWidth="299.0" text="Gestion de binomes" AnchorPane.bottomAnchor="95.0" AnchorPane.leftAnchor="161.0" AnchorPane.rightAnchor="140.0" />
-      <Button fx:id="Gestion_Note" layoutX="161.0" layoutY="321.0" mnemonicParsing="false" onAction="#gestionNote" prefHeight="36.0" prefWidth="299.0" text="Gestion de notes" AnchorPane.bottomAnchor="43.0" AnchorPane.leftAnchor="161.0" AnchorPane.rightAnchor="140.0" />
    </children>
 </AnchorPane>

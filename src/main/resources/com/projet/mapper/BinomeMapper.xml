@@ -98,12 +98,13 @@
 		AND a.id_binome = b.id_binome
 		AND a.id_projet = b.id_projet
 		AND b.id_projet = p.id_projet
-		<if test="projet.nomMatiere != null and projet.nomMatiere != ''">
-			AND lower(p.nom_matiere) like lower(#{projet.nomMatiere})
+		<if test="nomMatiere != null and nomMatiere != ''">
+			AND lower(p.nom_matiere) like lower(#{nomMatiere})
 		</if>
-		<if test="projet.sujet != null and projet.sujet != ''">
-			AND lower(p.sujet) like lower(#{projet.sujet})
+		<if test="sujet != null and sujet != ''">
+			AND lower(p.sujet) like lower(#{sujet})
 		</if>
+		AND p.id_projet = #{idProjet}
 	</select>
 	
 	<!-- Sélection d'un binôme par identifiant de projet -->
@@ -150,6 +151,12 @@
 		  AND a.id_projet = b.id_projet
 		  AND b.id_projet = p.id_projet
 		  AND p.id_projet = #{idProjet}
+	</select>
+	
+	<select id="getNbBinomeByIdEtudiant" resultType="java.lang.Integer">
+		SELECT COUNT(id_binome)
+		FROM appartenir
+		WHERE id_etudiant = #{idEtudiant}
 	</select>
 	
 	<!-- Insertion d'un binôme (étape 1) -->

@@ -260,7 +260,7 @@ public class ShowBinomeController {
 		
 		tableviewBinome.widthProperty().addListener((observable, oldValue, newValue) -> {
 			double tableWidth = newValue.doubleValue();
-			nomMatiere.setPrefWidth((tableWidth - 240) /6);
+			nomMatiere.setPrefWidth((tableWidth - 240) / 6);
 			sujet.setPrefWidth((tableWidth - 240) / 6);
 			etudiant1.setPrefWidth((tableWidth - 240) / 6);
 			etudiant2.setPrefWidth((tableWidth - 240) / 6);
@@ -296,8 +296,6 @@ public class ShowBinomeController {
 	}
 	
 	
-	
-	
 	public void toAjouterBinome(ActionEvent actionEvent) {
 		Main.addView("/com/projet/view/AddBinome.fxml");
 	}
@@ -306,16 +304,15 @@ public class ShowBinomeController {
 	public void searchBinome(ActionEvent actionEvent) {
 		
 		try {
-			// Création d'un objet binôme et définition des critères de recherche
-			Binome binome = new Binome();
-			Projet projet = new Projet();
-			projet.setNomMatiere("%" + textfieldNomMatiere.getText() + "%");
-			projet.setSujet("%" + textfieldSujet.getText() + "%");
-			binome.setProjet(projet);
-			// Récupération des binômes correspondants aux critères
-			List<Binome> binomeDB = binomeService.selectByCondition(binome);
+			String nomMatiere = "%" + textfieldNomMatiere.getText().trim() + "%";
+			String sujet = "%" + textfieldSujet.getText().trim() + "%";
 			ObservableList<Binome> data = FXCollections.observableArrayList();
-			data.addAll(binomeDB);
+			List<Integer> idsProjet = projetService.getIdsProjet();
+			for (Integer idProjet : idsProjet) {
+				List<Binome> binomeDB = binomeService.selectByCondition(nomMatiere, sujet, idProjet);
+				data.addAll(binomeDB);
+			}
+			// Récupération des binômes correspondants aux critères
 			tableviewBinome.setItems(data);
 			tableviewBinome.refresh();
 		} catch (Exception e) {

@@ -58,7 +58,7 @@ public class InscrireController {
 		question.getItems().clear();
 		List<String> questions = enseignantService.getQuestions();
 		question.getItems().addAll(questions);
-		text.setText("* Pour le mot de passe, veuillez saisir 8 caractères, \ncomprenant au moins une lettre majuscule, \nune lettre minuscule, un chiffre et un caractère spécial.");
+		text.setText("* Pour le mot de passe, veuillez saisir 8 caractères, \ncomprenant au moins une lettre majuscule, \nune lettre minuscule, un chiffre et \nun caractère spécial.");
 		text.setStyle("-fx-text-fill: red;");
 	}
 	

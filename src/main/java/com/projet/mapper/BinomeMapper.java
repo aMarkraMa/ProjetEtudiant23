@@ -29,7 +29,7 @@ public interface BinomeMapper {
 	
 	int updateBinomeStep3(@Param("noteRapport") Double noteRapport, @Param("dateReelleRemise") LocalDate dateReelleRemise, @Param("idBinome") Integer idBinome, @Param("idProjet") Integer idProjet);
 	
-	List<Binome> selectByCondition(Binome binome);
+	List<Binome> selectByCondition(@Param("nomMatiere") String nomMatiere, @Param("sujet") String sujet, @Param("idProjet") Integer idProjet);
 	
 	Binome selectByIdBinomeAndIdProjet(Binome binome);
 	
@@ -42,4 +42,6 @@ public interface BinomeMapper {
 	Integer getNombreBinomeByIdProjet(@Param("idProjet") Integer idProjet);
 	
 	List<Binome> getBinomesByIdProjet(@Param("idProjet") Integer idProjet);
+	
+	Integer getNbBinomeByIdEtudiant(@Param("idEtudiant") Integer idEtudiant);
 }

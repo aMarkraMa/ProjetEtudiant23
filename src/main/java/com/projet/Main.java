@@ -31,10 +31,10 @@ public class Main extends Application {
         stage.initStyle(StageStyle.DECORATED); // Style de la fenêtre
         stage.setWidth(1200);
         stage.setHeight(600);
-        stage.setMinWidth(600); // Largeur minimale
-        stage.setMinHeight(400); // Hauteur minimale
-        startView("/com/projet/view/Main.fxml");
-        //startView("/com/projet/view/LogIn.fxml"); // Vue initiale
+        stage.setMinWidth(1200); // Largeur minimale
+        stage.setMinHeight(600); // Hauteur minimale
+        // startView("/com/projet/view/Main.fxml");
+        startView("/com/projet/view/LogIn.fxml"); // Vue initiale
         stage.show(); // Affiche la fenêtre
     }
     

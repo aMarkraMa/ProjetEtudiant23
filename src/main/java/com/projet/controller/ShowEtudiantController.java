@@ -4,10 +4,13 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.projet.Main;
+import com.projet.entity.Binome;
 import com.projet.entity.Etudiant;
 import com.projet.entity.Formation;
 import com.projet.mapper.EtudiantMapper;
+import com.projet.service.BinomeService;
 import com.projet.service.EtudiantService;
+import com.projet.service.impl.BinomeServiceImpl;
 import com.projet.utils.MyBatisUtils;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -87,6 +90,8 @@ public class ShowEtudiantController {
 	
 	private EtudiantService etudiantService = new EtudiantServiceImpl();
 	
+	private BinomeService binomeService = new BinomeServiceImpl();
+	
 	// Initialisation du contrôleur et configuration du tableau
 	@FXML
 	public void initialize() {
@@ -126,15 +131,25 @@ public class ShowEtudiantController {
 						});
 						
 						supprimer.setOnAction((ActionEvent event) -> {
-							Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-							alert.setTitle("Supprimer un etudiant");
-							alert.setHeaderText("Confirmez votre choix");
-							alert.setContentText("Vous allez supprimer cet etudiant. Etes-vous sur?");
-							Optional<ButtonType> resultat = alert.showAndWait();
+							Alert alert1 = new Alert(Alert.AlertType.CONFIRMATION);
+							alert1.setTitle("Supprimer un etudiant");
+							alert1.setHeaderText("Confirmez votre choix");
+							alert1.setContentText("Vous allez supprimer cet etudiant. Etes-vous sur?");
+							Optional<ButtonType> resultat = alert1.showAndWait();
 							if (resultat.isPresent() && resultat.get() == ButtonType.OK) {
 								try {
 									Etudiant etudiant = getTableView().getItems().get(getIndex());
 									Integer idEtudiant = etudiant.getIdEtudiant();
+									Integer nbBinome = binomeService.getNbBinomeByIdEtudiant(idEtudiant);
+									if (nbBinome > 0) {
+										Alert alert2 = new Alert(Alert.AlertType.ERROR);
+										alert2.setTitle("ERREUR: Cet etudiant est dans un binome!");
+										alert2.setHeaderText("Cet etudiant est dans un binome!");
+										alert2.setContentText("Cet etudiant est dans un binome, vous ne pouvez pas le supprimer.");
+										alert2.getDialogPane().setPrefWidth(800);
+										alert2.show();
+										return;
+									}
 									etudiantService.deleteById(idEtudiant);
 									ObservableList<Etudiant> data = FXCollections.observableArrayList();
 									List<Etudiant> etudiants = etudiantService.selectAll();

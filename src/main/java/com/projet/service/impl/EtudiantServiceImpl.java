@@ -226,12 +226,12 @@ public class EtudiantServiceImpl implements EtudiantService {
 			int lastRowNum = sheet.getLastRowNum();
 			for (int i = 1; i <= lastRowNum; i++) {
 				XSSFRow row = sheet.getRow(i);
-				String nomEtudiant = row.getCell(0).getStringCellValue();
-				String prenomEtudiant = row.getCell(1).getStringCellValue();
-				String nomFormation = row.getCell(2).getStringCellValue();
-				String promotion = row.getCell(3).getStringCellValue();
+				String nomEtudiant = row.getCell(0).getStringCellValue().trim();
+				String prenomEtudiant = row.getCell(1).getStringCellValue().trim();
+				String nomFormation = row.getCell(2).getStringCellValue().trim();
+				String promotion = row.getCell(3).getStringCellValue().trim();
 				System.out.println(nomEtudiant + " " + prenomEtudiant + " " + nomFormation + " " + promotion);
-				if (!"Initiale".equals(promotion.trim()) && !"En Alternance".equals(promotion.trim()) && !"Formation Continue".equals(promotion.trim())) {
+				if (!"Initiale".equals(promotion) && !"En Alternance".equals(promotion) && !"Formation Continue".equals(promotion)) {
 					Alert alert = new Alert(Alert.AlertType.ERROR);
 					alert.setTitle("ERREUR: Une des valeurs dans la colonne \"Promotion\" n'est pas valide!");
 					alert.setHeaderText("Une des valeurs dans la colonne \"Promotion\" n'est pas valide!");
