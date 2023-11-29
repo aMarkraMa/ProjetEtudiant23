@@ -56,8 +56,8 @@ public class LogInController {
 		Image imageL = new Image("/com/projet/img/dauphine.png");
 		
 		ImageView imageViewB = new ImageView(imageB);
-		imageViewB.setFitWidth(600);
-		imageViewB.setFitHeight(400);
+		imageViewB.setFitWidth(1200);
+		imageViewB.setFitHeight(600);
 		
 		ImageView imageViewL = new ImageView(imageL);
 		imageViewL.setFitWidth(394);

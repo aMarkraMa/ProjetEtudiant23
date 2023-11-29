@@ -29,9 +29,10 @@ public class Main extends Application {
         stage.getIcons().add(new Image("/com/projet/img/logo.png")); // Icône de la fenêtre
         stage.setResizable(true); // Permet de redimensionner la fenêtre
         stage.initStyle(StageStyle.DECORATED); // Style de la fenêtre
+        stage.setWidth(1200);
+        stage.setHeight(600);
         stage.setMinWidth(600); // Largeur minimale
         stage.setMinHeight(400); // Hauteur minimale
-        // changeView("/com/projet/view/Main.fxml");
         startView("/com/projet/view/Main.fxml");
         //startView("/com/projet/view/LogIn.fxml"); // Vue initiale
         stage.show(); // Affiche la fenêtre
@@ -44,7 +45,6 @@ public class Main extends Application {
             root = FXMLLoader.load(Main.class.getResource(fxml));
             Scene scene = new Scene(root);
             scene.getStylesheets().add(Main.class.getResource("/flat-style.css").toExternalForm());
-
             stage.setScene(scene);
             stage.setResizable(false); // Fenêtre non redimensionnable
         }
@@ -60,7 +60,7 @@ public class Main extends Application {
             root = FXMLLoader.load(Main.class.getResource(fxml));
             Scene scene = new Scene(root);
             scene.getStylesheets().add(Main.class.getResource("/flat-style.css").toExternalForm());
-
+            
             stage.setScene(scene);
             stage.setResizable(true); // Fenêtre redimensionnable
         }
