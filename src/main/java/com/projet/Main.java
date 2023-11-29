@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
+import java.util.Locale;
 
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
@@ -24,6 +25,7 @@ public class Main extends Application {
     // Démarre l'interface utilisateur principale de l'application
     @Override
     public void start(Stage stage) throws Exception {
+        Locale.setDefault(Locale.FRENCH);
         Main.stage = stage;
         stage.setTitle("Système de gestion de projets des étudiants"); // Titre de la fenêtre
         stage.getIcons().add(new Image("/com/projet/img/logo.png")); // Icône de la fenêtre
