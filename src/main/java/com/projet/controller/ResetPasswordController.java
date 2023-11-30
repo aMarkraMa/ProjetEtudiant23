@@ -149,7 +149,7 @@ public class ResetPasswordController {
 		String upperCaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		String lowerCaseLetters = "abcdefghijklmnopqrstuvwxyz";
 		String numbers = "0123456789";
-		String specialCharacters = "!@#$%^&*()_-+=<>?/{}~|";
+		String specialCharacters = "!.@#$%^*&+=-";
 		String combinedChars = upperCaseLetters + lowerCaseLetters + numbers + specialCharacters;
 		Random random = new Random();
 		StringBuilder password = new StringBuilder();

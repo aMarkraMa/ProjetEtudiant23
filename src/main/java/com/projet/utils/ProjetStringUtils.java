@@ -19,7 +19,7 @@ public class ProjetStringUtils {
 	}
 	
 	public static boolean isValidPassword(String password) {
-		String regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!.@#$%^&+=-])(?=\\S+$).{8}$";
+		String regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!.@#$%^*&+=-])(?=\\S+$).{8}$";
 		return Pattern.compile(regex).matcher(password).matches();
 	}
 	
