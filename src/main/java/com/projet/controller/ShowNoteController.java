@@ -218,7 +218,11 @@ public class ShowNoteController {
 					Double noteFinale = noteRapportE * pourcentageRapport * 0.01 + noteSoutenanceE * pourcentageSoutenance * 0.01;
 					if (note.getValue().getDateReeleRemise().isAfter(note.getValue().getProjet().getDatePrevueRemise())) {
 						long dateDelay = ChronoUnit.DAYS.between(note.getValue().getDateReeleRemise(), note.getValue().getProjet().getDatePrevueRemise());
-						noteFinale = noteFinale - Math.abs(dateDelay) * 0.01;
+						if(noteFinale - Math.abs(dateDelay) * 0.01 >= 0){
+							noteFinale = noteFinale - Math.abs(dateDelay) * 0.01;
+						}else{
+							noteFinale = 0.0;
+						}
 					}
 					return new SimpleStringProperty(noteFinale.toString());
 				}
