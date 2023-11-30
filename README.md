@@ -12,20 +12,11 @@ Il s'agit du projet Java pour la session 2023-2024 du MIAGE M1. Ce projet est co
 
 
 MacOS & Linux:
-
 To configure the project:
 ```sh
 git clone git@github.com:your_user_name/ProjetEtudiant23.git
 cd ProjetEtudiant23.git
 vim src/main/resources/jdbc.properties
-```
-replace 
-```sh
-jdbc.url=jdbc:sqlite:testDB.sqlite
-```
-with
-```sh
-jdbc.url=jdbc:sqlite:src/main/resources/testDB.sqlite
 ```
 
 To run the project:
