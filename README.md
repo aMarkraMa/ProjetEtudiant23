@@ -16,7 +16,6 @@ To configure the project:
 ```sh
 git clone git@github.com:your_user_name/ProjetEtudiant23.git
 cd ProjetEtudiant23.git
-vim src/main/resources/jdbc.properties
 ```
 
 To run the project:
@@ -28,7 +27,7 @@ mvn javafx:run
 To run the jar package:
 move the testDB.sqlite to the same folder of file jar
 ```sh
-cd ProjetEtudiant23/jar
+cd your-path-of-jar
 java --module-path path-to-your-sdk/javafx-sdk-version/lib --add-modules javafx.controls,javafx.fxml -jar LI-MA-jar-with-dependencies.jar
 ```
 
