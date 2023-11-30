@@ -35,8 +35,8 @@ public class Main extends Application {
         stage.setHeight(600);
         stage.setMinWidth(1200); // Largeur minimale
         stage.setMinHeight(600); // Hauteur minimale
-        startView("/com/projet/view/Main.fxml");
-        //startView("/com/projet/view/LogIn.fxml"); // Vue initiale
+        // startView("/com/projet/view/Main.fxml");
+        startView("/com/projet/view/LogIn.fxml"); // Vue initiale
         stage.show(); // Affiche la fenêtre
     }
     
