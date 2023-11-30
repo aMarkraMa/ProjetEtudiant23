@@ -35,6 +35,7 @@ mvn javafx:run
 ```
 
 To run the jar package:
+move the testDB.sqlite to the same folder of file jar
 ```sh
 cd ProjetEtudiant23/jar
 java --module-path path-to-your-sdk/javafx-sdk-version/lib --add-modules javafx.controls,javafx.fxml -jar Projet-jar-with-dependencies.jar
