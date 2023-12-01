@@ -147,6 +147,8 @@
                 <configuration>
                     <archive>
                         <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
                             <mainClass>com.projet.Main</mainClass>
                         </manifest>
                     </archive>
